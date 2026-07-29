@@ -1,0 +1,26 @@
+import cors from 'cors';
+import express from 'express';
+import { env } from './config/env.js';
+import { errorHandler } from './middlewares/error-handler.js';
+import { successResponse } from './utils/api-response.js';
+
+export const app = express();
+
+app.use(
+  cors({
+    credentials: true,
+    origin: env.NODE_ENV === 'development' ? true : false,
+  }),
+);
+app.use(express.json());
+
+app.get('/api/v1/health', (_request, response) => {
+  response.status(200).json(
+    successResponse({
+      service: 'backend',
+      status: 'ok',
+    }),
+  );
+});
+
+app.use(errorHandler);

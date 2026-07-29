@@ -1,0 +1,40 @@
+// backend/prisma/schema/subscriptions.prisma
+
+model SubscriptionPlan {
+  id                       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String             @db.VarChar(50)
+  audience                 target_audience
+  level                    plan_level
+  price_mmk                BigInt             @default(0)
+  billing_cycle            String             @default("MONTHLY") @db.VarChar(20)
+  max_job_posts            Int                @default(3)
+  ai_sourcing_enabled      Boolean            @default(false)
+  ai_search_mode           String             @default("BASIC") @db.VarChar(20)
+  max_active_orders        Int                @default(3)
+  max_packages             Int                @default(3)
+  commission_rate          Decimal            @default(10.0) @db.Decimal(5, 2)
+  can_create_gold_packages Boolean            @default(false)
+  is_active                Boolean            @default(true)
+  created_at               DateTime           @default(now()) @db.Timestamptz
+  updated_at               DateTime           @updatedAt @db.Timestamptz
+  user_subscriptions       UserSubscription[]
+
+  @@map("subscription_plans")
+}
+
+model UserSubscription {
+  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String              @db.Uuid
+  plan_id    String              @db.Uuid
+  status     subscription_status @default(ACTIVE)
+  started_at DateTime            @default(now()) @db.Timestamptz
+  ends_at    DateTime?           @db.Timestamptz
+  created_at DateTime            @default(now()) @db.Timestamptz
+  updated_at DateTime            @updatedAt @db.Timestamptz
+  user       User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  plan       SubscriptionPlan    @relation(fields: [plan_id], references: [id])
+
+  @@index([user_id], map: "idx_user_subs_user")
+  @@index([status], map: "idx_user_subs_status")
+  @@map("user_subscriptions")
+}

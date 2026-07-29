@@ -1,0 +1,75 @@
+// backend/prisma/schema/transactions.prisma
+
+model Order {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id        String       @db.Uuid
+  freelancer_id    String       @db.Uuid
+  source_type      order_source
+  package_id       String?      @db.Uuid
+  job_post_id      String?      @db.Uuid
+  agreed_price_mmk BigInt
+  platform_fee_mmk BigInt       @default(0)
+  status           order_status @default(AWAITING_ESCROW)
+  is_escrow_funded Boolean      @default(false)
+  created_at       DateTime     @default(now()) @db.Timestamptz
+  updated_at       DateTime     @updatedAt @db.Timestamptz
+  deleted_at       DateTime?    @db.Timestamptz
+
+  client       User                 @relation("ClientOrders", fields: [client_id], references: [id], onDelete: Cascade)
+  freelancer   User                 @relation("FreelancerOrders", fields: [freelancer_id], references: [id], onDelete: Cascade)
+  package      Package?             @relation(fields: [package_id], references: [id], onDelete: SetNull)
+  job_post     JobPost?             @relation(fields: [job_post_id], references: [id], onDelete: SetNull)
+  milestones   Milestone[]
+  payments     PaymentTransaction[]
+  messages     Message[]
+  deliverables Deliverable[]
+  reviews      Review[]
+  disputes     Dispute[]
+
+  @@index([client_id], map: "idx_orders_client")
+  @@index([freelancer_id], map: "idx_orders_freelancer")
+  @@index([status], map: "idx_orders_status")
+}
+
+model Milestone {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id    String           @db.Uuid
+  title       String           @db.VarChar(255)
+  description String?
+  amount_mmk  BigInt
+  status      milestone_status @default(PENDING_FUNDING)
+  due_date    DateTime?        @db.Date
+  created_at  DateTime         @default(now()) @db.Timestamptz
+  updated_at  DateTime         @updatedAt @db.Timestamptz
+
+  order        Order                @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  payments     PaymentTransaction[]
+  deliverables Deliverable[]
+
+  @@index([order_id], map: "idx_milestones_order")
+  @@map("milestones")
+}
+
+model PaymentTransaction {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id          String         @db.Uuid
+  milestone_id      String?        @db.Uuid
+  amount_mmk        BigInt
+  payment_method_id String?        @db.Uuid
+  transaction_ref   String?        @db.VarChar(255)
+  screenshot_url    String
+  status            payment_status @default(PENDING_ADMIN)
+  verified_by       String?        @db.Uuid
+  verified_at       DateTime?      @db.Timestamptz
+  created_at        DateTime       @default(now()) @db.Timestamptz
+  updated_at        DateTime       @updatedAt @db.Timestamptz
+
+  order          Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  milestone      Milestone?     @relation(fields: [milestone_id], references: [id], onDelete: SetNull)
+  payment_method PaymentMethod? @relation(fields: [payment_method_id], references: [id])
+  verifier       User?          @relation("PaymentVerifier", fields: [verified_by], references: [id])
+
+  @@index([order_id], map: "idx_payments_order")
+  @@index([status], map: "idx_payments_status")
+  @@map("payment_transactions")
+}

@@ -1,0 +1,40 @@
+// backend/prisma/schema/execution.prisma
+
+model Message {
+  id                     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id               String       @db.Uuid
+  sender_id              String       @db.Uuid
+  type                   message_type @default(TEXT)
+  content                String?
+  attachment_url         String?
+  attachment_type        String?      @db.VarChar(50)
+  audio_duration_seconds Int?
+  created_at             DateTime     @default(now()) @db.Timestamptz
+  deleted_at             DateTime?    @db.Timestamptz
+  
+  order                  Order        @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  sender                 User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
+
+  @@index([order_id], map: "idx_messages_order")
+  @@index([created_at], map: "idx_messages_created_at")
+  @@map("messages")
+}
+
+model Deliverable {
+  id                   String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id             String             @db.Uuid
+  milestone_id         String?            @db.Uuid
+  file_name            String             @db.VarChar(255)
+  file_url_clean       String
+  file_url_watermarked String
+  file_size_bytes      BigInt?
+  status               deliverable_status @default(UNDER_REVIEW)
+  submitted_at         DateTime           @default(now()) @db.Timestamptz
+  approved_at          DateTime?          @db.Timestamptz
+  
+  order                Order              @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  milestone            Milestone?         @relation(fields: [milestone_id], references: [id], onDelete: SetNull)
+
+  @@index([order_id], map: "idx_deliverables_order")
+  @@map("deliverables")
+}

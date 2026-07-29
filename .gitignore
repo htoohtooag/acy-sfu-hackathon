@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+*.env
+
+# Build Outputs
+dist/
+.next/
+build/
+
+# Prisma
+backend/generated/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store

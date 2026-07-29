@@ -1,0 +1,21 @@
+// backend/prisma/schema/kyc.prisma
+
+model IdentityVerification {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String     @unique @db.Uuid
+  nrc_number       String?    @db.VarChar(50) // e.g., "12/Kamana(N)090958"
+  nrc_front_url    String? // URL from Supabase Storage
+  nrc_back_url     String? // URL from Supabase Storage
+  status           kyc_status @default(NOT_SUBMITTED)
+  verified_by      String?    @db.Uuid // Admin who approved it
+  verified_at      DateTime?  @db.Timestamptz
+  rejection_reason String? // If rejected, admin provides a reason
+  created_at       DateTime   @default(now()) @db.Timestamptz
+  updated_at       DateTime   @updatedAt @db.Timestamptz
+
+  user     User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  verifier User? @relation("KYCVerifier", fields: [verified_by], references: [id])
+
+  @@index([status], map: "idx_kyc_status")
+  @@map("identity_verifications")
+}

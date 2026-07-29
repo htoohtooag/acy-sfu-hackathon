@@ -1,0 +1,7 @@
+-- Create the vector indexes manually in Supabase
+CREATE INDEX IF NOT EXISTS idx_freelancer_embedding ON "FreelancerProfile" USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_packages_embedding ON "Package" USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_jobposts_embedding ON "JobPost" USING hnsw (embedding vector_cosine_ops);
+
+-- Create the GIN index for skills array
+CREATE INDEX IF NOT EXISTS idx_freelancer_skills ON "FreelancerProfile" USING gin (skills);

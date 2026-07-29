@@ -1,0 +1,619 @@
+// backend/prisma/schema/admin.prisma
+
+model AdminProfile {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String   @unique @db.Uuid
+  admin_role_id String?  @db.Uuid
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz
+  updated_at    DateTime @updatedAt @db.Timestamptz
+
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  admin_role AdminRole? @relation(fields: [admin_role_id], references: [id])
+
+  @@map("admin_profiles")
+}
+
+model AdminAuditLog {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  admin_id        String?  @db.Uuid
+  audit_action_id String?  @db.Uuid
+  target_user_id  String?  @db.Uuid
+  entity_id       String?  @db.Uuid
+  notes           String?
+  metadata        Json     @default("{}")
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  admin        User?        @relation("AuditLogAdmin", fields: [admin_id], references: [id], onDelete: SetNull)
+  audit_action AuditAction? @relation(fields: [audit_action_id], references: [id])
+  target_user  User?        @relation("AuditLogTarget", fields: [target_user_id], references: [id], onDelete: SetNull)
+
+  @@index([admin_id], map: "idx_audit_logs_admin")
+  @@index([target_user_id], map: "idx_audit_logs_target")
+  @@index([audit_action_id], map: "idx_audit_logs_action")
+  @@map("admin_audit_logs")
+}
+
+// backend/prisma/schema/enums.prisma
+
+enum user_status {
+  LEAD
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum subscription_status {
+  ACTIVE
+  PENDING_ADMIN_APPROVAL
+  CANCELED
+  EXPIRED
+}
+
+enum target_audience {
+  CLIENT
+  FREELANCER
+}
+
+enum plan_level {
+  FREE
+  GOLD
+  DIAMOND
+}
+
+enum job_status {
+  OPEN
+  HIRING
+  CLOSED
+  DELETED
+}
+
+enum order_source {
+  PACKAGE
+  CUSTOM_OFFER
+}
+
+enum order_status {
+  AWAITING_ESCROW
+  ACTIVE
+  IN_REVIEW
+  COMPLETED
+  DISPUTED
+  CANCELED
+}
+
+enum milestone_status {
+  PENDING_FUNDING
+  FUNDED
+  IN_REVIEW
+  RELEASED
+  DISPUTED
+}
+
+enum payment_status {
+  PENDING_ADMIN
+  VERIFIED
+  REJECTED
+}
+
+enum deliverable_status {
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum message_type {
+  TEXT
+  FILE
+  SYSTEM
+  CUSTOM_OFFER
+}
+
+enum dispute_reason {
+  WORK_NOT_DELIVERED
+  PAYMENT_ISSUES
+  QUALITY_ISSUE
+  OTHER
+}
+
+enum dispute_status {
+  OPEN
+  RESOLVED_CLIENT
+  RESOLVED_FREELANCER
+  ESCALATED
+}
+
+enum moderation_status {
+  ACTIVE
+  LIFTED
+}
+
+enum kyc_status {
+  NOT_SUBMITTED
+  PENDING_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+// backend/prisma/schema/execution.prisma
+
+model Message {
+  id                     String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id               String       @db.Uuid
+  sender_id              String       @db.Uuid
+  type                   message_type @default(TEXT)
+  content                String?
+  attachment_url         String?
+  attachment_type        String?      @db.VarChar(50)
+  audio_duration_seconds Int?
+  created_at             DateTime     @default(now()) @db.Timestamptz
+  deleted_at             DateTime?    @db.Timestamptz
+
+  order  Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  sender User  @relation(fields: [sender_id], references: [id], onDelete: Cascade)
+
+  @@index([order_id], map: "idx_messages_order")
+  @@index([created_at], map: "idx_messages_created_at")
+  @@map("messages")
+}
+
+model Deliverable {
+  id                   String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id             String             @db.Uuid
+  milestone_id         String?            @db.Uuid
+  file_name            String             @db.VarChar(255)
+  file_url_clean       String
+  file_url_watermarked String
+  file_size_bytes      BigInt?
+  status               deliverable_status @default(UNDER_REVIEW)
+  submitted_at         DateTime           @default(now()) @db.Timestamptz
+  approved_at          DateTime?          @db.Timestamptz
+
+  order     Order      @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  milestone Milestone? @relation(fields: [milestone_id], references: [id], onDelete: SetNull)
+
+  @@index([order_id], map: "idx_deliverables_order")
+  @@map("deliverables")
+}
+
+// backend/prisma/schema/identity.prisma
+model User {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email      String      @unique @db.Citext
+  full_name  String?     @db.VarChar(255)
+  avatar_url String?
+  status     user_status @default(LEAD)
+  created_at DateTime    @default(now()) @db.Timestamptz
+  updated_at DateTime    @updatedAt @db.Timestamptz
+  deleted_at DateTime?   @db.Timestamptz
+
+  identity_verification IdentityVerification?
+  kyc_verifications     IdentityVerification[] @relation("KYCVerifier")
+
+  client_profile     ClientProfile?
+  freelancer_profile FreelancerProfile?
+  roles              UserRole[]
+
+  moderations       UserModeration[] @relation("UserModerations")
+  admin_moderations UserModeration[] @relation("AdminModerations")
+
+  admin_profile        AdminProfile?
+  subscriptions        UserSubscription[]
+  orders_as_client     Order[]              @relation("ClientOrders")
+  orders_as_freelancer Order[]              @relation("FreelancerOrders")
+  messages             Message[]
+  reviews_written      Review[]             @relation("ReviewerReviews")
+  reviews_received     Review[]             @relation("RevieweeReviews")
+  disputes_raised      Dispute[]            @relation("DisputeRaiser")
+  disputes_resolved    Dispute[]            @relation("DisputeAdmin")
+  payments_verified    PaymentTransaction[] @relation("PaymentVerifier")
+  notifications        Notification[]
+
+  // ADD THESE TWO LINES:
+  audit_logs_as_admin  AdminAuditLog[] @relation("AuditLogAdmin")
+  audit_logs_as_target AdminAuditLog[] @relation("AuditLogTarget")
+
+  @@index([status], map: "idx_users_status")
+  @@map("users")
+}
+
+model Role {
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String     @unique @db.VarChar(50)
+  description    String?
+  is_system_role Boolean    @default(false)
+  created_at     DateTime   @default(now()) @db.Timestamptz
+  users          UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String   @db.Uuid
+  role_id     String   @db.Uuid
+  assigned_at DateTime @default(now()) @db.Timestamptz
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role        Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role_id])
+  @@index([user_id], map: "idx_user_roles_user")
+  @@map("user_roles")
+}
+
+model UserModeration {
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String            @db.Uuid
+  admin_id   String?           @db.Uuid
+  reason     String
+  status     moderation_status @default(ACTIVE)
+  expires_at DateTime?         @db.Timestamptz
+  created_at DateTime          @default(now()) @db.Timestamptz
+  updated_at DateTime          @updatedAt @db.Timestamptz
+
+  user  User  @relation("UserModerations", fields: [user_id], references: [id], onDelete: Cascade)
+  admin User? @relation("AdminModerations", fields: [admin_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id], map: "idx_moderations_user")
+  @@map("user_moderations")
+}
+
+model ClientProfile {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String    @unique @db.Uuid
+  company_name String?   @db.VarChar(255)
+  industry     String?   @db.VarChar(100)
+  bio          String?
+  created_at   DateTime  @default(now()) @db.Timestamptz
+  updated_at   DateTime  @updatedAt @db.Timestamptz
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  job_posts    JobPost[]
+
+  @@map("client_profiles")
+}
+
+model FreelancerProfile {
+  id                       String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                  String                       @unique @db.Uuid
+  headline                 String?                      @db.VarChar(255)
+  bio                      String?
+  skills                   String[]                     @default([])
+  experience_level_id      String?                      @db.Uuid
+  success_rate             Decimal                      @default(100.0) @db.Decimal(5, 2)
+  total_earnings_mmk       BigInt                       @default(0)
+  is_verified              Boolean                      @default(false)
+  completed_projects_count Int                          @default(0)
+  ongoing_projects_count   Int                          @default(0)
+  canceled_projects_count  Int                          @default(0)
+  embedding                Unsupported("vector(1536)")?
+  created_at               DateTime                     @default(now()) @db.Timestamptz
+  updated_at               DateTime                     @updatedAt @db.Timestamptz
+  deleted_at               DateTime?                    @db.Timestamptz
+
+  user             User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  experience_level ExperienceLevel? @relation(fields: [experience_level_id], references: [id])
+  packages         Package[]
+
+  @@index([skills], type: Gin, map: "idx_freelancer_skills")
+  @@map("freelancer_profiles")
+}
+
+// backend/prisma/schema/kyc.prisma
+
+model IdentityVerification {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String     @unique @db.Uuid
+  nrc_number       String?    @db.VarChar(50) // e.g., "12/Kamana(N)090958"
+  nrc_front_url    String? // URL from Supabase Storage
+  nrc_back_url     String? // URL from Supabase Storage
+  status           kyc_status @default(NOT_SUBMITTED)
+  verified_by      String?    @db.Uuid // Admin who approved it
+  verified_at      DateTime?  @db.Timestamptz
+  rejection_reason String? // If rejected, admin provides a reason
+  created_at       DateTime   @default(now()) @db.Timestamptz
+  updated_at       DateTime   @updatedAt @db.Timestamptz
+
+  user     User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  verifier User? @relation("KYCVerifier", fields: [verified_by], references: [id])
+
+  @@index([status], map: "idx_kyc_status")
+  @@map("identity_verifications")
+}
+
+// backend/prisma/schema/lookups.prisma
+
+model PaymentMethod {
+  id             String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String               @unique @db.VarChar(50)
+  display_name   String?              @db.VarChar(100)
+  logo_url       String?
+  account_number String?              @db.VarChar(255)
+  account_name   String?              @db.VarChar(255)
+  instructions   String?
+  is_active      Boolean              @default(true)
+  created_at     DateTime             @default(now()) @db.Timestamptz
+  updated_at     DateTime             @updatedAt @db.Timestamptz
+  payments       PaymentTransaction[]
+
+  @@map("payment_methods")
+}
+
+model PackageTier {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String    @unique @db.VarChar(50)
+  display_name String?   @db.VarChar(100)
+  sort_order   Int       @default(0)
+  is_active    Boolean   @default(true)
+  created_at   DateTime  @default(now()) @db.Timestamptz
+  packages     Package[]
+
+  @@map("package_tiers")
+}
+
+model ExperienceLevel {
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String              @unique @db.VarChar(50)
+  display_name String?             @db.VarChar(100)
+  sort_order   Int                 @default(0)
+  is_active    Boolean             @default(true)
+  created_at   DateTime            @default(now()) @db.Timestamptz
+  freelancers  FreelancerProfile[]
+
+  @@map("experience_levels")
+}
+
+model AdminRole {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String         @unique @db.VarChar(50)
+  description String?
+  created_at  DateTime       @default(now()) @db.Timestamptz
+  admins      AdminProfile[]
+
+  @@map("admin_roles")
+}
+
+model AuditAction {
+  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String          @unique @db.VarChar(50)
+  category   String?         @db.VarChar(50)
+  created_at DateTime        @default(now()) @db.Timestamptz
+  logs       AdminAuditLog[]
+
+  @@map("audit_actions")
+}
+
+// backend/prisma/schema/main.prisma
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// backend/prisma/schema/marketplace.prisma
+
+model Package {
+  id            String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  freelancer_id String                       @db.Uuid
+  tier_id       String?                      @db.Uuid
+  title         String                       @db.VarChar(255)
+  description   String?
+  price_mmk     BigInt
+  delivery_days Int
+  features      Json                         @default("[]")
+  is_active     Boolean                      @default(true)
+  embedding     Unsupported("vector(1536)")?
+  created_at    DateTime                     @default(now()) @db.Timestamptz
+  updated_at    DateTime                     @updatedAt @db.Timestamptz
+  deleted_at    DateTime?                    @db.Timestamptz
+
+  freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
+  tier       PackageTier?      @relation(fields: [tier_id], references: [id])
+  orders     Order[]
+
+  @@index([freelancer_id], map: "idx_packages_freelancer")
+  @@map("packages")
+}
+
+model JobPost {
+  id                String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id         String                       @db.Uuid
+  title             String                       @db.VarChar(255)
+  description       String
+  budget_min_mmk    BigInt?
+  budget_max_mmk    BigInt?
+  expected_deadline DateTime?                    @db.Date
+  status            job_status                   @default(OPEN)
+  embedding         Unsupported("vector(1536)")?
+  created_at        DateTime                     @default(now()) @db.Timestamptz
+  updated_at        DateTime                     @updatedAt @db.Timestamptz
+  deleted_at        DateTime?                    @db.Timestamptz
+
+  client ClientProfile @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@index([client_id], map: "idx_jobposts_client")
+  @@index([status], map: "idx_jobposts_status")
+  @@map("job_posts")
+}
+
+// backend/prisma/schema/notifications.prisma
+
+model Notification {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  type       String   @db.VarChar(50)
+  title      String   @db.VarChar(255)
+  body       String?
+  is_read    Boolean  @default(false)
+  metadata   Json     @default("{}")
+  created_at DateTime @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id], map: "idx_notifications_user_unread")
+  @@map("notifications")
+}
+
+// backend/prisma/schema/reputation.prisma
+
+model Review {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id    String    @db.Uuid
+  reviewer_id String    @db.Uuid
+  reviewee_id String    @db.Uuid
+  rating      Int
+  comment     String?
+  is_public   Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz
+  deleted_at  DateTime? @db.Timestamptz
+
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  reviewer User  @relation("ReviewerReviews", fields: [reviewer_id], references: [id], onDelete: Cascade)
+  reviewee User  @relation("RevieweeReviews", fields: [reviewee_id], references: [id], onDelete: Cascade)
+
+  @@index([reviewee_id], map: "idx_reviews_reviewee")
+  @@map("reviews")
+}
+
+model Dispute {
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id         String         @db.Uuid
+  raised_by        String         @db.Uuid
+  reason           dispute_reason
+  explanation      String
+  evidence_urls    String[]       @default([])
+  status           dispute_status @default(OPEN)
+  admin_id         String?        @db.Uuid
+  resolution_notes String?
+  created_at       DateTime       @default(now()) @db.Timestamptz
+  resolved_at      DateTime?      @db.Timestamptz
+
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  raiser   User  @relation("DisputeRaiser", fields: [raised_by], references: [id], onDelete: Cascade)
+  resolver User? @relation("DisputeAdmin", fields: [admin_id], references: [id])
+
+  @@index([status], map: "idx_disputes_status")
+  @@map("disputes")
+}
+
+// backend/prisma/schema/subscriptions.prisma
+
+model SubscriptionPlan {
+  id                       String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String             @db.VarChar(50)
+  audience                 target_audience
+  level                    plan_level
+  price_mmk                BigInt             @default(0)
+  billing_cycle            String             @default("MONTHLY") @db.VarChar(20)
+  max_job_posts            Int                @default(3)
+  ai_sourcing_enabled      Boolean            @default(false)
+  ai_search_mode           String             @default("BASIC") @db.VarChar(20)
+  max_active_orders        Int                @default(3)
+  max_packages             Int                @default(3)
+  commission_rate          Decimal            @default(10.0) @db.Decimal(5, 2)
+  can_create_gold_packages Boolean            @default(false)
+  is_active                Boolean            @default(true)
+  created_at               DateTime           @default(now()) @db.Timestamptz
+  updated_at               DateTime           @updatedAt @db.Timestamptz
+  user_subscriptions       UserSubscription[]
+
+  @@map("subscription_plans")
+}
+
+model UserSubscription {
+  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String              @db.Uuid
+  plan_id    String              @db.Uuid
+  status     subscription_status @default(ACTIVE)
+  started_at DateTime            @default(now()) @db.Timestamptz
+  ends_at    DateTime?           @db.Timestamptz
+  created_at DateTime            @default(now()) @db.Timestamptz
+  updated_at DateTime            @updatedAt @db.Timestamptz
+  user       User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  plan       SubscriptionPlan    @relation(fields: [plan_id], references: [id])
+
+  @@index([user_id], map: "idx_user_subs_user")
+  @@index([status], map: "idx_user_subs_status")
+  @@map("user_subscriptions")
+}
+
+// backend/prisma/schema/transactions.prisma
+
+model Order {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  client_id        String       @db.Uuid
+  freelancer_id    String       @db.Uuid
+  source_type      order_source
+  package_id       String?      @db.Uuid
+  job_post_id      String?      @db.Uuid
+  agreed_price_mmk BigInt
+  platform_fee_mmk BigInt       @default(0)
+  status           order_status @default(AWAITING_ESCROW)
+  is_escrow_funded Boolean      @default(false)
+  created_at       DateTime     @default(now()) @db.Timestamptz
+  updated_at       DateTime     @updatedAt @db.Timestamptz
+  deleted_at       DateTime?    @db.Timestamptz
+
+  client       User                 @relation("ClientOrders", fields: [client_id], references: [id], onDelete: Cascade)
+  freelancer   User                 @relation("FreelancerOrders", fields: [freelancer_id], references: [id], onDelete: Cascade)
+  package      Package?             @relation(fields: [package_id], references: [id], onDelete: SetNull)
+  job_post     JobPost?             @relation(fields: [job_post_id], references: [id], onDelete: SetNull)
+  milestones   Milestone[]
+  payments     PaymentTransaction[]
+  messages     Message[]
+  deliverables Deliverable[]
+  reviews      Review[]
+  disputes     Dispute[]
+
+  @@index([client_id], map: "idx_orders_client")
+  @@index([freelancer_id], map: "idx_orders_freelancer")
+  @@index([status], map: "idx_orders_status")
+}
+
+model Milestone {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id    String           @db.Uuid
+  title       String           @db.VarChar(255)
+  description String?
+  amount_mmk  BigInt
+  status      milestone_status @default(PENDING_FUNDING)
+  due_date    DateTime?        @db.Date
+  created_at  DateTime         @default(now()) @db.Timestamptz
+  updated_at  DateTime         @updatedAt @db.Timestamptz
+
+  order        Order                @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  payments     PaymentTransaction[]
+  deliverables Deliverable[]
+
+  @@index([order_id], map: "idx_milestones_order")
+  @@map("milestones")
+}
+
+model PaymentTransaction {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id          String         @db.Uuid
+  milestone_id      String?        @db.Uuid
+  amount_mmk        BigInt
+  payment_method_id String?        @db.Uuid
+  transaction_ref   String?        @db.VarChar(255)
+  screenshot_url    String
+  status            payment_status @default(PENDING_ADMIN)
+  verified_by       String?        @db.Uuid
+  verified_at       DateTime?      @db.Timestamptz
+  created_at        DateTime       @default(now()) @db.Timestamptz
+  updated_at        DateTime       @updatedAt @db.Timestamptz
+
+  order          Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  milestone      Milestone?     @relation(fields: [milestone_id], references: [id], onDelete: SetNull)
+  payment_method PaymentMethod? @relation(fields: [payment_method_id], references: [id])
+  verifier       User?          @relation("PaymentVerifier", fields: [verified_by], references: [id])
+
+  @@index([order_id], map: "idx_payments_order")
+  @@index([status], map: "idx_payments_status")
+  @@map("payment_transactions")
+}

@@ -1,0 +1,100 @@
+// backend/prisma/schema/enums.prisma
+
+enum user_status {
+  LEAD
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum subscription_status {
+  ACTIVE
+  PENDING_ADMIN_APPROVAL
+  CANCELED
+  EXPIRED
+}
+
+enum target_audience {
+  CLIENT
+  FREELANCER
+}
+
+enum plan_level {
+  FREE
+  GOLD
+  DIAMOND
+}
+
+enum job_status {
+  OPEN
+  HIRING
+  CLOSED
+  DELETED
+}
+
+enum order_source {
+  PACKAGE
+  CUSTOM_OFFER
+}
+
+enum order_status {
+  AWAITING_ESCROW
+  ACTIVE
+  IN_REVIEW
+  COMPLETED
+  DISPUTED
+  CANCELED
+}
+
+enum milestone_status {
+  PENDING_FUNDING
+  FUNDED
+  IN_REVIEW
+  RELEASED
+  DISPUTED
+}
+
+enum payment_status {
+  PENDING_ADMIN
+  VERIFIED
+  REJECTED
+}
+
+enum deliverable_status {
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum message_type {
+  TEXT
+  FILE
+  SYSTEM
+  CUSTOM_OFFER
+}
+
+enum dispute_reason {
+  WORK_NOT_DELIVERED
+  PAYMENT_ISSUES
+  QUALITY_ISSUE
+  OTHER
+}
+
+enum dispute_status {
+  OPEN
+  RESOLVED_CLIENT
+  RESOLVED_FREELANCER
+  ESCALATED
+}
+
+enum moderation_status {
+  ACTIVE
+  LIFTED
+}
+
+enum kyc_status {
+  NOT_SUBMITTED
+  PENDING_REVIEW
+  VERIFIED
+  REJECTED
+}

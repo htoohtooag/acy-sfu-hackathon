@@ -1,0 +1,41 @@
+// backend/prisma/schema/reputation.prisma
+
+model Review {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id    String    @db.Uuid
+  reviewer_id String    @db.Uuid
+  reviewee_id String    @db.Uuid
+  rating      Int
+  comment     String?
+  is_public   Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz
+  deleted_at  DateTime? @db.Timestamptz
+
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  reviewer User  @relation("ReviewerReviews", fields: [reviewer_id], references: [id], onDelete: Cascade)
+  reviewee User  @relation("RevieweeReviews", fields: [reviewee_id], references: [id], onDelete: Cascade)
+
+  @@index([reviewee_id], map: "idx_reviews_reviewee")
+  @@map("reviews")
+}
+
+model Dispute {
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id         String         @db.Uuid
+  raised_by        String         @db.Uuid
+  reason           dispute_reason
+  explanation      String
+  evidence_urls    String[]       @default([])
+  status           dispute_status @default(OPEN)
+  admin_id         String?        @db.Uuid
+  resolution_notes String?
+  created_at       DateTime       @default(now()) @db.Timestamptz
+  resolved_at      DateTime?      @db.Timestamptz
+
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  raiser   User  @relation("DisputeRaiser", fields: [raised_by], references: [id], onDelete: Cascade)
+  resolver User? @relation("DisputeAdmin", fields: [admin_id], references: [id])
+
+  @@index([status], map: "idx_disputes_status")
+  @@map("disputes")
+}
