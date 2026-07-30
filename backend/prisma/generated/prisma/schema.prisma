@@ -622,6 +622,7 @@ model Order {
   @@index([client_id], map: "idx_orders_client")
   @@index([freelancer_id], map: "idx_orders_freelancer")
   @@index([status], map: "idx_orders_status")
+  @@map("orders")
 }
 
 model Milestone {

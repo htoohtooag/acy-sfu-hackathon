@@ -112,24 +112,25 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
   - *Done when:* A user can search for freelancers (returns UI cards + text) AND ask platform questions (returns accurate text based on DB documents). Off-topic/rude prompts are rejected. Updating a platform rule in the database instantly updates the AI's knowledge without code changes.
 
 
-### Phase 4: Transactions & Workroom
+### Phase 4: Transactions & Escrow
 - [ ] **Step 7: Order & Escrow APIs**
   - Implement `POST /api/v1/orders` (Calculate `platform_fee_mmk`, set status `AWAITING_ESCROW`).
+  - in order can not be that order both , only have to one job post or package
   - Implement `POST /api/v1/orders/:id/payments` (Upload screenshot to Supabase Storage, save to `payment_transactions`).
   - *Done when:* Order is created and payment proof is uploaded.
-- [ ] **Step 8: Workroom Socket.io**
-  - Initialize Socket.io server.
-  - Implement room joining strictly based on `order_id` and user participation.
-  - Handle real-time messages and persist to `messages` table.
-  - *Done when:* Two users can chat in real-time; messages survive a refresh.
-
-
-### Phase 5: Admin & Resolution
-- [ ] **Step 9: Admin APIs**
+- [ ] **Step 8: Admin APIs**
   - Implement `PATCH /api/v1/admin/payments/:id` (Verify escrow). Update Order to `ACTIVE`.
   - Implement `POST /api/v1/admin/users/:id/moderations` (Ban user).
   - ALL admin actions MUST insert a row into `admin_audit_logs`.
   - *Done when:* Admin verifies payment, Workroom unlocks, and audit log is recorded.
+
+
+### Phase 5: Execution & Resolution
+- [ ] **Step 9: Workroom Socket.io**
+  - Initialize Socket.io server.
+  - Implement room joining strictly based on `order_id` and user participation.
+  - Handle real-time messages and persist to `messages` table.
+  - *Done when:* Two users can chat in real-time; messages survive a refresh.
 - [ ] **Step 10: Delivery & Reviews**
   - Implement `PATCH /api/v1/orders/:id/deliverables` (Client approves). Update Order to `COMPLETED`. Expose clean file URL.
   - Implement `POST /api/v1/orders/:id/reviews`.

@@ -1,0 +1,36 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  createOrderSchema,
+  paymentProofFieldsSchema,
+} from 'shared/schemas';
+
+test('package order accepts only its package source', () => {
+  assert.equal(createOrderSchema.safeParse({ package_id: '00000000-0000-4000-8000-000000000001' }).success, true);
+  assert.equal(createOrderSchema.safeParse({
+    package_id: '00000000-0000-4000-8000-000000000001',
+    job_post_id: '00000000-0000-4000-8000-000000000002',
+  }).success, false);
+});
+
+test('custom offer order requires its freelancer and positive agreed amount', () => {
+  const valid = createOrderSchema.safeParse({
+    job_post_id: '00000000-0000-4000-8000-000000000001',
+    freelancer_id: '00000000-0000-4000-8000-000000000002',
+    agreed_price_mmk: '150000',
+  });
+  assert.equal(valid.success, true);
+  assert.equal(createOrderSchema.safeParse({
+    job_post_id: '00000000-0000-4000-8000-000000000001',
+    freelancer_id: '00000000-0000-4000-8000-000000000002',
+    agreed_price_mmk: '0',
+  }).success, false);
+});
+
+test('payment proof fields reject client controlled transaction state', () => {
+  assert.equal(paymentProofFieldsSchema.safeParse({
+    amount_mmk: '150000',
+    payment_method_id: '00000000-0000-4000-8000-000000000001',
+    status: 'VERIFIED',
+  }).success, false);
+});

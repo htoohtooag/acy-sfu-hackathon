@@ -9,6 +9,8 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   SUPABASE_JWT_SECRET: z.string().min(1),
+  SUPABASE_PAYMENT_PROOF_BUCKET: z.string().trim().min(1).default('payment-proofs'),
+  PAYMENT_PROOF_MAX_BYTES: z.coerce.number().int().positive().default(10485760),
   GEMINI_API_KEY: z.string().min(1),
   GEMINI_GENERATION_MODEL: z.string().trim().min(1),
   GEMINI_EMBEDDING_MODEL: z.string().trim().min(1),

@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 3, Step 6 — AI Search Agent
-**Next:** Phase 3, Step 7 — Backend hardening and verification
+**Last completed:** Phase 4, Step 7 — Order & Escrow APIs
+**Next:** Phase 4, Step 8 — Workroom Socket.io
 
 ---
 
@@ -29,7 +29,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 06 AI Search Agent (Vercel AI SDK + Gemini)
 
 ### Phase 4 — Transactions & Workroom
-- [ ] 07 Order & Escrow APIs
+- [x] 07 Order & Escrow APIs
 - [ ] 08 Workroom Socket.io
 - [ ] 09 Watermark Pipeline (Sharp)
 
@@ -89,3 +89,5 @@ Update this file after every completed feature. Any AI agent reading this should
 - Phase 3 catalog APIs are implemented under `backend/src/features/marketplace`: package and job CRUD, pagination, ownership and role checks, subscription limits, soft deletion, Gemini embeddings, and shared frontend contracts. The subscription seed ran twice successfully. Root build and backend tests pass. Next: implement the AI Search Agent.
 - Onboarding now provisions the seeded active free plan for the completed role inside the onboarding transaction. Client and freelancer roles receive separate subscriptions, dual role onboarding is supported, duplicate user and plan subscriptions are prevented by a database constraint, and the migration plus seed were applied successfully. Build and all backend tests pass.
 - Phase 3 Step 6 is complete: the AI SDK UI stream route, plan-gated tools, exact package filters with pgvector ranking, platform-document retrieval, RLS migration, shared validation, rate limiting, and focused tests are implemented. The migration and idempotent seed were applied to Supabase, AI search was verified through Postman, and the root build plus backend tests pass. Next: Phase 3 Step 7 hardening and verification.
+- Phase 4 Step 7 is complete: package and custom offer orders enforce one source, freelancer plan limits, locked commission fees, and the AWAITING_ESCROW state. Clients can upload private payment proof images to Supabase Storage, with PENDING_ADMIN transactions and cleanup on persistence failure. The migration was applied and both order source constraints were verified live. Root build and backend tests pass. Next: Phase 4 Step 8 Workroom Socket.io.
+- The Order model now maps to the physical `orders` table. A data-preserving rename migration was applied with Prisma Migrate, Prisma Client was regenerated, and live foreign keys/check constraints were verified. Local `migrate dev` shadow replay remains blocked because the existing baseline migration uses `citext`/`vector` without creating those extensions; do not alter the already-applied baseline migration.

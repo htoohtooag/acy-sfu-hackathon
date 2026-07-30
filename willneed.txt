@@ -54,3 +54,8 @@ CREATE INDEX IF NOT EXISTS idx_jobposts_embedding ON "job_posts" USING hnsw (emb
 
 
 -------------
+
+CHECK (
+    (package_id IS NOT NULL AND job_post_id IS NULL)
+ OR (package_id IS NULL AND job_post_id IS NOT NULL)
+)

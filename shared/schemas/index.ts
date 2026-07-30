@@ -43,3 +43,14 @@ export type {
   SearchPackagesToolInput,
   SearchPlatformDocsToolInput,
 } from './ai-search.js';
+export {
+  createOrderSchema,
+  orderIdSchema,
+  paymentProofFieldsSchema,
+} from './orders.js';
+export type {
+  CreateOrderRequest,
+  OrderResponse,
+  PaymentProofFields,
+  PaymentResponse,
+} from './orders.js';
