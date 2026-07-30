@@ -92,10 +92,25 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
   - Generate embeddings on save.
   - *Done when:* Freelancer can create packages; Client can post jobs.
 - [ ] **Step 6: AI Search Agent**
-  - Implement `POST /api/v1/ai/search` using Vercel AI SDK (Streaming).
-  - AI MUST use Function Calling to extract filters (budget, skill) and run strict SQL first.
-  - Use `pgvector` cosine similarity ONLY to sort the exact matches.
-  - *Done when:* AI streams a response and returns valid package cards based on DB data.
+
+- [ ] **Step 6: AI Search Agent (Enterprise Agentic RAG)**
+  - **Endpoint:** Implement `POST /api/v1/ai/search` using the Vercel AI SDK (`streamText`).
+  - **Persona & Guardrails:** 
+    - Configure the AI as "TalentScout", an expert, professional assistant.
+    - **Scope Restriction:** The AI MUST ONLY answer questions related to the marketplace. Off-topic questions must be politely declined.
+    - **Abuse Guardrail:** Rude/abusive language must be met with a polite refusal to engage.
+    - **Tone Rules:** Concise, objective, and professional. No fluff or long essays.
+  - **Tool 1: `searchPackages` (Marketplace Search):**
+    - **Trigger:** Used when the user is looking for talent or services.
+    - **Logic:** Extract hard filters (skill, budget) via Zod. Run strict SQL filters first. Use `pgvector` to sort exact matches by semantic relevance. Return "Rich JSON" (including `is_verified`, `completed_projects_count`) so the AI can make professional suggestions.
+    - **UI Contract:** Database results are sent as a structured `toolInvocations` array for the frontend to render as interactive UI Package Cards. The AI streams a 1-2 sentence text summary and recommendation.
+  - **Tool 2: `searchPlatformDocs` (RAG Knowledge Base):**
+    - **Trigger:** Used when the user asks general platform questions (e.g., "How does escrow work?", "What is the watermark lock?").
+    - **Database Setup:** Create a `platform_documents` table with columns: `id`, `title`, `content`, `embedding (vector(1536))`. Seed this table with initial platform rules (Escrow, Watermark, Plans).
+    - **Logic:** The tool takes the user's prompt, generates a Gemini embedding, and runs `pgvector` cosine similarity against the `platform_documents` table. It returns the top 1-2 matching document contents to the AI.
+    - **Response:** The AI reads the returned documentation and concisely answers the user's question in 2-3 sentences. Do not hallucinate features; rely strictly on the retrieved documents.
+  - *Done when:* A user can search for freelancers (returns UI cards + text) AND ask platform questions (returns accurate text based on DB documents). Off-topic/rude prompts are rejected. Updating a platform rule in the database instantly updates the AI's knowledge without code changes.
+
 
 ### Phase 4: Transactions & Workroom
 - [ ] **Step 7: Order & Escrow APIs**

@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 3, Step 5 — Catalog APIs
-**Next:** Phase 3, Step 6 — AI Search Agent
+**Last completed:** Phase 3, Step 6 — AI Search Agent
+**Next:** Phase 3, Step 7 — Backend hardening and verification
 
 ---
 
@@ -26,7 +26,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 3 — Marketplace & AI
 - [x] 05 Catalog APIs (Packages & Jobs)
-- [ ] 06 AI Search Agent (Vercel AI SDK + Gemini)
+- [x] 06 AI Search Agent (Vercel AI SDK + Gemini)
 
 ### Phase 4 — Transactions & Workroom
 - [ ] 07 Order & Escrow APIs
@@ -88,3 +88,4 @@ Update this file after every completed feature. Any AI agent reading this should
 - Phase 2 onboarding debug fixes are implemented with an identity repository layer. Active users can add their second role, existing KYC status is preserved, and embeddings use the Vercel AI SDK Google provider. Regression tests cover dual role rules and experience level UUID validation.
 - Phase 3 catalog APIs are implemented under `backend/src/features/marketplace`: package and job CRUD, pagination, ownership and role checks, subscription limits, soft deletion, Gemini embeddings, and shared frontend contracts. The subscription seed ran twice successfully. Root build and backend tests pass. Next: implement the AI Search Agent.
 - Onboarding now provisions the seeded active free plan for the completed role inside the onboarding transaction. Client and freelancer roles receive separate subscriptions, dual role onboarding is supported, duplicate user and plan subscriptions are prevented by a database constraint, and the migration plus seed were applied successfully. Build and all backend tests pass.
+- Phase 3 Step 6 is complete: the AI SDK UI stream route, plan-gated tools, exact package filters with pgvector ranking, platform-document retrieval, RLS migration, shared validation, rate limiting, and focused tests are implemented. The migration and idempotent seed were applied to Supabase, AI search was verified through Postman, and the root build plus backend tests pass. Next: Phase 3 Step 7 hardening and verification.

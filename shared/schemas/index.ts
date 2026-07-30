@@ -32,3 +32,14 @@ export type {
   UpdateJobPostRequest,
   UpdatePackageRequest,
 } from './catalog.js';
+export {
+  aiSearchRequestSchema,
+  searchPackagesToolSchema,
+  searchPlatformDocsToolSchema,
+} from './ai-search.js';
+export type {
+  AiSearchRequest,
+  AiSearchMessage,
+  SearchPackagesToolInput,
+  SearchPlatformDocsToolInput,
+} from './ai-search.js';

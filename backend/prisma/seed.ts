@@ -1,23 +1,25 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from './generated/prisma/client.js';
 import { config } from 'dotenv';
+import { createTextEmbedding } from '../src/config/gemini.js';
+import { normalizePostgresConnectionString } from '../src/config/postgres-connection.js';
 
 type LoadedEnvironment = {
-  DIRECT_URL: string;
+  DATABASE_URL: string;
 };
 
 const loadedEnvironment = config();
-const directUrl = loadedEnvironment.parsed?.DIRECT_URL;
+const databaseUrl = loadedEnvironment.parsed?.DATABASE_URL;
 
-if (!directUrl) {
-  throw new Error('DIRECT_URL must be defined in backend/.env before seeding.');
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL must be defined in backend/.env before seeding.');
 }
 
 const environment: LoadedEnvironment = {
-  DIRECT_URL: directUrl,
+  DATABASE_URL: normalizePostgresConnectionString(databaseUrl),
 };
 
-const adapter = new PrismaPg({ connectionString: environment.DIRECT_URL });
+const adapter = new PrismaPg({ connectionString: environment.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 const roles = [
@@ -77,7 +79,54 @@ const subscriptionPlans = [
     ai_search_mode: 'BASIC',
     commission_rate: 10,
   },
+  {
+    name: 'GOLD_CLIENT',
+    audience: 'CLIENT' as const,
+    level: 'GOLD' as const,
+    max_job_posts: 100,
+    max_packages: 3,
+    ai_sourcing_enabled: true,
+    ai_search_mode: 'AGENT',
+    commission_rate: 0,
+  },
 ];
+
+const platformDocuments = [
+  {
+    title: 'Escrow',
+    content: [
+      'An order starts in AWAITING_ESCROW when a client buys a package or accepts a custom offer.',
+      'Workroom chat is read-only until an administrator verifies the client payment proof and the order becomes ACTIVE.',
+      'When the client approves the completed work, the order becomes COMPLETED, the clean file is unlocked, and funds are released to the freelancer.',
+      'An order may become DISPUTED or CANCELED according to the marketplace dispute and funding rules.',
+    ].join(' '),
+  },
+  {
+    title: 'Watermark Lock',
+    content: [
+      'When a freelancer uploads a deliverable, the backend creates a low-resolution watermarked preview stamped DRAFT and a separate clean high-resolution file.',
+      'While an order is IN_REVIEW, clients may access only the watermarked preview.',
+      'The clean file is exposed only after the order becomes COMPLETED.',
+    ].join(' '),
+  },
+  {
+    title: 'Subscription Plans',
+    content: [
+      'Subscription plans limit marketplace actions for the active plan.',
+      'Free clients receive basic AI search only. Pro clients can use the AI agent and proactive AI sourcing.',
+      'Free freelancers may create up to three active packages and pay a ten percent platform commission.',
+      'Pro freelancer access requires administrator approval, a success rate above ninety percent, and more than five completed projects.',
+    ].join(' '),
+  },
+];
+
+function toVectorLiteral(values: number[]): string {
+  if (values.length !== 1536 || !values.every((value) => Number.isFinite(value))) {
+    throw new Error('Platform document embedding must contain 1536 finite values.');
+  }
+
+  return `[${values.join(',')}]`;
+}
 
 async function main(): Promise<void> {
   for (const role of roles) {
@@ -142,6 +191,26 @@ async function main(): Promise<void> {
         data: subscriptionPlan,
       });
     }
+  }
+
+  for (const platformDocument of platformDocuments) {
+    const embedding = await createTextEmbedding(`${platformDocument.title}\n${platformDocument.content}`);
+    const vector = toVectorLiteral(embedding);
+
+    await prisma.$transaction(async (transaction) => {
+      const document = await transaction.platformDocument.upsert({
+        where: { title: platformDocument.title },
+        update: { content: platformDocument.content },
+        create: platformDocument,
+        select: { id: true },
+      });
+
+      await transaction.$executeRaw`
+        UPDATE platform_documents
+        SET embedding = ${vector}::vector, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${document.id}::uuid
+      `;
+    });
   }
 }
 

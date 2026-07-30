@@ -355,6 +355,14 @@ exports.Prisma.NotificationScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.PlatformDocumentScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReviewScalarFieldEnum = {
   id: 'id',
   order_id: 'order_id',
@@ -604,6 +612,7 @@ exports.Prisma.ModelName = {
   PackageMedia: 'PackageMedia',
   JobPost: 'JobPost',
   Notification: 'Notification',
+  PlatformDocument: 'PlatformDocument',
   Review: 'Review',
   Dispute: 'Dispute',
   SubscriptionPlan: 'SubscriptionPlan',

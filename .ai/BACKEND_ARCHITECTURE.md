@@ -54,7 +54,7 @@ All API responses MUST use the standardized envelope. Do not send raw data or ra
 
 ### B. AI Search (Vercel AI SDK + Gemini)
 - The AI Search endpoint MUST use the Vercel AI SDK to stream responses.
-- The AI MUST use **Function Calling (Tools)**. It must extract hard constraints (budget, location) from the user's prompt and call a backend service function to run strict SQL filters. 
+- The AI MUST use **Function Calling (Tools)**. It must extract hard constraints (budget, location and etc) from the user's prompt and call a backend service function to run strict SQL filters. 
 - Do NOT rely purely on vector similarity for filtering hard constraints (like price).
 
 ### C. Image Processing (Sharp)

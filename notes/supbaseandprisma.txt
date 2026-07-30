@@ -1,0 +1,37 @@
+The seed works now because it uses the reachable pooled PostgreSQL connection.
+
+| Purpose | File | Connection |
+|---|---|---|
+| Application database queries | `backend/src/config/prisma.ts` | `DATABASE_URL`, port `6543` |
+| Seed database queries | `backend/prisma/seed.ts` | `DATABASE_URL`, port `6543` |
+| Prisma migrations | `backend/prisma.config.ts` | `DIRECT_URL`, port `5432` |
+| Supabase Auth or REST APIs | `backend/src/config/supabase.ts` | Supabase URL and service key |
+
+`backend/src/config/supabase.ts` is currently not imported anywhere. It creates a Supabase Admin client, but this backend currently uses:
+
+- Prisma for database queries
+- `jose` and Supabase JWKS for JWT verification
+- `PrismaPg` for PostgreSQL connections
+
+The original error occurred because:
+
+```text
+DIRECT_URL → pooler port 5432 → connection timed out
+```
+
+The working connection is:
+
+```text
+DATABASE_URL → pooler port 6543
+```
+
+The connection normalizer also adds:
+
+```text
+sslmode=require
+uselibpqcompat=true
+```
+
+This handles the Supabase pooler certificate behavior with the installed `pg` version.
+
+So `supabase.ts` was not responsible for the error. The failing code was the Prisma connection inside `seed.ts`.

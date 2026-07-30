@@ -51,3 +51,6 @@ WHERE auth_user.email IS NOT NULL
 CREATE INDEX IF NOT EXISTS idx_freelancer_embedding ON "freelancer_profiles" USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS idx_packages_embedding ON "packages" USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS idx_jobposts_embedding ON "job_posts" USING hnsw (embedding vector_cosine_ops);
+
+
+-------------

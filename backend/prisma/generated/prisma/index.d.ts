@@ -119,6 +119,11 @@ export type JobPost = $Result.DefaultSelection<Prisma.$JobPostPayload>
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model PlatformDocument
+ * 
+ */
+export type PlatformDocument = $Result.DefaultSelection<Prisma.$PlatformDocumentPayload>
+/**
  * Model Review
  * 
  */
@@ -695,6 +700,16 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.platformDocument`: Exposes CRUD operations for the **PlatformDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlatformDocuments
+    * const platformDocuments = await prisma.platformDocument.findMany()
+    * ```
+    */
+  get platformDocument(): Prisma.PlatformDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.review`: Exposes CRUD operations for the **Review** model.
     * Example usage:
     * ```ts
@@ -1231,6 +1246,7 @@ export namespace Prisma {
     PackageMedia: 'PackageMedia',
     JobPost: 'JobPost',
     Notification: 'Notification',
+    PlatformDocument: 'PlatformDocument',
     Review: 'Review',
     Dispute: 'Dispute',
     SubscriptionPlan: 'SubscriptionPlan',
@@ -1253,7 +1269,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "adminProfile" | "adminAuditLog" | "message" | "deliverable" | "user" | "role" | "userRole" | "userModeration" | "clientProfile" | "freelancerProfile" | "freelancerCertificate" | "identityVerification" | "paymentMethod" | "packageTier" | "experienceLevel" | "adminRole" | "auditAction" | "package" | "packageMedia" | "jobPost" | "notification" | "review" | "dispute" | "subscriptionPlan" | "userSubscription" | "order" | "milestone" | "paymentTransaction"
+      modelProps: "adminProfile" | "adminAuditLog" | "message" | "deliverable" | "user" | "role" | "userRole" | "userModeration" | "clientProfile" | "freelancerProfile" | "freelancerCertificate" | "identityVerification" | "paymentMethod" | "packageTier" | "experienceLevel" | "adminRole" | "auditAction" | "package" | "packageMedia" | "jobPost" | "notification" | "platformDocument" | "review" | "dispute" | "subscriptionPlan" | "userSubscription" | "order" | "milestone" | "paymentTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2811,6 +2827,80 @@ export namespace Prisma {
           }
         }
       }
+      PlatformDocument: {
+        payload: Prisma.$PlatformDocumentPayload<ExtArgs>
+        fields: Prisma.PlatformDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlatformDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlatformDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.PlatformDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlatformDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.PlatformDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.PlatformDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.PlatformDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlatformDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.PlatformDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          update: {
+            args: Prisma.PlatformDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlatformDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlatformDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlatformDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlatformDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.PlatformDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlatformDocument>
+          }
+          groupBy: {
+            args: Prisma.PlatformDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlatformDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlatformDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<PlatformDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
       Review: {
         payload: Prisma.$ReviewPayload<ExtArgs>
         fields: Prisma.ReviewFieldRefs
@@ -3473,6 +3563,7 @@ export namespace Prisma {
     packageMedia?: PackageMediaOmit
     jobPost?: JobPostOmit
     notification?: NotificationOmit
+    platformDocument?: PlatformDocumentOmit
     review?: ReviewOmit
     dispute?: DisputeOmit
     subscriptionPlan?: SubscriptionPlanOmit
@@ -28694,6 +28785,1006 @@ export namespace Prisma {
 
 
   /**
+   * Model PlatformDocument
+   */
+
+  export type AggregatePlatformDocument = {
+    _count: PlatformDocumentCountAggregateOutputType | null
+    _min: PlatformDocumentMinAggregateOutputType | null
+    _max: PlatformDocumentMaxAggregateOutputType | null
+  }
+
+  export type PlatformDocumentMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type PlatformDocumentMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type PlatformDocumentCountAggregateOutputType = {
+    id: number
+    title: number
+    content: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type PlatformDocumentMinAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type PlatformDocumentMaxAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type PlatformDocumentCountAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type PlatformDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformDocument to aggregate.
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformDocuments to fetch.
+     */
+    orderBy?: PlatformDocumentOrderByWithRelationInput | PlatformDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlatformDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlatformDocuments
+    **/
+    _count?: true | PlatformDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlatformDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlatformDocumentMaxAggregateInputType
+  }
+
+  export type GetPlatformDocumentAggregateType<T extends PlatformDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlatformDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlatformDocument[P]>
+      : GetScalarType<T[P], AggregatePlatformDocument[P]>
+  }
+
+
+
+
+  export type PlatformDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlatformDocumentWhereInput
+    orderBy?: PlatformDocumentOrderByWithAggregationInput | PlatformDocumentOrderByWithAggregationInput[]
+    by: PlatformDocumentScalarFieldEnum[] | PlatformDocumentScalarFieldEnum
+    having?: PlatformDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlatformDocumentCountAggregateInputType | true
+    _min?: PlatformDocumentMinAggregateInputType
+    _max?: PlatformDocumentMaxAggregateInputType
+  }
+
+  export type PlatformDocumentGroupByOutputType = {
+    id: string
+    title: string
+    content: string
+    created_at: Date
+    updated_at: Date
+    _count: PlatformDocumentCountAggregateOutputType | null
+    _min: PlatformDocumentMinAggregateOutputType | null
+    _max: PlatformDocumentMaxAggregateOutputType | null
+  }
+
+  type GetPlatformDocumentGroupByPayload<T extends PlatformDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlatformDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlatformDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlatformDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], PlatformDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlatformDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["platformDocument"]>
+
+  export type PlatformDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["platformDocument"]>
+
+  export type PlatformDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["platformDocument"]>
+
+  export type PlatformDocumentSelectScalar = {
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type PlatformDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "created_at" | "updated_at", ExtArgs["result"]["platformDocument"]>
+
+  export type $PlatformDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlatformDocument"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      content: string
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["platformDocument"]>
+    composites: {}
+  }
+
+  type PlatformDocumentGetPayload<S extends boolean | null | undefined | PlatformDocumentDefaultArgs> = $Result.GetResult<Prisma.$PlatformDocumentPayload, S>
+
+  type PlatformDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlatformDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlatformDocumentCountAggregateInputType | true
+    }
+
+  export interface PlatformDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlatformDocument'], meta: { name: 'PlatformDocument' } }
+    /**
+     * Find zero or one PlatformDocument that matches the filter.
+     * @param {PlatformDocumentFindUniqueArgs} args - Arguments to find a PlatformDocument
+     * @example
+     * // Get one PlatformDocument
+     * const platformDocument = await prisma.platformDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlatformDocumentFindUniqueArgs>(args: SelectSubset<T, PlatformDocumentFindUniqueArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlatformDocument that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlatformDocumentFindUniqueOrThrowArgs} args - Arguments to find a PlatformDocument
+     * @example
+     * // Get one PlatformDocument
+     * const platformDocument = await prisma.platformDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlatformDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatformDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentFindFirstArgs} args - Arguments to find a PlatformDocument
+     * @example
+     * // Get one PlatformDocument
+     * const platformDocument = await prisma.platformDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlatformDocumentFindFirstArgs>(args?: SelectSubset<T, PlatformDocumentFindFirstArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentFindFirstOrThrowArgs} args - Arguments to find a PlatformDocument
+     * @example
+     * // Get one PlatformDocument
+     * const platformDocument = await prisma.platformDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlatformDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatformDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlatformDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlatformDocuments
+     * const platformDocuments = await prisma.platformDocument.findMany()
+     * 
+     * // Get first 10 PlatformDocuments
+     * const platformDocuments = await prisma.platformDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const platformDocumentWithIdOnly = await prisma.platformDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlatformDocumentFindManyArgs>(args?: SelectSubset<T, PlatformDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlatformDocument.
+     * @param {PlatformDocumentCreateArgs} args - Arguments to create a PlatformDocument.
+     * @example
+     * // Create one PlatformDocument
+     * const PlatformDocument = await prisma.platformDocument.create({
+     *   data: {
+     *     // ... data to create a PlatformDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlatformDocumentCreateArgs>(args: SelectSubset<T, PlatformDocumentCreateArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlatformDocuments.
+     * @param {PlatformDocumentCreateManyArgs} args - Arguments to create many PlatformDocuments.
+     * @example
+     * // Create many PlatformDocuments
+     * const platformDocument = await prisma.platformDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlatformDocumentCreateManyArgs>(args?: SelectSubset<T, PlatformDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlatformDocuments and returns the data saved in the database.
+     * @param {PlatformDocumentCreateManyAndReturnArgs} args - Arguments to create many PlatformDocuments.
+     * @example
+     * // Create many PlatformDocuments
+     * const platformDocument = await prisma.platformDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlatformDocuments and only return the `id`
+     * const platformDocumentWithIdOnly = await prisma.platformDocument.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlatformDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatformDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PlatformDocument.
+     * @param {PlatformDocumentDeleteArgs} args - Arguments to delete one PlatformDocument.
+     * @example
+     * // Delete one PlatformDocument
+     * const PlatformDocument = await prisma.platformDocument.delete({
+     *   where: {
+     *     // ... filter to delete one PlatformDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlatformDocumentDeleteArgs>(args: SelectSubset<T, PlatformDocumentDeleteArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlatformDocument.
+     * @param {PlatformDocumentUpdateArgs} args - Arguments to update one PlatformDocument.
+     * @example
+     * // Update one PlatformDocument
+     * const platformDocument = await prisma.platformDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlatformDocumentUpdateArgs>(args: SelectSubset<T, PlatformDocumentUpdateArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlatformDocuments.
+     * @param {PlatformDocumentDeleteManyArgs} args - Arguments to filter PlatformDocuments to delete.
+     * @example
+     * // Delete a few PlatformDocuments
+     * const { count } = await prisma.platformDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlatformDocumentDeleteManyArgs>(args?: SelectSubset<T, PlatformDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlatformDocuments
+     * const platformDocument = await prisma.platformDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlatformDocumentUpdateManyArgs>(args: SelectSubset<T, PlatformDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformDocuments and returns the data updated in the database.
+     * @param {PlatformDocumentUpdateManyAndReturnArgs} args - Arguments to update many PlatformDocuments.
+     * @example
+     * // Update many PlatformDocuments
+     * const platformDocument = await prisma.platformDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PlatformDocuments and only return the `id`
+     * const platformDocumentWithIdOnly = await prisma.platformDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlatformDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatformDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PlatformDocument.
+     * @param {PlatformDocumentUpsertArgs} args - Arguments to update or create a PlatformDocument.
+     * @example
+     * // Update or create a PlatformDocument
+     * const platformDocument = await prisma.platformDocument.upsert({
+     *   create: {
+     *     // ... data to create a PlatformDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlatformDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlatformDocumentUpsertArgs>(args: SelectSubset<T, PlatformDocumentUpsertArgs<ExtArgs>>): Prisma__PlatformDocumentClient<$Result.GetResult<Prisma.$PlatformDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PlatformDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentCountArgs} args - Arguments to filter PlatformDocuments to count.
+     * @example
+     * // Count the number of PlatformDocuments
+     * const count = await prisma.platformDocument.count({
+     *   where: {
+     *     // ... the filter for the PlatformDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlatformDocumentCountArgs>(
+      args?: Subset<T, PlatformDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlatformDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlatformDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlatformDocumentAggregateArgs>(args: Subset<T, PlatformDocumentAggregateArgs>): Prisma.PrismaPromise<GetPlatformDocumentAggregateType<T>>
+
+    /**
+     * Group by PlatformDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlatformDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlatformDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: PlatformDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlatformDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatformDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlatformDocument model
+   */
+  readonly fields: PlatformDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlatformDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlatformDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlatformDocument model
+   */
+  interface PlatformDocumentFieldRefs {
+    readonly id: FieldRef<"PlatformDocument", 'String'>
+    readonly title: FieldRef<"PlatformDocument", 'String'>
+    readonly content: FieldRef<"PlatformDocument", 'String'>
+    readonly created_at: FieldRef<"PlatformDocument", 'DateTime'>
+    readonly updated_at: FieldRef<"PlatformDocument", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlatformDocument findUnique
+   */
+  export type PlatformDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformDocument to fetch.
+     */
+    where: PlatformDocumentWhereUniqueInput
+  }
+
+  /**
+   * PlatformDocument findUniqueOrThrow
+   */
+  export type PlatformDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformDocument to fetch.
+     */
+    where: PlatformDocumentWhereUniqueInput
+  }
+
+  /**
+   * PlatformDocument findFirst
+   */
+  export type PlatformDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformDocument to fetch.
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformDocuments to fetch.
+     */
+    orderBy?: PlatformDocumentOrderByWithRelationInput | PlatformDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformDocuments.
+     */
+    cursor?: PlatformDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformDocuments.
+     */
+    distinct?: PlatformDocumentScalarFieldEnum | PlatformDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformDocument findFirstOrThrow
+   */
+  export type PlatformDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformDocument to fetch.
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformDocuments to fetch.
+     */
+    orderBy?: PlatformDocumentOrderByWithRelationInput | PlatformDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformDocuments.
+     */
+    cursor?: PlatformDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformDocuments.
+     */
+    distinct?: PlatformDocumentScalarFieldEnum | PlatformDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformDocument findMany
+   */
+  export type PlatformDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformDocuments to fetch.
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformDocuments to fetch.
+     */
+    orderBy?: PlatformDocumentOrderByWithRelationInput | PlatformDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlatformDocuments.
+     */
+    cursor?: PlatformDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformDocuments.
+     */
+    distinct?: PlatformDocumentScalarFieldEnum | PlatformDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformDocument create
+   */
+  export type PlatformDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PlatformDocument.
+     */
+    data: XOR<PlatformDocumentCreateInput, PlatformDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * PlatformDocument createMany
+   */
+  export type PlatformDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlatformDocuments.
+     */
+    data: PlatformDocumentCreateManyInput | PlatformDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlatformDocument createManyAndReturn
+   */
+  export type PlatformDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to create many PlatformDocuments.
+     */
+    data: PlatformDocumentCreateManyInput | PlatformDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlatformDocument update
+   */
+  export type PlatformDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PlatformDocument.
+     */
+    data: XOR<PlatformDocumentUpdateInput, PlatformDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which PlatformDocument to update.
+     */
+    where: PlatformDocumentWhereUniqueInput
+  }
+
+  /**
+   * PlatformDocument updateMany
+   */
+  export type PlatformDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlatformDocuments.
+     */
+    data: XOR<PlatformDocumentUpdateManyMutationInput, PlatformDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformDocuments to update
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * Limit how many PlatformDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformDocument updateManyAndReturn
+   */
+  export type PlatformDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update PlatformDocuments.
+     */
+    data: XOR<PlatformDocumentUpdateManyMutationInput, PlatformDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformDocuments to update
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * Limit how many PlatformDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformDocument upsert
+   */
+  export type PlatformDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PlatformDocument to update in case it exists.
+     */
+    where: PlatformDocumentWhereUniqueInput
+    /**
+     * In case the PlatformDocument found by the `where` argument doesn't exist, create a new PlatformDocument with this data.
+     */
+    create: XOR<PlatformDocumentCreateInput, PlatformDocumentUncheckedCreateInput>
+    /**
+     * In case the PlatformDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlatformDocumentUpdateInput, PlatformDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * PlatformDocument delete
+   */
+  export type PlatformDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+    /**
+     * Filter which PlatformDocument to delete.
+     */
+    where: PlatformDocumentWhereUniqueInput
+  }
+
+  /**
+   * PlatformDocument deleteMany
+   */
+  export type PlatformDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformDocuments to delete
+     */
+    where?: PlatformDocumentWhereInput
+    /**
+     * Limit how many PlatformDocuments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformDocument without action
+   */
+  export type PlatformDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformDocument
+     */
+    select?: PlatformDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformDocument
+     */
+    omit?: PlatformDocumentOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Review
    */
 
@@ -37633,6 +38724,17 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const PlatformDocumentScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    content: 'content',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type PlatformDocumentScalarFieldEnum = (typeof PlatformDocumentScalarFieldEnum)[keyof typeof PlatformDocumentScalarFieldEnum]
+
+
   export const ReviewScalarFieldEnum: {
     id: 'id',
     order_id: 'order_id',
@@ -39734,6 +40836,58 @@ export namespace Prisma {
     is_read?: BoolWithAggregatesFilter<"Notification"> | boolean
     metadata?: JsonWithAggregatesFilter<"Notification">
     created_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
+  export type PlatformDocumentWhereInput = {
+    AND?: PlatformDocumentWhereInput | PlatformDocumentWhereInput[]
+    OR?: PlatformDocumentWhereInput[]
+    NOT?: PlatformDocumentWhereInput | PlatformDocumentWhereInput[]
+    id?: UuidFilter<"PlatformDocument"> | string
+    title?: StringFilter<"PlatformDocument"> | string
+    content?: StringFilter<"PlatformDocument"> | string
+    created_at?: DateTimeFilter<"PlatformDocument"> | Date | string
+    updated_at?: DateTimeFilter<"PlatformDocument"> | Date | string
+  }
+
+  export type PlatformDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type PlatformDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    title?: string
+    AND?: PlatformDocumentWhereInput | PlatformDocumentWhereInput[]
+    OR?: PlatformDocumentWhereInput[]
+    NOT?: PlatformDocumentWhereInput | PlatformDocumentWhereInput[]
+    content?: StringFilter<"PlatformDocument"> | string
+    created_at?: DateTimeFilter<"PlatformDocument"> | Date | string
+    updated_at?: DateTimeFilter<"PlatformDocument"> | Date | string
+  }, "id" | "title">
+
+  export type PlatformDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: PlatformDocumentCountOrderByAggregateInput
+    _max?: PlatformDocumentMaxOrderByAggregateInput
+    _min?: PlatformDocumentMinOrderByAggregateInput
+  }
+
+  export type PlatformDocumentScalarWhereWithAggregatesInput = {
+    AND?: PlatformDocumentScalarWhereWithAggregatesInput | PlatformDocumentScalarWhereWithAggregatesInput[]
+    OR?: PlatformDocumentScalarWhereWithAggregatesInput[]
+    NOT?: PlatformDocumentScalarWhereWithAggregatesInput | PlatformDocumentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PlatformDocument"> | string
+    title?: StringWithAggregatesFilter<"PlatformDocument"> | string
+    content?: StringWithAggregatesFilter<"PlatformDocument"> | string
+    created_at?: DateTimeWithAggregatesFilter<"PlatformDocument"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"PlatformDocument"> | Date | string
   }
 
   export type ReviewWhereInput = {
@@ -42153,6 +43307,62 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlatformDocumentCreateInput = {
+    id?: string
+    title: string
+    content: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type PlatformDocumentUncheckedCreateInput = {
+    id?: string
+    title: string
+    content: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type PlatformDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformDocumentCreateManyInput = {
+    id?: string
+    title: string
+    content: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type PlatformDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ReviewCreateInput = {
     id?: string
     rating: number
@@ -44420,6 +45630,30 @@ export namespace Prisma {
     body?: SortOrder
     is_read?: SortOrder
     created_at?: SortOrder
+  }
+
+  export type PlatformDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type PlatformDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type PlatformDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type ReviewCountOrderByAggregateInput = {

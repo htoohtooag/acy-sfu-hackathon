@@ -496,6 +496,17 @@ model Notification {
   @@map("notifications")
 }
 
+model PlatformDocument {
+  id         String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title      String                       @unique @db.VarChar(255)
+  content    String
+  embedding  Unsupported("vector(1536)")?
+  created_at DateTime                     @default(now()) @db.Timestamptz
+  updated_at DateTime                     @updatedAt @db.Timestamptz
+
+  @@map("platform_documents")
+}
+
 // backend/prisma/schema/reputation.prisma
 
 model Review {
