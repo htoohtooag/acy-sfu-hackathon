@@ -56,6 +56,29 @@ const auditActions = [
   { name: 'RESOLVE_DISPUTE', category: 'DISPUTES' },
 ];
 
+const subscriptionPlans = [
+  {
+    name: 'FREE_CLIENT',
+    audience: 'CLIENT' as const,
+    level: 'FREE' as const,
+    max_job_posts: 3,
+    max_packages: 3,
+    ai_sourcing_enabled: false,
+    ai_search_mode: 'BASIC',
+    commission_rate: 0,
+  },
+  {
+    name: 'FREE_FREELANCER',
+    audience: 'FREELANCER' as const,
+    level: 'FREE' as const,
+    max_job_posts: 3,
+    max_packages: 3,
+    ai_sourcing_enabled: false,
+    ai_search_mode: 'BASIC',
+    commission_rate: 10,
+  },
+];
+
 async function main(): Promise<void> {
   for (const role of roles) {
     await prisma.role.upsert({
@@ -103,6 +126,22 @@ async function main(): Promise<void> {
       update: auditAction,
       create: auditAction,
     });
+  }
+
+  for (const subscriptionPlan of subscriptionPlans) {
+    const existingPlan = await prisma.subscriptionPlan.findFirst({
+      where: { name: subscriptionPlan.name },
+      select: { id: true },
+    });
+
+    if (existingPlan === null) {
+      await prisma.subscriptionPlan.create({ data: subscriptionPlan });
+    } else {
+      await prisma.subscriptionPlan.update({
+        where: { id: existingPlan.id },
+        data: subscriptionPlan,
+      });
+    }
   }
 }
 

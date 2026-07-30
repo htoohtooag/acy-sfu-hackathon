@@ -2,6 +2,8 @@ import cors from 'cors';
 import express from 'express';
 import { env } from './config/env.js';
 import { identityRouter } from './features/identity/identity.routes.js';
+import { jobRouter } from './features/marketplace/job.routes.js';
+import { packageRouter } from './features/marketplace/package.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { successResponse } from './utils/api-response.js';
 
@@ -25,5 +27,7 @@ app.get('/api/v1/health', (_request, response) => {
 });
 
 app.use('/api/v1/users', identityRouter);
+app.use('/api/v1/packages', packageRouter);
+app.use('/api/v1/jobs', jobRouter);
 
 app.use(errorHandler);

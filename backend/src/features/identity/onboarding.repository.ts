@@ -1,6 +1,7 @@
 import type { OnboardingRequest, OnboardingResponse } from 'shared/schemas';
 import { prisma } from '../../config/prisma.js';
 import { ApiError } from '../../utils/api-error.js';
+import { ensureFreeSubscription } from './subscription.repository.js';
 
 type OnboardingUserSnapshot = {
   id: string;
@@ -111,6 +112,8 @@ export async function persistOnboarding(
         WHERE id = ${profileId}::uuid
       `;
     }
+
+    await ensureFreeSubscription(input.userId, input.payload.role, transaction);
 
     await transaction.user.update({
       where: { id: input.userId },

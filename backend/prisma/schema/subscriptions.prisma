@@ -36,5 +36,6 @@ model UserSubscription {
 
   @@index([user_id], map: "idx_user_subs_user")
   @@index([status], map: "idx_user_subs_status")
+  @@unique([user_id, plan_id], map: "user_subscriptions_user_id_plan_id_key")
   @@map("user_subscriptions")
 }

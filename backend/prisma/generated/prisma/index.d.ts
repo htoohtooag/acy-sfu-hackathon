@@ -40053,6 +40053,7 @@ export namespace Prisma {
 
   export type UserSubscriptionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    user_id_plan_id?: UserSubscriptionUser_idPlan_idCompoundUniqueInput
     AND?: UserSubscriptionWhereInput | UserSubscriptionWhereInput[]
     OR?: UserSubscriptionWhereInput[]
     NOT?: UserSubscriptionWhereInput | UserSubscriptionWhereInput[]
@@ -40065,7 +40066,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"UserSubscription"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     plan?: XOR<SubscriptionPlanScalarRelationFilter, SubscriptionPlanWhereInput>
-  }, "id">
+  }, "id" | "user_id_plan_id">
 
   export type UserSubscriptionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -44656,6 +44657,11 @@ export namespace Prisma {
   export type SubscriptionPlanScalarRelationFilter = {
     is?: SubscriptionPlanWhereInput
     isNot?: SubscriptionPlanWhereInput
+  }
+
+  export type UserSubscriptionUser_idPlan_idCompoundUniqueInput = {
+    user_id: string
+    plan_id: string
   }
 
   export type UserSubscriptionCountOrderByAggregateInput = {
