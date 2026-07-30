@@ -87,26 +87,31 @@ backend/
 │   │   │   ├── user.routes.js
 │   │   │   ├── user.controller.js
 │   │   │   ├── user.service.js
+│   │   │   ├── user.repository.js
 │   │   │   ├── user.validator.js   # Zod schemas for profile updates
 │   │   │   └── auth.middleware.js  # Supabase JWT verification
 │   │   │
 │   │   ├── subscriptions/    # Plans & User Subscriptions
 │   │   │   ├── subscription.routes.js
 │   │   │   ├── subscription.controller.js
+│   │   │   ├── subscription.repository.js
 │   │   │   └── subscription.service.js  # Checks plan limits (max_posts, etc.)
 │   │   │
 │   │   ├── marketplace/      # Packages & Job Posts
 │   │   │   ├── package.routes.js
 │   │   │   ├── package.controller.js
+│   │   │   ├── package.repository.js
 │   │   │   ├── package.service.js       # pgvector embedding logic here
 │   │   │   ├── package.validator.js
 │   │   │   ├── job.routes.js
 │   │   │   ├── job.controller.js
+│   │   │   ├── job.repository.js
 │   │   │   └── job.service.js
 │   │   │
 │   │   ├── ai-search/        # ChatGPT-style Agent Search
 │   │   │   ├── aiSearch.routes.js
 │   │   │   ├── aiSearch.controller.js
+│   │   │   ├── aiserach.repository.js
 │   │   │   └── aiSearch.service.js      # Vercel AI SDK, Gemini Tools, streaming
 │   │   │
 │   │   ├── transactions/     # Orders, Escrow, Milestones, Payments

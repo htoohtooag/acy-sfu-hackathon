@@ -63,12 +63,27 @@ Execute these steps in order. Do not move to the next step until the current one
   - Create `auth.middleware.js` to verify Supabase JWTs and attach `req.user.id`.
   - Create RBAC middleware to check user roles.
   - *Done when:* Protected routes return 401 without a token, 403 with wrong role, and 200 with valid token.
-- [ ] **Step 4: Onboarding APIs**
-  - Implement `POST /api/v1/users/me/roles` (Assign role to user).
-  - Implement `POST /api/v1/users/me/profile/client` and `/freelancer`.
-  - Freelancer profile creation MUST call Google Gemini to generate an embedding and save it to the `embedding` column.
-  - Update `users.status` to `ACTIVE` upon profile completion.
-  - *Done when:* User can complete onboarding and profile is saved with vector embedding.
+Here is the exact Markdown for Step 4. You can copy and paste this directly into your `BACKEND_BUILD_PLAN.md`, replacing the old Step 
+
+- [ ] **Step 4: Unified Onboarding API**
+  - *Context: User is authenticated by Supabase but has `status = LEAD`. They need to complete their profile to become `ACTIVE`.*
+  - **Endpoint:** `POST /api/v1/users/me/onboarding` (Single endpoint for all onboarding logic).
+  - **Validation (Zod):** 
+    - Accept `role` ("CLIENT" | "FREELANCER").
+    - Accept base data: `phone_number`, `nrc_number`.
+    - If `CLIENT`: Require `company_name`, `industry`.
+    - If `FREELANCER`: Require `headline`, `skills` (array), `experience_level_id`, `years_of_experience` (int).
+  - **Database Logic (MUST use `prisma.$transaction`):**
+    1. Update `users` table with `phone_number`.
+    2. Upsert `identity_verifications` table with `nrc_number` (status remains `NOT_SUBMITTED` until KYC photo upload later).
+    3. Insert into `user_roles` table.
+    4. If `CLIENT`: Insert into `client_profiles`.
+    5. If `FREELANCER`: Insert into `freelancer_profiles`.
+    6. **AI Action (Freelancer only):** Combine `headline` + `skills` + `experience_level` into a single string. Call Google Gemini Embedding API. 
+       - *Strict Rule:* DO NOT hardcode the embedding model name (e.g., "text-embedding-004") in the code. Pull the model name from the validated environment variables (e.g., `env.GEMINI_EMBEDDING_MODEL`).
+       - Save the resulting vector to `freelancer_profiles.embedding`.
+    7. Update `users.status` to `ACTIVE`.
+  - *Done when:* A `LEAD` user submits the single onboarding form, all tables are updated in a transaction, the Gemini embedding is generated without a hardcoded model name, and the user's status becomes `ACTIVE`.
 
 ### Phase 3: Marketplace & AI
 - [ ] **Step 5: Catalog APIs**

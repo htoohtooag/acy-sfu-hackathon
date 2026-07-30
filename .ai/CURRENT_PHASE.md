@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 1, Step 2 — Core Infrastructure
-**Next:** Phase 2, Step 3 — Supabase JWT authentication middleware
+**Last completed:** Phase 3, Step 5 — Catalog APIs
+**Next:** Phase 3, Step 6 — AI Search Agent
 
 ---
 
@@ -21,11 +21,11 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 02 Core Infrastructure (Express, Env, Prisma Client, Supabase Admin client, health endpoint, graceful shutdown)
 
 ### Phase 2 — Identity & Access
-- [ ] 03 Auth Middleware (Supabase JWT)
-- [ ] 04 Onboarding APIs (Profiles & Embeddings)
+- [x] 03 Auth Middleware (Supabase JWT)
+- [x] 04 Onboarding APIs (Profiles & Embeddings)
 
 ### Phase 3 — Marketplace & AI
-- [ ] 05 Catalog APIs (Packages & Jobs)
+- [x] 05 Catalog APIs (Packages & Jobs)
 - [ ] 06 AI Search Agent (Vercel AI SDK + Gemini)
 
 ### Phase 4 — Transactions & Workroom
@@ -81,4 +81,10 @@ Update this file after every completed feature. Any AI agent reading this should
 - Prisma migration configuration continues to target `DIRECT_URL`; runtime connections may use pooled `DATABASE_URL`.
 - The existing Supabase schema matches the Prisma schema with no diff. A generated `prisma/migrations/0_init/migration.sql` baseline was marked applied without resetting or changing existing tables/data.
 - Lookup seed data is defined in `backend/prisma/seed.ts` and was executed twice successfully using Prisma's generated client and PostgreSQL adapter.
-- Core infrastructure is implemented under `backend/src`: validated environment, Prisma singleton, Supabase Admin client, API envelope utilities, global error handling, health endpoint, and graceful shutdown. The compiled server passed the health and SIGTERM checks. Next: implement Supabase JWT authentication middleware.
+- Core infrastructure is implemented under `backend/src`: validated environment, Prisma singleton, Supabase Admin client, API envelope utilities, global error handling, health endpoint, and graceful shutdown. The compiled server passed the health and SIGTERM checks.
+- Supabase JWT middleware is implemented under `backend/src/middlewares`: HS256 tokens are verified with the validated JWT secret, active database users are loaded with their roles, and role checks return the standard `401` or `403` envelope. The protected `GET /api/v1/users/me` route passed missing and malformed token checks. Next: implement onboarding APIs.
+- The authentication debug fix adds an idempotent Supabase `auth.users` trigger and reconciles existing Auth users into `public.users` with status `LEAD`. ES256 and RS256 tokens are verified through the Supabase JWKS endpoint, while legacy HS256 support remains available. Next: implement onboarding APIs.
+- Unified onboarding is implemented at `POST /api/v1/users/me/onboarding`. Shared Zod contracts cover client and freelancer payloads, Prisma transactions persist identity, role, profile, and activation data, and freelancer embeddings use configured Gemini settings with a parameterized pgvector write. The root build compiles shared contracts before the backend. Next: implement catalog APIs.
+- Phase 2 onboarding debug fixes are implemented with an identity repository layer. Active users can add their second role, existing KYC status is preserved, and embeddings use the Vercel AI SDK Google provider. Regression tests cover dual role rules and experience level UUID validation.
+- Phase 3 catalog APIs are implemented under `backend/src/features/marketplace`: package and job CRUD, pagination, ownership and role checks, subscription limits, soft deletion, Gemini embeddings, and shared frontend contracts. The subscription seed ran twice successfully. Root build and backend tests pass. Next: implement the AI Search Agent.
+- Onboarding now provisions the seeded active free plan for the completed role inside the onboarding transaction. Client and freelancer roles receive separate subscriptions, dual role onboarding is supported, duplicate user and plan subscriptions are prevented by a database constraint, and the migration plus seed were applied successfully. Build and all backend tests pass.
