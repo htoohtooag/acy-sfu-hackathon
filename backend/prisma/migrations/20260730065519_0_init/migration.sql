@@ -1,6 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateEnum
 CREATE TYPE "user_status" AS ENUM ('LEAD', 'ACTIVE', 'SUSPENDED', 'DELETED');
 
@@ -110,6 +107,8 @@ CREATE TABLE "users" (
     "email" CITEXT NOT NULL,
     "full_name" VARCHAR(255),
     "avatar_url" TEXT,
+    "phone_number" VARCHAR(20),
+    "social_links" JSONB,
     "status" "user_status" NOT NULL DEFAULT 'LEAD',
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
@@ -160,6 +159,8 @@ CREATE TABLE "client_profiles" (
     "company_name" VARCHAR(255),
     "industry" VARCHAR(100),
     "bio" TEXT,
+    "ocation_city" VARCHAR(100),
+    "website_url" TEXT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -174,6 +175,10 @@ CREATE TABLE "freelancer_profiles" (
     "bio" TEXT,
     "skills" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "experience_level_id" UUID,
+    "years_of_experience" INTEGER,
+    "portfolio_url" TEXT,
+    "languages" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "location_city" VARCHAR(100),
     "success_rate" DECIMAL(5,2) NOT NULL DEFAULT 100.0,
     "total_earnings_mmk" BIGINT NOT NULL DEFAULT 0,
     "is_verified" BOOLEAN NOT NULL DEFAULT false,
@@ -186,6 +191,18 @@ CREATE TABLE "freelancer_profiles" (
     "deleted_at" TIMESTAMPTZ,
 
     CONSTRAINT "freelancer_profiles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "freelancer_certificates" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "freelancer_id" UUID NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "issuer" VARCHAR(255),
+    "issued_date" DATE,
+    "file_url" TEXT,
+
+    CONSTRAINT "freelancer_certificates_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -282,6 +299,17 @@ CREATE TABLE "packages" (
     "deleted_at" TIMESTAMPTZ,
 
     CONSTRAINT "packages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "package_media" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "package_id" UUID NOT NULL,
+    "type" VARCHAR(20) NOT NULL,
+    "url" TEXT NOT NULL,
+    "sort_order" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "package_media_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -485,6 +513,9 @@ CREATE UNIQUE INDEX "freelancer_profiles_user_id_key" ON "freelancer_profiles"("
 CREATE INDEX "idx_freelancer_skills" ON "freelancer_profiles" USING GIN ("skills");
 
 -- CreateIndex
+CREATE INDEX "idx_certificates_freelancer" ON "freelancer_certificates"("freelancer_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "identity_verifications_user_id_key" ON "identity_verifications"("user_id");
 
 -- CreateIndex
@@ -507,6 +538,9 @@ CREATE UNIQUE INDEX "audit_actions_name_key" ON "audit_actions"("name");
 
 -- CreateIndex
 CREATE INDEX "idx_packages_freelancer" ON "packages"("freelancer_id");
+
+-- CreateIndex
+CREATE INDEX "idx_package_media_package" ON "package_media"("package_id");
 
 -- CreateIndex
 CREATE INDEX "idx_jobposts_client" ON "job_posts"("client_id");
@@ -596,6 +630,9 @@ ALTER TABLE "freelancer_profiles" ADD CONSTRAINT "freelancer_profiles_user_id_fk
 ALTER TABLE "freelancer_profiles" ADD CONSTRAINT "freelancer_profiles_experience_level_id_fkey" FOREIGN KEY ("experience_level_id") REFERENCES "experience_levels"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "freelancer_certificates" ADD CONSTRAINT "freelancer_certificates_freelancer_id_fkey" FOREIGN KEY ("freelancer_id") REFERENCES "freelancer_profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "identity_verifications" ADD CONSTRAINT "identity_verifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -606,6 +643,9 @@ ALTER TABLE "packages" ADD CONSTRAINT "packages_freelancer_id_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "packages" ADD CONSTRAINT "packages_tier_id_fkey" FOREIGN KEY ("tier_id") REFERENCES "package_tiers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "package_media" ADD CONSTRAINT "package_media_package_id_fkey" FOREIGN KEY ("package_id") REFERENCES "packages"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "job_posts" ADD CONSTRAINT "job_posts_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "client_profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;

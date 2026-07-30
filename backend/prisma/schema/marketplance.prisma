@@ -18,9 +18,23 @@ model Package {
   freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
   tier       PackageTier?      @relation(fields: [tier_id], references: [id])
   orders     Order[]
+  media      PackageMedia[]
 
   @@index([freelancer_id], map: "idx_packages_freelancer")
   @@map("packages")
+}
+
+model PackageMedia {
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  package_id String @db.Uuid
+  type       String @db.VarChar(20) // "IMAGE" or "VIDEO"
+  url        String // URL from Supabase Storage
+  sort_order Int    @default(0) // To order them in the UI gallery
+
+  package Package @relation(fields: [package_id], references: [id], onDelete: Cascade)
+
+  @@index([package_id], map: "idx_package_media_package")
+  @@map("package_media")
 }
 
 model JobPost {

@@ -1,32 +1,32 @@
 // backend/prisma/schema/admin.prisma
 
 model AdminProfile {
-  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id       String     @unique @db.Uuid
-  admin_role_id String?    @db.Uuid
-  is_active     Boolean    @default(true)
-  created_at    DateTime   @default(now()) @db.Timestamptz
-  updated_at    DateTime   @updatedAt @db.Timestamptz
-  
-  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  admin_role    AdminRole? @relation(fields: [admin_role_id], references: [id])
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String   @unique @db.Uuid
+  admin_role_id String?  @db.Uuid
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz
+  updated_at    DateTime @updatedAt @db.Timestamptz
+
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  admin_role AdminRole? @relation(fields: [admin_role_id], references: [id])
+
   @@map("admin_profiles")
 }
 
-
 model AdminAuditLog {
-  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  admin_id        String?      @db.Uuid
-  audit_action_id String?      @db.Uuid
-  target_user_id  String?      @db.Uuid
-  entity_id       String?      @db.Uuid
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  admin_id        String?  @db.Uuid
+  audit_action_id String?  @db.Uuid
+  target_user_id  String?  @db.Uuid
+  entity_id       String?  @db.Uuid
   notes           String?
-  metadata        Json         @default("{}")
-  created_at      DateTime     @default(now()) @db.Timestamptz
-  
-  admin           User?        @relation("AuditLogAdmin", fields: [admin_id], references: [id], onDelete: SetNull)
-  audit_action    AuditAction? @relation(fields: [audit_action_id], references: [id])
-  target_user     User?        @relation("AuditLogTarget", fields: [target_user_id], references: [id], onDelete: SetNull)
+  metadata        Json     @default("{}")
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  admin        User?        @relation("AuditLogAdmin", fields: [admin_id], references: [id], onDelete: SetNull)
+  audit_action AuditAction? @relation(fields: [audit_action_id], references: [id])
+  target_user  User?        @relation("AuditLogTarget", fields: [target_user_id], references: [id], onDelete: SetNull)
 
   @@index([admin_id], map: "idx_audit_logs_admin")
   @@index([target_user_id], map: "idx_audit_logs_target")

@@ -1,11 +1,11 @@
 // backend/prisma/schema/main.prisma
 
 generator client {
-    provider        = "prisma-client-js"
-    output          = "../generated/prisma"
-    previewFeatures = ["prismaSchemaFolder"]
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }

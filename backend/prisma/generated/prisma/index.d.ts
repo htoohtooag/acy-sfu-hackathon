@@ -64,6 +64,11 @@ export type ClientProfile = $Result.DefaultSelection<Prisma.$ClientProfilePayloa
  */
 export type FreelancerProfile = $Result.DefaultSelection<Prisma.$FreelancerProfilePayload>
 /**
+ * Model FreelancerCertificate
+ * 
+ */
+export type FreelancerCertificate = $Result.DefaultSelection<Prisma.$FreelancerCertificatePayload>
+/**
  * Model IdentityVerification
  * 
  */
@@ -98,6 +103,11 @@ export type AuditAction = $Result.DefaultSelection<Prisma.$AuditActionPayload>
  * 
  */
 export type Package = $Result.DefaultSelection<Prisma.$PackagePayload>
+/**
+ * Model PackageMedia
+ * 
+ */
+export type PackageMedia = $Result.DefaultSelection<Prisma.$PackageMediaPayload>
 /**
  * Model JobPost
  * 
@@ -575,6 +585,16 @@ export class PrismaClient<
   get freelancerProfile(): Prisma.FreelancerProfileDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.freelancerCertificate`: Exposes CRUD operations for the **FreelancerCertificate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FreelancerCertificates
+    * const freelancerCertificates = await prisma.freelancerCertificate.findMany()
+    * ```
+    */
+  get freelancerCertificate(): Prisma.FreelancerCertificateDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.identityVerification`: Exposes CRUD operations for the **IdentityVerification** model.
     * Example usage:
     * ```ts
@@ -643,6 +663,16 @@ export class PrismaClient<
     * ```
     */
   get package(): Prisma.PackageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.packageMedia`: Exposes CRUD operations for the **PackageMedia** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PackageMedias
+    * const packageMedias = await prisma.packageMedia.findMany()
+    * ```
+    */
+  get packageMedia(): Prisma.PackageMediaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.jobPost`: Exposes CRUD operations for the **JobPost** model.
@@ -1190,6 +1220,7 @@ export namespace Prisma {
     UserModeration: 'UserModeration',
     ClientProfile: 'ClientProfile',
     FreelancerProfile: 'FreelancerProfile',
+    FreelancerCertificate: 'FreelancerCertificate',
     IdentityVerification: 'IdentityVerification',
     PaymentMethod: 'PaymentMethod',
     PackageTier: 'PackageTier',
@@ -1197,6 +1228,7 @@ export namespace Prisma {
     AdminRole: 'AdminRole',
     AuditAction: 'AuditAction',
     Package: 'Package',
+    PackageMedia: 'PackageMedia',
     JobPost: 'JobPost',
     Notification: 'Notification',
     Review: 'Review',
@@ -1221,7 +1253,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "adminProfile" | "adminAuditLog" | "message" | "deliverable" | "user" | "role" | "userRole" | "userModeration" | "clientProfile" | "freelancerProfile" | "identityVerification" | "paymentMethod" | "packageTier" | "experienceLevel" | "adminRole" | "auditAction" | "package" | "jobPost" | "notification" | "review" | "dispute" | "subscriptionPlan" | "userSubscription" | "order" | "milestone" | "paymentTransaction"
+      modelProps: "adminProfile" | "adminAuditLog" | "message" | "deliverable" | "user" | "role" | "userRole" | "userModeration" | "clientProfile" | "freelancerProfile" | "freelancerCertificate" | "identityVerification" | "paymentMethod" | "packageTier" | "experienceLevel" | "adminRole" | "auditAction" | "package" | "packageMedia" | "jobPost" | "notification" | "review" | "dispute" | "subscriptionPlan" | "userSubscription" | "order" | "milestone" | "paymentTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1965,6 +1997,80 @@ export namespace Prisma {
           }
         }
       }
+      FreelancerCertificate: {
+        payload: Prisma.$FreelancerCertificatePayload<ExtArgs>
+        fields: Prisma.FreelancerCertificateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FreelancerCertificateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FreelancerCertificateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          findFirst: {
+            args: Prisma.FreelancerCertificateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FreelancerCertificateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          findMany: {
+            args: Prisma.FreelancerCertificateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>[]
+          }
+          create: {
+            args: Prisma.FreelancerCertificateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          createMany: {
+            args: Prisma.FreelancerCertificateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FreelancerCertificateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>[]
+          }
+          delete: {
+            args: Prisma.FreelancerCertificateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          update: {
+            args: Prisma.FreelancerCertificateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          deleteMany: {
+            args: Prisma.FreelancerCertificateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FreelancerCertificateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FreelancerCertificateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>[]
+          }
+          upsert: {
+            args: Prisma.FreelancerCertificateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FreelancerCertificatePayload>
+          }
+          aggregate: {
+            args: Prisma.FreelancerCertificateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFreelancerCertificate>
+          }
+          groupBy: {
+            args: Prisma.FreelancerCertificateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FreelancerCertificateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FreelancerCertificateCountArgs<ExtArgs>
+            result: $Utils.Optional<FreelancerCertificateCountAggregateOutputType> | number
+          }
+        }
+      }
       IdentityVerification: {
         payload: Prisma.$IdentityVerificationPayload<ExtArgs>
         fields: Prisma.IdentityVerificationFieldRefs
@@ -2480,6 +2586,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PackageCountArgs<ExtArgs>
             result: $Utils.Optional<PackageCountAggregateOutputType> | number
+          }
+        }
+      }
+      PackageMedia: {
+        payload: Prisma.$PackageMediaPayload<ExtArgs>
+        fields: Prisma.PackageMediaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PackageMediaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PackageMediaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          findFirst: {
+            args: Prisma.PackageMediaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PackageMediaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          findMany: {
+            args: Prisma.PackageMediaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>[]
+          }
+          create: {
+            args: Prisma.PackageMediaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          createMany: {
+            args: Prisma.PackageMediaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PackageMediaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>[]
+          }
+          delete: {
+            args: Prisma.PackageMediaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          update: {
+            args: Prisma.PackageMediaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          deleteMany: {
+            args: Prisma.PackageMediaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PackageMediaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PackageMediaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>[]
+          }
+          upsert: {
+            args: Prisma.PackageMediaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackageMediaPayload>
+          }
+          aggregate: {
+            args: Prisma.PackageMediaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePackageMedia>
+          }
+          groupBy: {
+            args: Prisma.PackageMediaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PackageMediaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PackageMediaCountArgs<ExtArgs>
+            result: $Utils.Optional<PackageMediaCountAggregateOutputType> | number
           }
         }
       }
@@ -3282,6 +3462,7 @@ export namespace Prisma {
     userModeration?: UserModerationOmit
     clientProfile?: ClientProfileOmit
     freelancerProfile?: FreelancerProfileOmit
+    freelancerCertificate?: FreelancerCertificateOmit
     identityVerification?: IdentityVerificationOmit
     paymentMethod?: PaymentMethodOmit
     packageTier?: PackageTierOmit
@@ -3289,6 +3470,7 @@ export namespace Prisma {
     adminRole?: AdminRoleOmit
     auditAction?: AuditActionOmit
     package?: PackageOmit
+    packageMedia?: PackageMediaOmit
     jobPost?: JobPostOmit
     notification?: NotificationOmit
     review?: ReviewOmit
@@ -3606,10 +3788,12 @@ export namespace Prisma {
    */
 
   export type FreelancerProfileCountOutputType = {
+    certificates: number
     packages: number
   }
 
   export type FreelancerProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificates?: boolean | FreelancerProfileCountOutputTypeCountCertificatesArgs
     packages?: boolean | FreelancerProfileCountOutputTypeCountPackagesArgs
   }
 
@@ -3622,6 +3806,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the FreelancerProfileCountOutputType
      */
     select?: FreelancerProfileCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FreelancerProfileCountOutputType without action
+   */
+  export type FreelancerProfileCountOutputTypeCountCertificatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FreelancerCertificateWhereInput
   }
 
   /**
@@ -3793,10 +3984,12 @@ export namespace Prisma {
 
   export type PackageCountOutputType = {
     orders: number
+    media: number
   }
 
   export type PackageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orders?: boolean | PackageCountOutputTypeCountOrdersArgs
+    media?: boolean | PackageCountOutputTypeCountMediaArgs
   }
 
   // Custom InputTypes
@@ -3815,6 +4008,13 @@ export namespace Prisma {
    */
   export type PackageCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+  /**
+   * PackageCountOutputType without action
+   */
+  export type PackageCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageMediaWhereInput
   }
 
 
@@ -8648,6 +8848,7 @@ export namespace Prisma {
     email: string | null
     full_name: string | null
     avatar_url: string | null
+    phone_number: string | null
     status: $Enums.user_status | null
     created_at: Date | null
     updated_at: Date | null
@@ -8659,6 +8860,7 @@ export namespace Prisma {
     email: string | null
     full_name: string | null
     avatar_url: string | null
+    phone_number: string | null
     status: $Enums.user_status | null
     created_at: Date | null
     updated_at: Date | null
@@ -8670,6 +8872,8 @@ export namespace Prisma {
     email: number
     full_name: number
     avatar_url: number
+    phone_number: number
+    social_links: number
     status: number
     created_at: number
     updated_at: number
@@ -8683,6 +8887,7 @@ export namespace Prisma {
     email?: true
     full_name?: true
     avatar_url?: true
+    phone_number?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -8694,6 +8899,7 @@ export namespace Prisma {
     email?: true
     full_name?: true
     avatar_url?: true
+    phone_number?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -8705,6 +8911,8 @@ export namespace Prisma {
     email?: true
     full_name?: true
     avatar_url?: true
+    phone_number?: true
+    social_links?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -8789,6 +8997,8 @@ export namespace Prisma {
     email: string
     full_name: string | null
     avatar_url: string | null
+    phone_number: string | null
+    social_links: JsonValue | null
     status: $Enums.user_status
     created_at: Date
     updated_at: Date
@@ -8817,6 +9027,8 @@ export namespace Prisma {
     email?: boolean
     full_name?: boolean
     avatar_url?: boolean
+    phone_number?: boolean
+    social_links?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8849,6 +9061,8 @@ export namespace Prisma {
     email?: boolean
     full_name?: boolean
     avatar_url?: boolean
+    phone_number?: boolean
+    social_links?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8860,6 +9074,8 @@ export namespace Prisma {
     email?: boolean
     full_name?: boolean
     avatar_url?: boolean
+    phone_number?: boolean
+    social_links?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8871,13 +9087,15 @@ export namespace Prisma {
     email?: boolean
     full_name?: boolean
     avatar_url?: boolean
+    phone_number?: boolean
+    social_links?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
     deleted_at?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "full_name" | "avatar_url" | "status" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "full_name" | "avatar_url" | "phone_number" | "social_links" | "status" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     identity_verification?: boolean | User$identity_verificationArgs<ExtArgs>
     kyc_verifications?: boolean | User$kyc_verificationsArgs<ExtArgs>
@@ -8933,6 +9151,8 @@ export namespace Prisma {
       email: string
       full_name: string | null
       avatar_url: string | null
+      phone_number: string | null
+      social_links: Prisma.JsonValue | null
       status: $Enums.user_status
       created_at: Date
       updated_at: Date
@@ -9384,6 +9604,8 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly full_name: FieldRef<"User", 'String'>
     readonly avatar_url: FieldRef<"User", 'String'>
+    readonly phone_number: FieldRef<"User", 'String'>
+    readonly social_links: FieldRef<"User", 'Json'>
     readonly status: FieldRef<"User", 'user_status'>
     readonly created_at: FieldRef<"User", 'DateTime'>
     readonly updated_at: FieldRef<"User", 'DateTime'>
@@ -13537,6 +13759,8 @@ export namespace Prisma {
     company_name: string | null
     industry: string | null
     bio: string | null
+    ocation_city: string | null
+    website_url: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -13547,6 +13771,8 @@ export namespace Prisma {
     company_name: string | null
     industry: string | null
     bio: string | null
+    ocation_city: string | null
+    website_url: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -13557,6 +13783,8 @@ export namespace Prisma {
     company_name: number
     industry: number
     bio: number
+    ocation_city: number
+    website_url: number
     created_at: number
     updated_at: number
     _all: number
@@ -13569,6 +13797,8 @@ export namespace Prisma {
     company_name?: true
     industry?: true
     bio?: true
+    ocation_city?: true
+    website_url?: true
     created_at?: true
     updated_at?: true
   }
@@ -13579,6 +13809,8 @@ export namespace Prisma {
     company_name?: true
     industry?: true
     bio?: true
+    ocation_city?: true
+    website_url?: true
     created_at?: true
     updated_at?: true
   }
@@ -13589,6 +13821,8 @@ export namespace Prisma {
     company_name?: true
     industry?: true
     bio?: true
+    ocation_city?: true
+    website_url?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -13672,6 +13906,8 @@ export namespace Prisma {
     company_name: string | null
     industry: string | null
     bio: string | null
+    ocation_city: string | null
+    website_url: string | null
     created_at: Date
     updated_at: Date
     _count: ClientProfileCountAggregateOutputType | null
@@ -13699,6 +13935,8 @@ export namespace Prisma {
     company_name?: boolean
     industry?: boolean
     bio?: boolean
+    ocation_city?: boolean
+    website_url?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13712,6 +13950,8 @@ export namespace Prisma {
     company_name?: boolean
     industry?: boolean
     bio?: boolean
+    ocation_city?: boolean
+    website_url?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13723,6 +13963,8 @@ export namespace Prisma {
     company_name?: boolean
     industry?: boolean
     bio?: boolean
+    ocation_city?: boolean
+    website_url?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13734,11 +13976,13 @@ export namespace Prisma {
     company_name?: boolean
     industry?: boolean
     bio?: boolean
+    ocation_city?: boolean
+    website_url?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ClientProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "company_name" | "industry" | "bio" | "created_at" | "updated_at", ExtArgs["result"]["clientProfile"]>
+  export type ClientProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "company_name" | "industry" | "bio" | "ocation_city" | "website_url" | "created_at" | "updated_at", ExtArgs["result"]["clientProfile"]>
   export type ClientProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     job_posts?: boolean | ClientProfile$job_postsArgs<ExtArgs>
@@ -13763,6 +14007,8 @@ export namespace Prisma {
       company_name: string | null
       industry: string | null
       bio: string | null
+      ocation_city: string | null
+      website_url: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["clientProfile"]>
@@ -14195,6 +14441,8 @@ export namespace Prisma {
     readonly company_name: FieldRef<"ClientProfile", 'String'>
     readonly industry: FieldRef<"ClientProfile", 'String'>
     readonly bio: FieldRef<"ClientProfile", 'String'>
+    readonly ocation_city: FieldRef<"ClientProfile", 'String'>
+    readonly website_url: FieldRef<"ClientProfile", 'String'>
     readonly created_at: FieldRef<"ClientProfile", 'DateTime'>
     readonly updated_at: FieldRef<"ClientProfile", 'DateTime'>
   }
@@ -14653,6 +14901,7 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileAvgAggregateOutputType = {
+    years_of_experience: number | null
     success_rate: Decimal | null
     total_earnings_mmk: number | null
     completed_projects_count: number | null
@@ -14661,6 +14910,7 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileSumAggregateOutputType = {
+    years_of_experience: number | null
     success_rate: Decimal | null
     total_earnings_mmk: bigint | null
     completed_projects_count: number | null
@@ -14674,6 +14924,9 @@ export namespace Prisma {
     headline: string | null
     bio: string | null
     experience_level_id: string | null
+    years_of_experience: number | null
+    portfolio_url: string | null
+    location_city: string | null
     success_rate: Decimal | null
     total_earnings_mmk: bigint | null
     is_verified: boolean | null
@@ -14691,6 +14944,9 @@ export namespace Prisma {
     headline: string | null
     bio: string | null
     experience_level_id: string | null
+    years_of_experience: number | null
+    portfolio_url: string | null
+    location_city: string | null
     success_rate: Decimal | null
     total_earnings_mmk: bigint | null
     is_verified: boolean | null
@@ -14709,6 +14965,10 @@ export namespace Prisma {
     bio: number
     skills: number
     experience_level_id: number
+    years_of_experience: number
+    portfolio_url: number
+    languages: number
+    location_city: number
     success_rate: number
     total_earnings_mmk: number
     is_verified: number
@@ -14723,6 +14983,7 @@ export namespace Prisma {
 
 
   export type FreelancerProfileAvgAggregateInputType = {
+    years_of_experience?: true
     success_rate?: true
     total_earnings_mmk?: true
     completed_projects_count?: true
@@ -14731,6 +14992,7 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileSumAggregateInputType = {
+    years_of_experience?: true
     success_rate?: true
     total_earnings_mmk?: true
     completed_projects_count?: true
@@ -14744,6 +15006,9 @@ export namespace Prisma {
     headline?: true
     bio?: true
     experience_level_id?: true
+    years_of_experience?: true
+    portfolio_url?: true
+    location_city?: true
     success_rate?: true
     total_earnings_mmk?: true
     is_verified?: true
@@ -14761,6 +15026,9 @@ export namespace Prisma {
     headline?: true
     bio?: true
     experience_level_id?: true
+    years_of_experience?: true
+    portfolio_url?: true
+    location_city?: true
     success_rate?: true
     total_earnings_mmk?: true
     is_verified?: true
@@ -14779,6 +15047,10 @@ export namespace Prisma {
     bio?: true
     skills?: true
     experience_level_id?: true
+    years_of_experience?: true
+    portfolio_url?: true
+    languages?: true
+    location_city?: true
     success_rate?: true
     total_earnings_mmk?: true
     is_verified?: true
@@ -14884,6 +15156,10 @@ export namespace Prisma {
     bio: string | null
     skills: string[]
     experience_level_id: string | null
+    years_of_experience: number | null
+    portfolio_url: string | null
+    languages: string[]
+    location_city: string | null
     success_rate: Decimal
     total_earnings_mmk: bigint
     is_verified: boolean
@@ -14921,6 +15197,10 @@ export namespace Prisma {
     bio?: boolean
     skills?: boolean
     experience_level_id?: boolean
+    years_of_experience?: boolean
+    portfolio_url?: boolean
+    languages?: boolean
+    location_city?: boolean
     success_rate?: boolean
     total_earnings_mmk?: boolean
     is_verified?: boolean
@@ -14930,6 +15210,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     deleted_at?: boolean
+    certificates?: boolean | FreelancerProfile$certificatesArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     experience_level?: boolean | FreelancerProfile$experience_levelArgs<ExtArgs>
     packages?: boolean | FreelancerProfile$packagesArgs<ExtArgs>
@@ -14943,6 +15224,10 @@ export namespace Prisma {
     bio?: boolean
     skills?: boolean
     experience_level_id?: boolean
+    years_of_experience?: boolean
+    portfolio_url?: boolean
+    languages?: boolean
+    location_city?: boolean
     success_rate?: boolean
     total_earnings_mmk?: boolean
     is_verified?: boolean
@@ -14963,6 +15248,10 @@ export namespace Prisma {
     bio?: boolean
     skills?: boolean
     experience_level_id?: boolean
+    years_of_experience?: boolean
+    portfolio_url?: boolean
+    languages?: boolean
+    location_city?: boolean
     success_rate?: boolean
     total_earnings_mmk?: boolean
     is_verified?: boolean
@@ -14983,6 +15272,10 @@ export namespace Prisma {
     bio?: boolean
     skills?: boolean
     experience_level_id?: boolean
+    years_of_experience?: boolean
+    portfolio_url?: boolean
+    languages?: boolean
+    location_city?: boolean
     success_rate?: boolean
     total_earnings_mmk?: boolean
     is_verified?: boolean
@@ -14994,8 +15287,9 @@ export namespace Prisma {
     deleted_at?: boolean
   }
 
-  export type FreelancerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "headline" | "bio" | "skills" | "experience_level_id" | "success_rate" | "total_earnings_mmk" | "is_verified" | "completed_projects_count" | "ongoing_projects_count" | "canceled_projects_count" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["freelancerProfile"]>
+  export type FreelancerProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "headline" | "bio" | "skills" | "experience_level_id" | "years_of_experience" | "portfolio_url" | "languages" | "location_city" | "success_rate" | "total_earnings_mmk" | "is_verified" | "completed_projects_count" | "ongoing_projects_count" | "canceled_projects_count" | "created_at" | "updated_at" | "deleted_at", ExtArgs["result"]["freelancerProfile"]>
   export type FreelancerProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificates?: boolean | FreelancerProfile$certificatesArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     experience_level?: boolean | FreelancerProfile$experience_levelArgs<ExtArgs>
     packages?: boolean | FreelancerProfile$packagesArgs<ExtArgs>
@@ -15013,6 +15307,7 @@ export namespace Prisma {
   export type $FreelancerProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FreelancerProfile"
     objects: {
+      certificates: Prisma.$FreelancerCertificatePayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
       experience_level: Prisma.$ExperienceLevelPayload<ExtArgs> | null
       packages: Prisma.$PackagePayload<ExtArgs>[]
@@ -15024,6 +15319,10 @@ export namespace Prisma {
       bio: string | null
       skills: string[]
       experience_level_id: string | null
+      years_of_experience: number | null
+      portfolio_url: string | null
+      languages: string[]
+      location_city: string | null
       success_rate: Prisma.Decimal
       total_earnings_mmk: bigint
       is_verified: boolean
@@ -15427,6 +15726,7 @@ export namespace Prisma {
    */
   export interface Prisma__FreelancerProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificates<T extends FreelancerProfile$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, FreelancerProfile$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     experience_level<T extends FreelancerProfile$experience_levelArgs<ExtArgs> = {}>(args?: Subset<T, FreelancerProfile$experience_levelArgs<ExtArgs>>): Prisma__ExperienceLevelClient<$Result.GetResult<Prisma.$ExperienceLevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     packages<T extends FreelancerProfile$packagesArgs<ExtArgs> = {}>(args?: Subset<T, FreelancerProfile$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15465,6 +15765,10 @@ export namespace Prisma {
     readonly bio: FieldRef<"FreelancerProfile", 'String'>
     readonly skills: FieldRef<"FreelancerProfile", 'String[]'>
     readonly experience_level_id: FieldRef<"FreelancerProfile", 'String'>
+    readonly years_of_experience: FieldRef<"FreelancerProfile", 'Int'>
+    readonly portfolio_url: FieldRef<"FreelancerProfile", 'String'>
+    readonly languages: FieldRef<"FreelancerProfile", 'String[]'>
+    readonly location_city: FieldRef<"FreelancerProfile", 'String'>
     readonly success_rate: FieldRef<"FreelancerProfile", 'Decimal'>
     readonly total_earnings_mmk: FieldRef<"FreelancerProfile", 'BigInt'>
     readonly is_verified: FieldRef<"FreelancerProfile", 'Boolean'>
@@ -15875,6 +16179,30 @@ export namespace Prisma {
   }
 
   /**
+   * FreelancerProfile.certificates
+   */
+  export type FreelancerProfile$certificatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    where?: FreelancerCertificateWhereInput
+    orderBy?: FreelancerCertificateOrderByWithRelationInput | FreelancerCertificateOrderByWithRelationInput[]
+    cursor?: FreelancerCertificateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FreelancerCertificateScalarFieldEnum | FreelancerCertificateScalarFieldEnum[]
+  }
+
+  /**
    * FreelancerProfile.experience_level
    */
   export type FreelancerProfile$experience_levelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15933,6 +16261,1082 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FreelancerProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FreelancerCertificate
+   */
+
+  export type AggregateFreelancerCertificate = {
+    _count: FreelancerCertificateCountAggregateOutputType | null
+    _min: FreelancerCertificateMinAggregateOutputType | null
+    _max: FreelancerCertificateMaxAggregateOutputType | null
+  }
+
+  export type FreelancerCertificateMinAggregateOutputType = {
+    id: string | null
+    freelancer_id: string | null
+    name: string | null
+    issuer: string | null
+    issued_date: Date | null
+    file_url: string | null
+  }
+
+  export type FreelancerCertificateMaxAggregateOutputType = {
+    id: string | null
+    freelancer_id: string | null
+    name: string | null
+    issuer: string | null
+    issued_date: Date | null
+    file_url: string | null
+  }
+
+  export type FreelancerCertificateCountAggregateOutputType = {
+    id: number
+    freelancer_id: number
+    name: number
+    issuer: number
+    issued_date: number
+    file_url: number
+    _all: number
+  }
+
+
+  export type FreelancerCertificateMinAggregateInputType = {
+    id?: true
+    freelancer_id?: true
+    name?: true
+    issuer?: true
+    issued_date?: true
+    file_url?: true
+  }
+
+  export type FreelancerCertificateMaxAggregateInputType = {
+    id?: true
+    freelancer_id?: true
+    name?: true
+    issuer?: true
+    issued_date?: true
+    file_url?: true
+  }
+
+  export type FreelancerCertificateCountAggregateInputType = {
+    id?: true
+    freelancer_id?: true
+    name?: true
+    issuer?: true
+    issued_date?: true
+    file_url?: true
+    _all?: true
+  }
+
+  export type FreelancerCertificateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FreelancerCertificate to aggregate.
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FreelancerCertificates to fetch.
+     */
+    orderBy?: FreelancerCertificateOrderByWithRelationInput | FreelancerCertificateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FreelancerCertificateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FreelancerCertificates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FreelancerCertificates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FreelancerCertificates
+    **/
+    _count?: true | FreelancerCertificateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FreelancerCertificateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FreelancerCertificateMaxAggregateInputType
+  }
+
+  export type GetFreelancerCertificateAggregateType<T extends FreelancerCertificateAggregateArgs> = {
+        [P in keyof T & keyof AggregateFreelancerCertificate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFreelancerCertificate[P]>
+      : GetScalarType<T[P], AggregateFreelancerCertificate[P]>
+  }
+
+
+
+
+  export type FreelancerCertificateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FreelancerCertificateWhereInput
+    orderBy?: FreelancerCertificateOrderByWithAggregationInput | FreelancerCertificateOrderByWithAggregationInput[]
+    by: FreelancerCertificateScalarFieldEnum[] | FreelancerCertificateScalarFieldEnum
+    having?: FreelancerCertificateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FreelancerCertificateCountAggregateInputType | true
+    _min?: FreelancerCertificateMinAggregateInputType
+    _max?: FreelancerCertificateMaxAggregateInputType
+  }
+
+  export type FreelancerCertificateGroupByOutputType = {
+    id: string
+    freelancer_id: string
+    name: string
+    issuer: string | null
+    issued_date: Date | null
+    file_url: string | null
+    _count: FreelancerCertificateCountAggregateOutputType | null
+    _min: FreelancerCertificateMinAggregateOutputType | null
+    _max: FreelancerCertificateMaxAggregateOutputType | null
+  }
+
+  type GetFreelancerCertificateGroupByPayload<T extends FreelancerCertificateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FreelancerCertificateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FreelancerCertificateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FreelancerCertificateGroupByOutputType[P]>
+            : GetScalarType<T[P], FreelancerCertificateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FreelancerCertificateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    freelancer_id?: boolean
+    name?: boolean
+    issuer?: boolean
+    issued_date?: boolean
+    file_url?: boolean
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["freelancerCertificate"]>
+
+  export type FreelancerCertificateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    freelancer_id?: boolean
+    name?: boolean
+    issuer?: boolean
+    issued_date?: boolean
+    file_url?: boolean
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["freelancerCertificate"]>
+
+  export type FreelancerCertificateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    freelancer_id?: boolean
+    name?: boolean
+    issuer?: boolean
+    issued_date?: boolean
+    file_url?: boolean
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["freelancerCertificate"]>
+
+  export type FreelancerCertificateSelectScalar = {
+    id?: boolean
+    freelancer_id?: boolean
+    name?: boolean
+    issuer?: boolean
+    issued_date?: boolean
+    file_url?: boolean
+  }
+
+  export type FreelancerCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "freelancer_id" | "name" | "issuer" | "issued_date" | "file_url", ExtArgs["result"]["freelancerCertificate"]>
+  export type FreelancerCertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }
+  export type FreelancerCertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }
+  export type FreelancerCertificateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $FreelancerCertificatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FreelancerCertificate"
+    objects: {
+      freelancer: Prisma.$FreelancerProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      freelancer_id: string
+      name: string
+      issuer: string | null
+      issued_date: Date | null
+      file_url: string | null
+    }, ExtArgs["result"]["freelancerCertificate"]>
+    composites: {}
+  }
+
+  type FreelancerCertificateGetPayload<S extends boolean | null | undefined | FreelancerCertificateDefaultArgs> = $Result.GetResult<Prisma.$FreelancerCertificatePayload, S>
+
+  type FreelancerCertificateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FreelancerCertificateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FreelancerCertificateCountAggregateInputType | true
+    }
+
+  export interface FreelancerCertificateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FreelancerCertificate'], meta: { name: 'FreelancerCertificate' } }
+    /**
+     * Find zero or one FreelancerCertificate that matches the filter.
+     * @param {FreelancerCertificateFindUniqueArgs} args - Arguments to find a FreelancerCertificate
+     * @example
+     * // Get one FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FreelancerCertificateFindUniqueArgs>(args: SelectSubset<T, FreelancerCertificateFindUniqueArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FreelancerCertificate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FreelancerCertificateFindUniqueOrThrowArgs} args - Arguments to find a FreelancerCertificate
+     * @example
+     * // Get one FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FreelancerCertificateFindUniqueOrThrowArgs>(args: SelectSubset<T, FreelancerCertificateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FreelancerCertificate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateFindFirstArgs} args - Arguments to find a FreelancerCertificate
+     * @example
+     * // Get one FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FreelancerCertificateFindFirstArgs>(args?: SelectSubset<T, FreelancerCertificateFindFirstArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FreelancerCertificate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateFindFirstOrThrowArgs} args - Arguments to find a FreelancerCertificate
+     * @example
+     * // Get one FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FreelancerCertificateFindFirstOrThrowArgs>(args?: SelectSubset<T, FreelancerCertificateFindFirstOrThrowArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FreelancerCertificates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FreelancerCertificates
+     * const freelancerCertificates = await prisma.freelancerCertificate.findMany()
+     * 
+     * // Get first 10 FreelancerCertificates
+     * const freelancerCertificates = await prisma.freelancerCertificate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const freelancerCertificateWithIdOnly = await prisma.freelancerCertificate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FreelancerCertificateFindManyArgs>(args?: SelectSubset<T, FreelancerCertificateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FreelancerCertificate.
+     * @param {FreelancerCertificateCreateArgs} args - Arguments to create a FreelancerCertificate.
+     * @example
+     * // Create one FreelancerCertificate
+     * const FreelancerCertificate = await prisma.freelancerCertificate.create({
+     *   data: {
+     *     // ... data to create a FreelancerCertificate
+     *   }
+     * })
+     * 
+     */
+    create<T extends FreelancerCertificateCreateArgs>(args: SelectSubset<T, FreelancerCertificateCreateArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FreelancerCertificates.
+     * @param {FreelancerCertificateCreateManyArgs} args - Arguments to create many FreelancerCertificates.
+     * @example
+     * // Create many FreelancerCertificates
+     * const freelancerCertificate = await prisma.freelancerCertificate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FreelancerCertificateCreateManyArgs>(args?: SelectSubset<T, FreelancerCertificateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FreelancerCertificates and returns the data saved in the database.
+     * @param {FreelancerCertificateCreateManyAndReturnArgs} args - Arguments to create many FreelancerCertificates.
+     * @example
+     * // Create many FreelancerCertificates
+     * const freelancerCertificate = await prisma.freelancerCertificate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FreelancerCertificates and only return the `id`
+     * const freelancerCertificateWithIdOnly = await prisma.freelancerCertificate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FreelancerCertificateCreateManyAndReturnArgs>(args?: SelectSubset<T, FreelancerCertificateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FreelancerCertificate.
+     * @param {FreelancerCertificateDeleteArgs} args - Arguments to delete one FreelancerCertificate.
+     * @example
+     * // Delete one FreelancerCertificate
+     * const FreelancerCertificate = await prisma.freelancerCertificate.delete({
+     *   where: {
+     *     // ... filter to delete one FreelancerCertificate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FreelancerCertificateDeleteArgs>(args: SelectSubset<T, FreelancerCertificateDeleteArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FreelancerCertificate.
+     * @param {FreelancerCertificateUpdateArgs} args - Arguments to update one FreelancerCertificate.
+     * @example
+     * // Update one FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FreelancerCertificateUpdateArgs>(args: SelectSubset<T, FreelancerCertificateUpdateArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FreelancerCertificates.
+     * @param {FreelancerCertificateDeleteManyArgs} args - Arguments to filter FreelancerCertificates to delete.
+     * @example
+     * // Delete a few FreelancerCertificates
+     * const { count } = await prisma.freelancerCertificate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FreelancerCertificateDeleteManyArgs>(args?: SelectSubset<T, FreelancerCertificateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FreelancerCertificates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FreelancerCertificates
+     * const freelancerCertificate = await prisma.freelancerCertificate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FreelancerCertificateUpdateManyArgs>(args: SelectSubset<T, FreelancerCertificateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FreelancerCertificates and returns the data updated in the database.
+     * @param {FreelancerCertificateUpdateManyAndReturnArgs} args - Arguments to update many FreelancerCertificates.
+     * @example
+     * // Update many FreelancerCertificates
+     * const freelancerCertificate = await prisma.freelancerCertificate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FreelancerCertificates and only return the `id`
+     * const freelancerCertificateWithIdOnly = await prisma.freelancerCertificate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FreelancerCertificateUpdateManyAndReturnArgs>(args: SelectSubset<T, FreelancerCertificateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FreelancerCertificate.
+     * @param {FreelancerCertificateUpsertArgs} args - Arguments to update or create a FreelancerCertificate.
+     * @example
+     * // Update or create a FreelancerCertificate
+     * const freelancerCertificate = await prisma.freelancerCertificate.upsert({
+     *   create: {
+     *     // ... data to create a FreelancerCertificate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FreelancerCertificate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FreelancerCertificateUpsertArgs>(args: SelectSubset<T, FreelancerCertificateUpsertArgs<ExtArgs>>): Prisma__FreelancerCertificateClient<$Result.GetResult<Prisma.$FreelancerCertificatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FreelancerCertificates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateCountArgs} args - Arguments to filter FreelancerCertificates to count.
+     * @example
+     * // Count the number of FreelancerCertificates
+     * const count = await prisma.freelancerCertificate.count({
+     *   where: {
+     *     // ... the filter for the FreelancerCertificates we want to count
+     *   }
+     * })
+    **/
+    count<T extends FreelancerCertificateCountArgs>(
+      args?: Subset<T, FreelancerCertificateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FreelancerCertificateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FreelancerCertificate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FreelancerCertificateAggregateArgs>(args: Subset<T, FreelancerCertificateAggregateArgs>): Prisma.PrismaPromise<GetFreelancerCertificateAggregateType<T>>
+
+    /**
+     * Group by FreelancerCertificate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FreelancerCertificateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FreelancerCertificateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FreelancerCertificateGroupByArgs['orderBy'] }
+        : { orderBy?: FreelancerCertificateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FreelancerCertificateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFreelancerCertificateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FreelancerCertificate model
+   */
+  readonly fields: FreelancerCertificateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FreelancerCertificate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FreelancerCertificateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    freelancer<T extends FreelancerProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FreelancerProfileDefaultArgs<ExtArgs>>): Prisma__FreelancerProfileClient<$Result.GetResult<Prisma.$FreelancerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FreelancerCertificate model
+   */
+  interface FreelancerCertificateFieldRefs {
+    readonly id: FieldRef<"FreelancerCertificate", 'String'>
+    readonly freelancer_id: FieldRef<"FreelancerCertificate", 'String'>
+    readonly name: FieldRef<"FreelancerCertificate", 'String'>
+    readonly issuer: FieldRef<"FreelancerCertificate", 'String'>
+    readonly issued_date: FieldRef<"FreelancerCertificate", 'DateTime'>
+    readonly file_url: FieldRef<"FreelancerCertificate", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FreelancerCertificate findUnique
+   */
+  export type FreelancerCertificateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter, which FreelancerCertificate to fetch.
+     */
+    where: FreelancerCertificateWhereUniqueInput
+  }
+
+  /**
+   * FreelancerCertificate findUniqueOrThrow
+   */
+  export type FreelancerCertificateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter, which FreelancerCertificate to fetch.
+     */
+    where: FreelancerCertificateWhereUniqueInput
+  }
+
+  /**
+   * FreelancerCertificate findFirst
+   */
+  export type FreelancerCertificateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter, which FreelancerCertificate to fetch.
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FreelancerCertificates to fetch.
+     */
+    orderBy?: FreelancerCertificateOrderByWithRelationInput | FreelancerCertificateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FreelancerCertificates.
+     */
+    cursor?: FreelancerCertificateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FreelancerCertificates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FreelancerCertificates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FreelancerCertificates.
+     */
+    distinct?: FreelancerCertificateScalarFieldEnum | FreelancerCertificateScalarFieldEnum[]
+  }
+
+  /**
+   * FreelancerCertificate findFirstOrThrow
+   */
+  export type FreelancerCertificateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter, which FreelancerCertificate to fetch.
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FreelancerCertificates to fetch.
+     */
+    orderBy?: FreelancerCertificateOrderByWithRelationInput | FreelancerCertificateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FreelancerCertificates.
+     */
+    cursor?: FreelancerCertificateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FreelancerCertificates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FreelancerCertificates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FreelancerCertificates.
+     */
+    distinct?: FreelancerCertificateScalarFieldEnum | FreelancerCertificateScalarFieldEnum[]
+  }
+
+  /**
+   * FreelancerCertificate findMany
+   */
+  export type FreelancerCertificateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter, which FreelancerCertificates to fetch.
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FreelancerCertificates to fetch.
+     */
+    orderBy?: FreelancerCertificateOrderByWithRelationInput | FreelancerCertificateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FreelancerCertificates.
+     */
+    cursor?: FreelancerCertificateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FreelancerCertificates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FreelancerCertificates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FreelancerCertificates.
+     */
+    distinct?: FreelancerCertificateScalarFieldEnum | FreelancerCertificateScalarFieldEnum[]
+  }
+
+  /**
+   * FreelancerCertificate create
+   */
+  export type FreelancerCertificateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FreelancerCertificate.
+     */
+    data: XOR<FreelancerCertificateCreateInput, FreelancerCertificateUncheckedCreateInput>
+  }
+
+  /**
+   * FreelancerCertificate createMany
+   */
+  export type FreelancerCertificateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FreelancerCertificates.
+     */
+    data: FreelancerCertificateCreateManyInput | FreelancerCertificateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FreelancerCertificate createManyAndReturn
+   */
+  export type FreelancerCertificateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * The data used to create many FreelancerCertificates.
+     */
+    data: FreelancerCertificateCreateManyInput | FreelancerCertificateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FreelancerCertificate update
+   */
+  export type FreelancerCertificateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FreelancerCertificate.
+     */
+    data: XOR<FreelancerCertificateUpdateInput, FreelancerCertificateUncheckedUpdateInput>
+    /**
+     * Choose, which FreelancerCertificate to update.
+     */
+    where: FreelancerCertificateWhereUniqueInput
+  }
+
+  /**
+   * FreelancerCertificate updateMany
+   */
+  export type FreelancerCertificateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FreelancerCertificates.
+     */
+    data: XOR<FreelancerCertificateUpdateManyMutationInput, FreelancerCertificateUncheckedUpdateManyInput>
+    /**
+     * Filter which FreelancerCertificates to update
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * Limit how many FreelancerCertificates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FreelancerCertificate updateManyAndReturn
+   */
+  export type FreelancerCertificateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * The data used to update FreelancerCertificates.
+     */
+    data: XOR<FreelancerCertificateUpdateManyMutationInput, FreelancerCertificateUncheckedUpdateManyInput>
+    /**
+     * Filter which FreelancerCertificates to update
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * Limit how many FreelancerCertificates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FreelancerCertificate upsert
+   */
+  export type FreelancerCertificateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FreelancerCertificate to update in case it exists.
+     */
+    where: FreelancerCertificateWhereUniqueInput
+    /**
+     * In case the FreelancerCertificate found by the `where` argument doesn't exist, create a new FreelancerCertificate with this data.
+     */
+    create: XOR<FreelancerCertificateCreateInput, FreelancerCertificateUncheckedCreateInput>
+    /**
+     * In case the FreelancerCertificate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FreelancerCertificateUpdateInput, FreelancerCertificateUncheckedUpdateInput>
+  }
+
+  /**
+   * FreelancerCertificate delete
+   */
+  export type FreelancerCertificateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
+    /**
+     * Filter which FreelancerCertificate to delete.
+     */
+    where: FreelancerCertificateWhereUniqueInput
+  }
+
+  /**
+   * FreelancerCertificate deleteMany
+   */
+  export type FreelancerCertificateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FreelancerCertificates to delete
+     */
+    where?: FreelancerCertificateWhereInput
+    /**
+     * Limit how many FreelancerCertificates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FreelancerCertificate without action
+   */
+  export type FreelancerCertificateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FreelancerCertificate
+     */
+    select?: FreelancerCertificateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FreelancerCertificate
+     */
+    omit?: FreelancerCertificateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FreelancerCertificateInclude<ExtArgs> | null
   }
 
 
@@ -22869,6 +24273,7 @@ export namespace Prisma {
     freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
     tier?: boolean | Package$tierArgs<ExtArgs>
     orders?: boolean | Package$ordersArgs<ExtArgs>
+    media?: boolean | Package$mediaArgs<ExtArgs>
     _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["package"]>
 
@@ -22926,6 +24331,7 @@ export namespace Prisma {
     freelancer?: boolean | FreelancerProfileDefaultArgs<ExtArgs>
     tier?: boolean | Package$tierArgs<ExtArgs>
     orders?: boolean | Package$ordersArgs<ExtArgs>
+    media?: boolean | Package$mediaArgs<ExtArgs>
     _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PackageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22943,6 +24349,7 @@ export namespace Prisma {
       freelancer: Prisma.$FreelancerProfilePayload<ExtArgs>
       tier: Prisma.$PackageTierPayload<ExtArgs> | null
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      media: Prisma.$PackageMediaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -23354,6 +24761,7 @@ export namespace Prisma {
     freelancer<T extends FreelancerProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FreelancerProfileDefaultArgs<ExtArgs>>): Prisma__FreelancerProfileClient<$Result.GetResult<Prisma.$FreelancerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     tier<T extends Package$tierArgs<ExtArgs> = {}>(args?: Subset<T, Package$tierArgs<ExtArgs>>): Prisma__PackageTierClient<$Result.GetResult<Prisma.$PackageTierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orders<T extends Package$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Package$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    media<T extends Package$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Package$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23839,6 +25247,30 @@ export namespace Prisma {
   }
 
   /**
+   * Package.media
+   */
+  export type Package$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    where?: PackageMediaWhereInput
+    orderBy?: PackageMediaOrderByWithRelationInput | PackageMediaOrderByWithRelationInput[]
+    cursor?: PackageMediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PackageMediaScalarFieldEnum | PackageMediaScalarFieldEnum[]
+  }
+
+  /**
    * Package without action
    */
   export type PackageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -23854,6 +25286,1103 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PackageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PackageMedia
+   */
+
+  export type AggregatePackageMedia = {
+    _count: PackageMediaCountAggregateOutputType | null
+    _avg: PackageMediaAvgAggregateOutputType | null
+    _sum: PackageMediaSumAggregateOutputType | null
+    _min: PackageMediaMinAggregateOutputType | null
+    _max: PackageMediaMaxAggregateOutputType | null
+  }
+
+  export type PackageMediaAvgAggregateOutputType = {
+    sort_order: number | null
+  }
+
+  export type PackageMediaSumAggregateOutputType = {
+    sort_order: number | null
+  }
+
+  export type PackageMediaMinAggregateOutputType = {
+    id: string | null
+    package_id: string | null
+    type: string | null
+    url: string | null
+    sort_order: number | null
+  }
+
+  export type PackageMediaMaxAggregateOutputType = {
+    id: string | null
+    package_id: string | null
+    type: string | null
+    url: string | null
+    sort_order: number | null
+  }
+
+  export type PackageMediaCountAggregateOutputType = {
+    id: number
+    package_id: number
+    type: number
+    url: number
+    sort_order: number
+    _all: number
+  }
+
+
+  export type PackageMediaAvgAggregateInputType = {
+    sort_order?: true
+  }
+
+  export type PackageMediaSumAggregateInputType = {
+    sort_order?: true
+  }
+
+  export type PackageMediaMinAggregateInputType = {
+    id?: true
+    package_id?: true
+    type?: true
+    url?: true
+    sort_order?: true
+  }
+
+  export type PackageMediaMaxAggregateInputType = {
+    id?: true
+    package_id?: true
+    type?: true
+    url?: true
+    sort_order?: true
+  }
+
+  export type PackageMediaCountAggregateInputType = {
+    id?: true
+    package_id?: true
+    type?: true
+    url?: true
+    sort_order?: true
+    _all?: true
+  }
+
+  export type PackageMediaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackageMedia to aggregate.
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageMedias to fetch.
+     */
+    orderBy?: PackageMediaOrderByWithRelationInput | PackageMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PackageMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PackageMedias
+    **/
+    _count?: true | PackageMediaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PackageMediaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PackageMediaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PackageMediaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PackageMediaMaxAggregateInputType
+  }
+
+  export type GetPackageMediaAggregateType<T extends PackageMediaAggregateArgs> = {
+        [P in keyof T & keyof AggregatePackageMedia]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePackageMedia[P]>
+      : GetScalarType<T[P], AggregatePackageMedia[P]>
+  }
+
+
+
+
+  export type PackageMediaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageMediaWhereInput
+    orderBy?: PackageMediaOrderByWithAggregationInput | PackageMediaOrderByWithAggregationInput[]
+    by: PackageMediaScalarFieldEnum[] | PackageMediaScalarFieldEnum
+    having?: PackageMediaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PackageMediaCountAggregateInputType | true
+    _avg?: PackageMediaAvgAggregateInputType
+    _sum?: PackageMediaSumAggregateInputType
+    _min?: PackageMediaMinAggregateInputType
+    _max?: PackageMediaMaxAggregateInputType
+  }
+
+  export type PackageMediaGroupByOutputType = {
+    id: string
+    package_id: string
+    type: string
+    url: string
+    sort_order: number
+    _count: PackageMediaCountAggregateOutputType | null
+    _avg: PackageMediaAvgAggregateOutputType | null
+    _sum: PackageMediaSumAggregateOutputType | null
+    _min: PackageMediaMinAggregateOutputType | null
+    _max: PackageMediaMaxAggregateOutputType | null
+  }
+
+  type GetPackageMediaGroupByPayload<T extends PackageMediaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PackageMediaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PackageMediaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PackageMediaGroupByOutputType[P]>
+            : GetScalarType<T[P], PackageMediaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PackageMediaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    package_id?: boolean
+    type?: boolean
+    url?: boolean
+    sort_order?: boolean
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packageMedia"]>
+
+  export type PackageMediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    package_id?: boolean
+    type?: boolean
+    url?: boolean
+    sort_order?: boolean
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packageMedia"]>
+
+  export type PackageMediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    package_id?: boolean
+    type?: boolean
+    url?: boolean
+    sort_order?: boolean
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packageMedia"]>
+
+  export type PackageMediaSelectScalar = {
+    id?: boolean
+    package_id?: boolean
+    type?: boolean
+    url?: boolean
+    sort_order?: boolean
+  }
+
+  export type PackageMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "package_id" | "type" | "url" | "sort_order", ExtArgs["result"]["packageMedia"]>
+  export type PackageMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+  export type PackageMediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+  export type PackageMediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+
+  export type $PackageMediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PackageMedia"
+    objects: {
+      package: Prisma.$PackagePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      package_id: string
+      type: string
+      url: string
+      sort_order: number
+    }, ExtArgs["result"]["packageMedia"]>
+    composites: {}
+  }
+
+  type PackageMediaGetPayload<S extends boolean | null | undefined | PackageMediaDefaultArgs> = $Result.GetResult<Prisma.$PackageMediaPayload, S>
+
+  type PackageMediaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PackageMediaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PackageMediaCountAggregateInputType | true
+    }
+
+  export interface PackageMediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PackageMedia'], meta: { name: 'PackageMedia' } }
+    /**
+     * Find zero or one PackageMedia that matches the filter.
+     * @param {PackageMediaFindUniqueArgs} args - Arguments to find a PackageMedia
+     * @example
+     * // Get one PackageMedia
+     * const packageMedia = await prisma.packageMedia.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PackageMediaFindUniqueArgs>(args: SelectSubset<T, PackageMediaFindUniqueArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PackageMedia that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PackageMediaFindUniqueOrThrowArgs} args - Arguments to find a PackageMedia
+     * @example
+     * // Get one PackageMedia
+     * const packageMedia = await prisma.packageMedia.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PackageMediaFindUniqueOrThrowArgs>(args: SelectSubset<T, PackageMediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PackageMedia that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaFindFirstArgs} args - Arguments to find a PackageMedia
+     * @example
+     * // Get one PackageMedia
+     * const packageMedia = await prisma.packageMedia.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PackageMediaFindFirstArgs>(args?: SelectSubset<T, PackageMediaFindFirstArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PackageMedia that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaFindFirstOrThrowArgs} args - Arguments to find a PackageMedia
+     * @example
+     * // Get one PackageMedia
+     * const packageMedia = await prisma.packageMedia.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PackageMediaFindFirstOrThrowArgs>(args?: SelectSubset<T, PackageMediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PackageMedias that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PackageMedias
+     * const packageMedias = await prisma.packageMedia.findMany()
+     * 
+     * // Get first 10 PackageMedias
+     * const packageMedias = await prisma.packageMedia.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const packageMediaWithIdOnly = await prisma.packageMedia.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PackageMediaFindManyArgs>(args?: SelectSubset<T, PackageMediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PackageMedia.
+     * @param {PackageMediaCreateArgs} args - Arguments to create a PackageMedia.
+     * @example
+     * // Create one PackageMedia
+     * const PackageMedia = await prisma.packageMedia.create({
+     *   data: {
+     *     // ... data to create a PackageMedia
+     *   }
+     * })
+     * 
+     */
+    create<T extends PackageMediaCreateArgs>(args: SelectSubset<T, PackageMediaCreateArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PackageMedias.
+     * @param {PackageMediaCreateManyArgs} args - Arguments to create many PackageMedias.
+     * @example
+     * // Create many PackageMedias
+     * const packageMedia = await prisma.packageMedia.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PackageMediaCreateManyArgs>(args?: SelectSubset<T, PackageMediaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PackageMedias and returns the data saved in the database.
+     * @param {PackageMediaCreateManyAndReturnArgs} args - Arguments to create many PackageMedias.
+     * @example
+     * // Create many PackageMedias
+     * const packageMedia = await prisma.packageMedia.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PackageMedias and only return the `id`
+     * const packageMediaWithIdOnly = await prisma.packageMedia.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PackageMediaCreateManyAndReturnArgs>(args?: SelectSubset<T, PackageMediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PackageMedia.
+     * @param {PackageMediaDeleteArgs} args - Arguments to delete one PackageMedia.
+     * @example
+     * // Delete one PackageMedia
+     * const PackageMedia = await prisma.packageMedia.delete({
+     *   where: {
+     *     // ... filter to delete one PackageMedia
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PackageMediaDeleteArgs>(args: SelectSubset<T, PackageMediaDeleteArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PackageMedia.
+     * @param {PackageMediaUpdateArgs} args - Arguments to update one PackageMedia.
+     * @example
+     * // Update one PackageMedia
+     * const packageMedia = await prisma.packageMedia.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PackageMediaUpdateArgs>(args: SelectSubset<T, PackageMediaUpdateArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PackageMedias.
+     * @param {PackageMediaDeleteManyArgs} args - Arguments to filter PackageMedias to delete.
+     * @example
+     * // Delete a few PackageMedias
+     * const { count } = await prisma.packageMedia.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PackageMediaDeleteManyArgs>(args?: SelectSubset<T, PackageMediaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PackageMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PackageMedias
+     * const packageMedia = await prisma.packageMedia.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PackageMediaUpdateManyArgs>(args: SelectSubset<T, PackageMediaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PackageMedias and returns the data updated in the database.
+     * @param {PackageMediaUpdateManyAndReturnArgs} args - Arguments to update many PackageMedias.
+     * @example
+     * // Update many PackageMedias
+     * const packageMedia = await prisma.packageMedia.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PackageMedias and only return the `id`
+     * const packageMediaWithIdOnly = await prisma.packageMedia.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PackageMediaUpdateManyAndReturnArgs>(args: SelectSubset<T, PackageMediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PackageMedia.
+     * @param {PackageMediaUpsertArgs} args - Arguments to update or create a PackageMedia.
+     * @example
+     * // Update or create a PackageMedia
+     * const packageMedia = await prisma.packageMedia.upsert({
+     *   create: {
+     *     // ... data to create a PackageMedia
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PackageMedia we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PackageMediaUpsertArgs>(args: SelectSubset<T, PackageMediaUpsertArgs<ExtArgs>>): Prisma__PackageMediaClient<$Result.GetResult<Prisma.$PackageMediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PackageMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaCountArgs} args - Arguments to filter PackageMedias to count.
+     * @example
+     * // Count the number of PackageMedias
+     * const count = await prisma.packageMedia.count({
+     *   where: {
+     *     // ... the filter for the PackageMedias we want to count
+     *   }
+     * })
+    **/
+    count<T extends PackageMediaCountArgs>(
+      args?: Subset<T, PackageMediaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PackageMediaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PackageMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PackageMediaAggregateArgs>(args: Subset<T, PackageMediaAggregateArgs>): Prisma.PrismaPromise<GetPackageMediaAggregateType<T>>
+
+    /**
+     * Group by PackageMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackageMediaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PackageMediaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PackageMediaGroupByArgs['orderBy'] }
+        : { orderBy?: PackageMediaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PackageMediaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPackageMediaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PackageMedia model
+   */
+  readonly fields: PackageMediaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PackageMedia.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PackageMediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    package<T extends PackageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PackageDefaultArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PackageMedia model
+   */
+  interface PackageMediaFieldRefs {
+    readonly id: FieldRef<"PackageMedia", 'String'>
+    readonly package_id: FieldRef<"PackageMedia", 'String'>
+    readonly type: FieldRef<"PackageMedia", 'String'>
+    readonly url: FieldRef<"PackageMedia", 'String'>
+    readonly sort_order: FieldRef<"PackageMedia", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PackageMedia findUnique
+   */
+  export type PackageMediaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageMedia to fetch.
+     */
+    where: PackageMediaWhereUniqueInput
+  }
+
+  /**
+   * PackageMedia findUniqueOrThrow
+   */
+  export type PackageMediaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageMedia to fetch.
+     */
+    where: PackageMediaWhereUniqueInput
+  }
+
+  /**
+   * PackageMedia findFirst
+   */
+  export type PackageMediaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageMedia to fetch.
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageMedias to fetch.
+     */
+    orderBy?: PackageMediaOrderByWithRelationInput | PackageMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackageMedias.
+     */
+    cursor?: PackageMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackageMedias.
+     */
+    distinct?: PackageMediaScalarFieldEnum | PackageMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PackageMedia findFirstOrThrow
+   */
+  export type PackageMediaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageMedia to fetch.
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageMedias to fetch.
+     */
+    orderBy?: PackageMediaOrderByWithRelationInput | PackageMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackageMedias.
+     */
+    cursor?: PackageMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackageMedias.
+     */
+    distinct?: PackageMediaScalarFieldEnum | PackageMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PackageMedia findMany
+   */
+  export type PackageMediaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter, which PackageMedias to fetch.
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackageMedias to fetch.
+     */
+    orderBy?: PackageMediaOrderByWithRelationInput | PackageMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PackageMedias.
+     */
+    cursor?: PackageMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackageMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackageMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackageMedias.
+     */
+    distinct?: PackageMediaScalarFieldEnum | PackageMediaScalarFieldEnum[]
+  }
+
+  /**
+   * PackageMedia create
+   */
+  export type PackageMediaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PackageMedia.
+     */
+    data: XOR<PackageMediaCreateInput, PackageMediaUncheckedCreateInput>
+  }
+
+  /**
+   * PackageMedia createMany
+   */
+  export type PackageMediaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PackageMedias.
+     */
+    data: PackageMediaCreateManyInput | PackageMediaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PackageMedia createManyAndReturn
+   */
+  export type PackageMediaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * The data used to create many PackageMedias.
+     */
+    data: PackageMediaCreateManyInput | PackageMediaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PackageMedia update
+   */
+  export type PackageMediaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PackageMedia.
+     */
+    data: XOR<PackageMediaUpdateInput, PackageMediaUncheckedUpdateInput>
+    /**
+     * Choose, which PackageMedia to update.
+     */
+    where: PackageMediaWhereUniqueInput
+  }
+
+  /**
+   * PackageMedia updateMany
+   */
+  export type PackageMediaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PackageMedias.
+     */
+    data: XOR<PackageMediaUpdateManyMutationInput, PackageMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which PackageMedias to update
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * Limit how many PackageMedias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PackageMedia updateManyAndReturn
+   */
+  export type PackageMediaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * The data used to update PackageMedias.
+     */
+    data: XOR<PackageMediaUpdateManyMutationInput, PackageMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which PackageMedias to update
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * Limit how many PackageMedias to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PackageMedia upsert
+   */
+  export type PackageMediaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PackageMedia to update in case it exists.
+     */
+    where: PackageMediaWhereUniqueInput
+    /**
+     * In case the PackageMedia found by the `where` argument doesn't exist, create a new PackageMedia with this data.
+     */
+    create: XOR<PackageMediaCreateInput, PackageMediaUncheckedCreateInput>
+    /**
+     * In case the PackageMedia was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PackageMediaUpdateInput, PackageMediaUncheckedUpdateInput>
+  }
+
+  /**
+   * PackageMedia delete
+   */
+  export type PackageMediaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
+    /**
+     * Filter which PackageMedia to delete.
+     */
+    where: PackageMediaWhereUniqueInput
+  }
+
+  /**
+   * PackageMedia deleteMany
+   */
+  export type PackageMediaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackageMedias to delete
+     */
+    where?: PackageMediaWhereInput
+    /**
+     * Limit how many PackageMedias to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PackageMedia without action
+   */
+  export type PackageMediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackageMedia
+     */
+    select?: PackageMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PackageMedia
+     */
+    omit?: PackageMediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageMediaInclude<ExtArgs> | null
   }
 
 
@@ -34869,6 +37398,8 @@ export namespace Prisma {
     email: 'email',
     full_name: 'full_name',
     avatar_url: 'avatar_url',
+    phone_number: 'phone_number',
+    social_links: 'social_links',
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -34919,6 +37450,8 @@ export namespace Prisma {
     company_name: 'company_name',
     industry: 'industry',
     bio: 'bio',
+    ocation_city: 'ocation_city',
+    website_url: 'website_url',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -34933,6 +37466,10 @@ export namespace Prisma {
     bio: 'bio',
     skills: 'skills',
     experience_level_id: 'experience_level_id',
+    years_of_experience: 'years_of_experience',
+    portfolio_url: 'portfolio_url',
+    languages: 'languages',
+    location_city: 'location_city',
     success_rate: 'success_rate',
     total_earnings_mmk: 'total_earnings_mmk',
     is_verified: 'is_verified',
@@ -34945,6 +37482,18 @@ export namespace Prisma {
   };
 
   export type FreelancerProfileScalarFieldEnum = (typeof FreelancerProfileScalarFieldEnum)[keyof typeof FreelancerProfileScalarFieldEnum]
+
+
+  export const FreelancerCertificateScalarFieldEnum: {
+    id: 'id',
+    freelancer_id: 'freelancer_id',
+    name: 'name',
+    issuer: 'issuer',
+    issued_date: 'issued_date',
+    file_url: 'file_url'
+  };
+
+  export type FreelancerCertificateScalarFieldEnum = (typeof FreelancerCertificateScalarFieldEnum)[keyof typeof FreelancerCertificateScalarFieldEnum]
 
 
   export const IdentityVerificationScalarFieldEnum: {
@@ -35040,6 +37589,17 @@ export namespace Prisma {
   };
 
   export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
+
+
+  export const PackageMediaScalarFieldEnum: {
+    id: 'id',
+    package_id: 'package_id',
+    type: 'type',
+    url: 'url',
+    sort_order: 'sort_order'
+  };
+
+  export type PackageMediaScalarFieldEnum = (typeof PackageMediaScalarFieldEnum)[keyof typeof PackageMediaScalarFieldEnum]
 
 
   export const JobPostScalarFieldEnum: {
@@ -35206,6 +37766,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -35873,6 +38441,8 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     full_name?: StringNullableFilter<"User"> | string | null
     avatar_url?: StringNullableFilter<"User"> | string | null
+    phone_number?: StringNullableFilter<"User"> | string | null
+    social_links?: JsonNullableFilter<"User">
     status?: Enumuser_statusFilter<"User"> | $Enums.user_status
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
@@ -35904,6 +38474,8 @@ export namespace Prisma {
     email?: SortOrder
     full_name?: SortOrderInput | SortOrder
     avatar_url?: SortOrderInput | SortOrder
+    phone_number?: SortOrderInput | SortOrder
+    social_links?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -35938,6 +38510,8 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     full_name?: StringNullableFilter<"User"> | string | null
     avatar_url?: StringNullableFilter<"User"> | string | null
+    phone_number?: StringNullableFilter<"User"> | string | null
+    social_links?: JsonNullableFilter<"User">
     status?: Enumuser_statusFilter<"User"> | $Enums.user_status
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
@@ -35969,6 +38543,8 @@ export namespace Prisma {
     email?: SortOrder
     full_name?: SortOrderInput | SortOrder
     avatar_url?: SortOrderInput | SortOrder
+    phone_number?: SortOrderInput | SortOrder
+    social_links?: SortOrderInput | SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -35986,6 +38562,8 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     full_name?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatar_url?: StringNullableWithAggregatesFilter<"User"> | string | null
+    phone_number?: StringNullableWithAggregatesFilter<"User"> | string | null
+    social_links?: JsonNullableWithAggregatesFilter<"User">
     status?: Enumuser_statusWithAggregatesFilter<"User"> | $Enums.user_status
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -36183,6 +38761,8 @@ export namespace Prisma {
     company_name?: StringNullableFilter<"ClientProfile"> | string | null
     industry?: StringNullableFilter<"ClientProfile"> | string | null
     bio?: StringNullableFilter<"ClientProfile"> | string | null
+    ocation_city?: StringNullableFilter<"ClientProfile"> | string | null
+    website_url?: StringNullableFilter<"ClientProfile"> | string | null
     created_at?: DateTimeFilter<"ClientProfile"> | Date | string
     updated_at?: DateTimeFilter<"ClientProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -36195,6 +38775,8 @@ export namespace Prisma {
     company_name?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
+    ocation_city?: SortOrderInput | SortOrder
+    website_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -36210,6 +38792,8 @@ export namespace Prisma {
     company_name?: StringNullableFilter<"ClientProfile"> | string | null
     industry?: StringNullableFilter<"ClientProfile"> | string | null
     bio?: StringNullableFilter<"ClientProfile"> | string | null
+    ocation_city?: StringNullableFilter<"ClientProfile"> | string | null
+    website_url?: StringNullableFilter<"ClientProfile"> | string | null
     created_at?: DateTimeFilter<"ClientProfile"> | Date | string
     updated_at?: DateTimeFilter<"ClientProfile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -36222,6 +38806,8 @@ export namespace Prisma {
     company_name?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
+    ocation_city?: SortOrderInput | SortOrder
+    website_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ClientProfileCountOrderByAggregateInput
@@ -36238,6 +38824,8 @@ export namespace Prisma {
     company_name?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
     industry?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
     bio?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
+    ocation_city?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
+    website_url?: StringNullableWithAggregatesFilter<"ClientProfile"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"ClientProfile"> | Date | string
   }
@@ -36252,6 +38840,10 @@ export namespace Prisma {
     bio?: StringNullableFilter<"FreelancerProfile"> | string | null
     skills?: StringNullableListFilter<"FreelancerProfile">
     experience_level_id?: UuidNullableFilter<"FreelancerProfile"> | string | null
+    years_of_experience?: IntNullableFilter<"FreelancerProfile"> | number | null
+    portfolio_url?: StringNullableFilter<"FreelancerProfile"> | string | null
+    languages?: StringNullableListFilter<"FreelancerProfile">
+    location_city?: StringNullableFilter<"FreelancerProfile"> | string | null
     success_rate?: DecimalFilter<"FreelancerProfile"> | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFilter<"FreelancerProfile"> | bigint | number
     is_verified?: BoolFilter<"FreelancerProfile"> | boolean
@@ -36261,6 +38853,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"FreelancerProfile"> | Date | string
     updated_at?: DateTimeFilter<"FreelancerProfile"> | Date | string
     deleted_at?: DateTimeNullableFilter<"FreelancerProfile"> | Date | string | null
+    certificates?: FreelancerCertificateListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     experience_level?: XOR<ExperienceLevelNullableScalarRelationFilter, ExperienceLevelWhereInput> | null
     packages?: PackageListRelationFilter
@@ -36273,6 +38866,10 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     skills?: SortOrder
     experience_level_id?: SortOrderInput | SortOrder
+    years_of_experience?: SortOrderInput | SortOrder
+    portfolio_url?: SortOrderInput | SortOrder
+    languages?: SortOrder
+    location_city?: SortOrderInput | SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     is_verified?: SortOrder
@@ -36282,6 +38879,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     deleted_at?: SortOrderInput | SortOrder
+    certificates?: FreelancerCertificateOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
     experience_level?: ExperienceLevelOrderByWithRelationInput
     packages?: PackageOrderByRelationAggregateInput
@@ -36297,6 +38895,10 @@ export namespace Prisma {
     bio?: StringNullableFilter<"FreelancerProfile"> | string | null
     skills?: StringNullableListFilter<"FreelancerProfile">
     experience_level_id?: UuidNullableFilter<"FreelancerProfile"> | string | null
+    years_of_experience?: IntNullableFilter<"FreelancerProfile"> | number | null
+    portfolio_url?: StringNullableFilter<"FreelancerProfile"> | string | null
+    languages?: StringNullableListFilter<"FreelancerProfile">
+    location_city?: StringNullableFilter<"FreelancerProfile"> | string | null
     success_rate?: DecimalFilter<"FreelancerProfile"> | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFilter<"FreelancerProfile"> | bigint | number
     is_verified?: BoolFilter<"FreelancerProfile"> | boolean
@@ -36306,6 +38908,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"FreelancerProfile"> | Date | string
     updated_at?: DateTimeFilter<"FreelancerProfile"> | Date | string
     deleted_at?: DateTimeNullableFilter<"FreelancerProfile"> | Date | string | null
+    certificates?: FreelancerCertificateListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     experience_level?: XOR<ExperienceLevelNullableScalarRelationFilter, ExperienceLevelWhereInput> | null
     packages?: PackageListRelationFilter
@@ -36318,6 +38921,10 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     skills?: SortOrder
     experience_level_id?: SortOrderInput | SortOrder
+    years_of_experience?: SortOrderInput | SortOrder
+    portfolio_url?: SortOrderInput | SortOrder
+    languages?: SortOrder
+    location_city?: SortOrderInput | SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     is_verified?: SortOrder
@@ -36344,6 +38951,10 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
     skills?: StringNullableListFilter<"FreelancerProfile">
     experience_level_id?: UuidNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+    years_of_experience?: IntNullableWithAggregatesFilter<"FreelancerProfile"> | number | null
+    portfolio_url?: StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
+    languages?: StringNullableListFilter<"FreelancerProfile">
+    location_city?: StringNullableWithAggregatesFilter<"FreelancerProfile"> | string | null
     success_rate?: DecimalWithAggregatesFilter<"FreelancerProfile"> | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntWithAggregatesFilter<"FreelancerProfile"> | bigint | number
     is_verified?: BoolWithAggregatesFilter<"FreelancerProfile"> | boolean
@@ -36353,6 +38964,66 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"FreelancerProfile"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"FreelancerProfile"> | Date | string
     deleted_at?: DateTimeNullableWithAggregatesFilter<"FreelancerProfile"> | Date | string | null
+  }
+
+  export type FreelancerCertificateWhereInput = {
+    AND?: FreelancerCertificateWhereInput | FreelancerCertificateWhereInput[]
+    OR?: FreelancerCertificateWhereInput[]
+    NOT?: FreelancerCertificateWhereInput | FreelancerCertificateWhereInput[]
+    id?: UuidFilter<"FreelancerCertificate"> | string
+    freelancer_id?: UuidFilter<"FreelancerCertificate"> | string
+    name?: StringFilter<"FreelancerCertificate"> | string
+    issuer?: StringNullableFilter<"FreelancerCertificate"> | string | null
+    issued_date?: DateTimeNullableFilter<"FreelancerCertificate"> | Date | string | null
+    file_url?: StringNullableFilter<"FreelancerCertificate"> | string | null
+    freelancer?: XOR<FreelancerProfileScalarRelationFilter, FreelancerProfileWhereInput>
+  }
+
+  export type FreelancerCertificateOrderByWithRelationInput = {
+    id?: SortOrder
+    freelancer_id?: SortOrder
+    name?: SortOrder
+    issuer?: SortOrderInput | SortOrder
+    issued_date?: SortOrderInput | SortOrder
+    file_url?: SortOrderInput | SortOrder
+    freelancer?: FreelancerProfileOrderByWithRelationInput
+  }
+
+  export type FreelancerCertificateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FreelancerCertificateWhereInput | FreelancerCertificateWhereInput[]
+    OR?: FreelancerCertificateWhereInput[]
+    NOT?: FreelancerCertificateWhereInput | FreelancerCertificateWhereInput[]
+    freelancer_id?: UuidFilter<"FreelancerCertificate"> | string
+    name?: StringFilter<"FreelancerCertificate"> | string
+    issuer?: StringNullableFilter<"FreelancerCertificate"> | string | null
+    issued_date?: DateTimeNullableFilter<"FreelancerCertificate"> | Date | string | null
+    file_url?: StringNullableFilter<"FreelancerCertificate"> | string | null
+    freelancer?: XOR<FreelancerProfileScalarRelationFilter, FreelancerProfileWhereInput>
+  }, "id">
+
+  export type FreelancerCertificateOrderByWithAggregationInput = {
+    id?: SortOrder
+    freelancer_id?: SortOrder
+    name?: SortOrder
+    issuer?: SortOrderInput | SortOrder
+    issued_date?: SortOrderInput | SortOrder
+    file_url?: SortOrderInput | SortOrder
+    _count?: FreelancerCertificateCountOrderByAggregateInput
+    _max?: FreelancerCertificateMaxOrderByAggregateInput
+    _min?: FreelancerCertificateMinOrderByAggregateInput
+  }
+
+  export type FreelancerCertificateScalarWhereWithAggregatesInput = {
+    AND?: FreelancerCertificateScalarWhereWithAggregatesInput | FreelancerCertificateScalarWhereWithAggregatesInput[]
+    OR?: FreelancerCertificateScalarWhereWithAggregatesInput[]
+    NOT?: FreelancerCertificateScalarWhereWithAggregatesInput | FreelancerCertificateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"FreelancerCertificate"> | string
+    freelancer_id?: UuidWithAggregatesFilter<"FreelancerCertificate"> | string
+    name?: StringWithAggregatesFilter<"FreelancerCertificate"> | string
+    issuer?: StringNullableWithAggregatesFilter<"FreelancerCertificate"> | string | null
+    issued_date?: DateTimeNullableWithAggregatesFilter<"FreelancerCertificate"> | Date | string | null
+    file_url?: StringNullableWithAggregatesFilter<"FreelancerCertificate"> | string | null
   }
 
   export type IdentityVerificationWhereInput = {
@@ -36766,6 +39437,7 @@ export namespace Prisma {
     freelancer?: XOR<FreelancerProfileScalarRelationFilter, FreelancerProfileWhereInput>
     tier?: XOR<PackageTierNullableScalarRelationFilter, PackageTierWhereInput> | null
     orders?: OrderListRelationFilter
+    media?: PackageMediaListRelationFilter
   }
 
   export type PackageOrderByWithRelationInput = {
@@ -36784,6 +39456,7 @@ export namespace Prisma {
     freelancer?: FreelancerProfileOrderByWithRelationInput
     tier?: PackageTierOrderByWithRelationInput
     orders?: OrderOrderByRelationAggregateInput
+    media?: PackageMediaOrderByRelationAggregateInput
   }
 
   export type PackageWhereUniqueInput = Prisma.AtLeast<{
@@ -36805,6 +39478,7 @@ export namespace Prisma {
     freelancer?: XOR<FreelancerProfileScalarRelationFilter, FreelancerProfileWhereInput>
     tier?: XOR<PackageTierNullableScalarRelationFilter, PackageTierWhereInput> | null
     orders?: OrderListRelationFilter
+    media?: PackageMediaListRelationFilter
   }, "id">
 
   export type PackageOrderByWithAggregationInput = {
@@ -36843,6 +39517,63 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"Package"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Package"> | Date | string
     deleted_at?: DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
+  }
+
+  export type PackageMediaWhereInput = {
+    AND?: PackageMediaWhereInput | PackageMediaWhereInput[]
+    OR?: PackageMediaWhereInput[]
+    NOT?: PackageMediaWhereInput | PackageMediaWhereInput[]
+    id?: UuidFilter<"PackageMedia"> | string
+    package_id?: UuidFilter<"PackageMedia"> | string
+    type?: StringFilter<"PackageMedia"> | string
+    url?: StringFilter<"PackageMedia"> | string
+    sort_order?: IntFilter<"PackageMedia"> | number
+    package?: XOR<PackageScalarRelationFilter, PackageWhereInput>
+  }
+
+  export type PackageMediaOrderByWithRelationInput = {
+    id?: SortOrder
+    package_id?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    sort_order?: SortOrder
+    package?: PackageOrderByWithRelationInput
+  }
+
+  export type PackageMediaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PackageMediaWhereInput | PackageMediaWhereInput[]
+    OR?: PackageMediaWhereInput[]
+    NOT?: PackageMediaWhereInput | PackageMediaWhereInput[]
+    package_id?: UuidFilter<"PackageMedia"> | string
+    type?: StringFilter<"PackageMedia"> | string
+    url?: StringFilter<"PackageMedia"> | string
+    sort_order?: IntFilter<"PackageMedia"> | number
+    package?: XOR<PackageScalarRelationFilter, PackageWhereInput>
+  }, "id">
+
+  export type PackageMediaOrderByWithAggregationInput = {
+    id?: SortOrder
+    package_id?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    sort_order?: SortOrder
+    _count?: PackageMediaCountOrderByAggregateInput
+    _avg?: PackageMediaAvgOrderByAggregateInput
+    _max?: PackageMediaMaxOrderByAggregateInput
+    _min?: PackageMediaMinOrderByAggregateInput
+    _sum?: PackageMediaSumOrderByAggregateInput
+  }
+
+  export type PackageMediaScalarWhereWithAggregatesInput = {
+    AND?: PackageMediaScalarWhereWithAggregatesInput | PackageMediaScalarWhereWithAggregatesInput[]
+    OR?: PackageMediaScalarWhereWithAggregatesInput[]
+    NOT?: PackageMediaScalarWhereWithAggregatesInput | PackageMediaScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PackageMedia"> | string
+    package_id?: UuidWithAggregatesFilter<"PackageMedia"> | string
+    type?: StringWithAggregatesFilter<"PackageMedia"> | string
+    url?: StringWithAggregatesFilter<"PackageMedia"> | string
+    sort_order?: IntWithAggregatesFilter<"PackageMedia"> | number
   }
 
   export type JobPostWhereInput = {
@@ -37990,6 +40721,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -38021,6 +40754,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -38052,6 +40787,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38083,6 +40820,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38114,6 +40853,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -38125,6 +40866,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38136,6 +40879,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38329,6 +41074,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutClient_profileInput
@@ -38341,6 +41088,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     job_posts?: JobPostUncheckedCreateNestedManyWithoutClientInput
@@ -38351,6 +41100,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutClient_profileNestedInput
@@ -38363,6 +41114,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     job_posts?: JobPostUncheckedUpdateManyWithoutClientNestedInput
@@ -38374,6 +41127,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -38383,6 +41138,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38393,6 +41150,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38402,6 +41161,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -38411,6 +41174,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateCreateNestedManyWithoutFreelancerInput
     user: UserCreateNestedOneWithoutFreelancer_profileInput
     experience_level?: ExperienceLevelCreateNestedOneWithoutFreelancersInput
     packages?: PackageCreateNestedManyWithoutFreelancerInput
@@ -38423,6 +41187,10 @@ export namespace Prisma {
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
     experience_level_id?: string | null
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -38432,6 +41200,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateUncheckedCreateNestedManyWithoutFreelancerInput
     packages?: PackageUncheckedCreateNestedManyWithoutFreelancerInput
   }
 
@@ -38440,6 +41209,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -38449,6 +41222,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUpdateManyWithoutFreelancerNestedInput
     user?: UserUpdateOneRequiredWithoutFreelancer_profileNestedInput
     experience_level?: ExperienceLevelUpdateOneWithoutFreelancersNestedInput
     packages?: PackageUpdateManyWithoutFreelancerNestedInput
@@ -38461,6 +41235,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
     experience_level_id?: NullableStringFieldUpdateOperationsInput | string | null
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -38470,6 +41248,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUncheckedUpdateManyWithoutFreelancerNestedInput
     packages?: PackageUncheckedUpdateManyWithoutFreelancerNestedInput
   }
 
@@ -38480,6 +41259,10 @@ export namespace Prisma {
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
     experience_level_id?: string | null
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -38496,6 +41279,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -38514,6 +41301,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
     experience_level_id?: NullableStringFieldUpdateOperationsInput | string | null
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -38523,6 +41314,68 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FreelancerCertificateCreateInput = {
+    id?: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+    freelancer: FreelancerProfileCreateNestedOneWithoutCertificatesInput
+  }
+
+  export type FreelancerCertificateUncheckedCreateInput = {
+    id?: string
+    freelancer_id: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+  }
+
+  export type FreelancerCertificateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
+    freelancer?: FreelancerProfileUpdateOneRequiredWithoutCertificatesNestedInput
+  }
+
+  export type FreelancerCertificateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    freelancer_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FreelancerCertificateCreateManyInput = {
+    id?: string
+    freelancer_id: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+  }
+
+  export type FreelancerCertificateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FreelancerCertificateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    freelancer_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IdentityVerificationCreateInput = {
@@ -38970,6 +41823,7 @@ export namespace Prisma {
     freelancer: FreelancerProfileCreateNestedOneWithoutPackagesInput
     tier?: PackageTierCreateNestedOneWithoutPackagesInput
     orders?: OrderCreateNestedManyWithoutPackageInput
+    media?: PackageMediaCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateInput = {
@@ -38986,6 +41840,7 @@ export namespace Prisma {
     updated_at?: Date | string
     deleted_at?: Date | string | null
     orders?: OrderUncheckedCreateNestedManyWithoutPackageInput
+    media?: PackageMediaUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUpdateInput = {
@@ -39002,6 +41857,7 @@ export namespace Prisma {
     freelancer?: FreelancerProfileUpdateOneRequiredWithoutPackagesNestedInput
     tier?: PackageTierUpdateOneWithoutPackagesNestedInput
     orders?: OrderUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateInput = {
@@ -39018,6 +41874,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     orders?: OrderUncheckedUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageCreateManyInput = {
@@ -39061,6 +41918,61 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PackageMediaCreateInput = {
+    id?: string
+    type: string
+    url: string
+    sort_order?: number
+    package: PackageCreateNestedOneWithoutMediaInput
+  }
+
+  export type PackageMediaUncheckedCreateInput = {
+    id?: string
+    package_id: string
+    type: string
+    url: string
+    sort_order?: number
+  }
+
+  export type PackageMediaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
+    package?: PackageUpdateOneRequiredWithoutMediaNestedInput
+  }
+
+  export type PackageMediaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PackageMediaCreateManyInput = {
+    id?: string
+    package_id: string
+    type: string
+    url: string
+    sort_order?: number
+  }
+
+  export type PackageMediaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PackageMediaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
   }
 
   export type JobPostCreateInput = {
@@ -40458,6 +43370,29 @@ export namespace Prisma {
     _min?: NestedEnumdeliverable_statusFilter<$PrismaModel>
     _max?: NestedEnumdeliverable_statusFilter<$PrismaModel>
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type Enumuser_statusFilter<$PrismaModel = never> = {
     equals?: $Enums.user_status | Enumuser_statusFieldRefInput<$PrismaModel>
@@ -40601,6 +43536,8 @@ export namespace Prisma {
     email?: SortOrder
     full_name?: SortOrder
     avatar_url?: SortOrder
+    phone_number?: SortOrder
+    social_links?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -40612,6 +43549,7 @@ export namespace Prisma {
     email?: SortOrder
     full_name?: SortOrder
     avatar_url?: SortOrder
+    phone_number?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -40623,10 +43561,37 @@ export namespace Prisma {
     email?: SortOrder
     full_name?: SortOrder
     avatar_url?: SortOrder
+    phone_number?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     deleted_at?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type Enumuser_statusWithAggregatesFilter<$PrismaModel = never> = {
@@ -40760,6 +43725,8 @@ export namespace Prisma {
     company_name?: SortOrder
     industry?: SortOrder
     bio?: SortOrder
+    ocation_city?: SortOrder
+    website_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -40770,6 +43737,8 @@ export namespace Prisma {
     company_name?: SortOrder
     industry?: SortOrder
     bio?: SortOrder
+    ocation_city?: SortOrder
+    website_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -40780,6 +43749,8 @@ export namespace Prisma {
     company_name?: SortOrder
     industry?: SortOrder
     bio?: SortOrder
+    ocation_city?: SortOrder
+    website_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -40825,6 +43796,12 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type FreelancerCertificateListRelationFilter = {
+    every?: FreelancerCertificateWhereInput
+    some?: FreelancerCertificateWhereInput
+    none?: FreelancerCertificateWhereInput
+  }
+
   export type ExperienceLevelNullableScalarRelationFilter = {
     is?: ExperienceLevelWhereInput | null
     isNot?: ExperienceLevelWhereInput | null
@@ -40834,6 +43811,10 @@ export namespace Prisma {
     every?: PackageWhereInput
     some?: PackageWhereInput
     none?: PackageWhereInput
+  }
+
+  export type FreelancerCertificateOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PackageOrderByRelationAggregateInput = {
@@ -40847,6 +43828,10 @@ export namespace Prisma {
     bio?: SortOrder
     skills?: SortOrder
     experience_level_id?: SortOrder
+    years_of_experience?: SortOrder
+    portfolio_url?: SortOrder
+    languages?: SortOrder
+    location_city?: SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     is_verified?: SortOrder
@@ -40859,6 +43844,7 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileAvgOrderByAggregateInput = {
+    years_of_experience?: SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     completed_projects_count?: SortOrder
@@ -40872,6 +43858,9 @@ export namespace Prisma {
     headline?: SortOrder
     bio?: SortOrder
     experience_level_id?: SortOrder
+    years_of_experience?: SortOrder
+    portfolio_url?: SortOrder
+    location_city?: SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     is_verified?: SortOrder
@@ -40889,6 +43878,9 @@ export namespace Prisma {
     headline?: SortOrder
     bio?: SortOrder
     experience_level_id?: SortOrder
+    years_of_experience?: SortOrder
+    portfolio_url?: SortOrder
+    location_city?: SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     is_verified?: SortOrder
@@ -40901,6 +43893,7 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileSumOrderByAggregateInput = {
+    years_of_experience?: SortOrder
     success_rate?: SortOrder
     total_earnings_mmk?: SortOrder
     completed_projects_count?: SortOrder
@@ -40954,6 +43947,38 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type FreelancerProfileScalarRelationFilter = {
+    is?: FreelancerProfileWhereInput
+    isNot?: FreelancerProfileWhereInput
+  }
+
+  export type FreelancerCertificateCountOrderByAggregateInput = {
+    id?: SortOrder
+    freelancer_id?: SortOrder
+    name?: SortOrder
+    issuer?: SortOrder
+    issued_date?: SortOrder
+    file_url?: SortOrder
+  }
+
+  export type FreelancerCertificateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    freelancer_id?: SortOrder
+    name?: SortOrder
+    issuer?: SortOrder
+    issued_date?: SortOrder
+    file_url?: SortOrder
+  }
+
+  export type FreelancerCertificateMinOrderByAggregateInput = {
+    id?: SortOrder
+    freelancer_id?: SortOrder
+    name?: SortOrder
+    issuer?: SortOrder
+    issued_date?: SortOrder
+    file_url?: SortOrder
   }
 
   export type Enumkyc_statusFilter<$PrismaModel = never> = {
@@ -41186,14 +44211,19 @@ export namespace Prisma {
     created_at?: SortOrder
   }
 
-  export type FreelancerProfileScalarRelationFilter = {
-    is?: FreelancerProfileWhereInput
-    isNot?: FreelancerProfileWhereInput
-  }
-
   export type PackageTierNullableScalarRelationFilter = {
     is?: PackageTierWhereInput | null
     isNot?: PackageTierWhereInput | null
+  }
+
+  export type PackageMediaListRelationFilter = {
+    every?: PackageMediaWhereInput
+    some?: PackageMediaWhereInput
+    none?: PackageMediaWhereInput
+  }
+
+  export type PackageMediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PackageCountOrderByAggregateInput = {
@@ -41247,6 +44277,43 @@ export namespace Prisma {
   export type PackageSumOrderByAggregateInput = {
     price_mmk?: SortOrder
     delivery_days?: SortOrder
+  }
+
+  export type PackageScalarRelationFilter = {
+    is?: PackageWhereInput
+    isNot?: PackageWhereInput
+  }
+
+  export type PackageMediaCountOrderByAggregateInput = {
+    id?: SortOrder
+    package_id?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    sort_order?: SortOrder
+  }
+
+  export type PackageMediaAvgOrderByAggregateInput = {
+    sort_order?: SortOrder
+  }
+
+  export type PackageMediaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    package_id?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    sort_order?: SortOrder
+  }
+
+  export type PackageMediaMinOrderByAggregateInput = {
+    id?: SortOrder
+    package_id?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    sort_order?: SortOrder
+  }
+
+  export type PackageMediaSumOrderByAggregateInput = {
+    sort_order?: SortOrder
   }
 
   export type Enumjob_statusFilter<$PrismaModel = never> = {
@@ -43040,6 +46107,17 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type FreelancerProfileCreatelanguagesInput = {
+    set: string[]
+  }
+
+  export type FreelancerCertificateCreateNestedManyWithoutFreelancerInput = {
+    create?: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput> | FreelancerCertificateCreateWithoutFreelancerInput[] | FreelancerCertificateUncheckedCreateWithoutFreelancerInput[]
+    connectOrCreate?: FreelancerCertificateCreateOrConnectWithoutFreelancerInput | FreelancerCertificateCreateOrConnectWithoutFreelancerInput[]
+    createMany?: FreelancerCertificateCreateManyFreelancerInputEnvelope
+    connect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutFreelancer_profileInput = {
     create?: XOR<UserCreateWithoutFreelancer_profileInput, UserUncheckedCreateWithoutFreelancer_profileInput>
     connectOrCreate?: UserCreateOrConnectWithoutFreelancer_profileInput
@@ -43059,6 +46137,13 @@ export namespace Prisma {
     connect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
   }
 
+  export type FreelancerCertificateUncheckedCreateNestedManyWithoutFreelancerInput = {
+    create?: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput> | FreelancerCertificateCreateWithoutFreelancerInput[] | FreelancerCertificateUncheckedCreateWithoutFreelancerInput[]
+    connectOrCreate?: FreelancerCertificateCreateOrConnectWithoutFreelancerInput | FreelancerCertificateCreateOrConnectWithoutFreelancerInput[]
+    createMany?: FreelancerCertificateCreateManyFreelancerInputEnvelope
+    connect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+  }
+
   export type PackageUncheckedCreateNestedManyWithoutFreelancerInput = {
     create?: XOR<PackageCreateWithoutFreelancerInput, PackageUncheckedCreateWithoutFreelancerInput> | PackageCreateWithoutFreelancerInput[] | PackageUncheckedCreateWithoutFreelancerInput[]
     connectOrCreate?: PackageCreateOrConnectWithoutFreelancerInput | PackageCreateOrConnectWithoutFreelancerInput[]
@@ -43067,6 +46152,11 @@ export namespace Prisma {
   }
 
   export type FreelancerProfileUpdateskillsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type FreelancerProfileUpdatelanguagesInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -43093,6 +46183,20 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type FreelancerCertificateUpdateManyWithoutFreelancerNestedInput = {
+    create?: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput> | FreelancerCertificateCreateWithoutFreelancerInput[] | FreelancerCertificateUncheckedCreateWithoutFreelancerInput[]
+    connectOrCreate?: FreelancerCertificateCreateOrConnectWithoutFreelancerInput | FreelancerCertificateCreateOrConnectWithoutFreelancerInput[]
+    upsert?: FreelancerCertificateUpsertWithWhereUniqueWithoutFreelancerInput | FreelancerCertificateUpsertWithWhereUniqueWithoutFreelancerInput[]
+    createMany?: FreelancerCertificateCreateManyFreelancerInputEnvelope
+    set?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    disconnect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    delete?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    connect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    update?: FreelancerCertificateUpdateWithWhereUniqueWithoutFreelancerInput | FreelancerCertificateUpdateWithWhereUniqueWithoutFreelancerInput[]
+    updateMany?: FreelancerCertificateUpdateManyWithWhereWithoutFreelancerInput | FreelancerCertificateUpdateManyWithWhereWithoutFreelancerInput[]
+    deleteMany?: FreelancerCertificateScalarWhereInput | FreelancerCertificateScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutFreelancer_profileNestedInput = {
@@ -43127,6 +46231,20 @@ export namespace Prisma {
     deleteMany?: PackageScalarWhereInput | PackageScalarWhereInput[]
   }
 
+  export type FreelancerCertificateUncheckedUpdateManyWithoutFreelancerNestedInput = {
+    create?: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput> | FreelancerCertificateCreateWithoutFreelancerInput[] | FreelancerCertificateUncheckedCreateWithoutFreelancerInput[]
+    connectOrCreate?: FreelancerCertificateCreateOrConnectWithoutFreelancerInput | FreelancerCertificateCreateOrConnectWithoutFreelancerInput[]
+    upsert?: FreelancerCertificateUpsertWithWhereUniqueWithoutFreelancerInput | FreelancerCertificateUpsertWithWhereUniqueWithoutFreelancerInput[]
+    createMany?: FreelancerCertificateCreateManyFreelancerInputEnvelope
+    set?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    disconnect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    delete?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    connect?: FreelancerCertificateWhereUniqueInput | FreelancerCertificateWhereUniqueInput[]
+    update?: FreelancerCertificateUpdateWithWhereUniqueWithoutFreelancerInput | FreelancerCertificateUpdateWithWhereUniqueWithoutFreelancerInput[]
+    updateMany?: FreelancerCertificateUpdateManyWithWhereWithoutFreelancerInput | FreelancerCertificateUpdateManyWithWhereWithoutFreelancerInput[]
+    deleteMany?: FreelancerCertificateScalarWhereInput | FreelancerCertificateScalarWhereInput[]
+  }
+
   export type PackageUncheckedUpdateManyWithoutFreelancerNestedInput = {
     create?: XOR<PackageCreateWithoutFreelancerInput, PackageUncheckedCreateWithoutFreelancerInput> | PackageCreateWithoutFreelancerInput[] | PackageUncheckedCreateWithoutFreelancerInput[]
     connectOrCreate?: PackageCreateOrConnectWithoutFreelancerInput | PackageCreateOrConnectWithoutFreelancerInput[]
@@ -43139,6 +46257,20 @@ export namespace Prisma {
     update?: PackageUpdateWithWhereUniqueWithoutFreelancerInput | PackageUpdateWithWhereUniqueWithoutFreelancerInput[]
     updateMany?: PackageUpdateManyWithWhereWithoutFreelancerInput | PackageUpdateManyWithWhereWithoutFreelancerInput[]
     deleteMany?: PackageScalarWhereInput | PackageScalarWhereInput[]
+  }
+
+  export type FreelancerProfileCreateNestedOneWithoutCertificatesInput = {
+    create?: XOR<FreelancerProfileCreateWithoutCertificatesInput, FreelancerProfileUncheckedCreateWithoutCertificatesInput>
+    connectOrCreate?: FreelancerProfileCreateOrConnectWithoutCertificatesInput
+    connect?: FreelancerProfileWhereUniqueInput
+  }
+
+  export type FreelancerProfileUpdateOneRequiredWithoutCertificatesNestedInput = {
+    create?: XOR<FreelancerProfileCreateWithoutCertificatesInput, FreelancerProfileUncheckedCreateWithoutCertificatesInput>
+    connectOrCreate?: FreelancerProfileCreateOrConnectWithoutCertificatesInput
+    upsert?: FreelancerProfileUpsertWithoutCertificatesInput
+    connect?: FreelancerProfileWhereUniqueInput
+    update?: XOR<XOR<FreelancerProfileUpdateToOneWithWhereWithoutCertificatesInput, FreelancerProfileUpdateWithoutCertificatesInput>, FreelancerProfileUncheckedUpdateWithoutCertificatesInput>
   }
 
   export type UserCreateNestedOneWithoutIdentity_verificationInput = {
@@ -43404,11 +46536,25 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type PackageMediaCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput> | PackageMediaCreateWithoutPackageInput[] | PackageMediaUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageMediaCreateOrConnectWithoutPackageInput | PackageMediaCreateOrConnectWithoutPackageInput[]
+    createMany?: PackageMediaCreateManyPackageInputEnvelope
+    connect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+  }
+
   export type OrderUncheckedCreateNestedManyWithoutPackageInput = {
     create?: XOR<OrderCreateWithoutPackageInput, OrderUncheckedCreateWithoutPackageInput> | OrderCreateWithoutPackageInput[] | OrderUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: OrderCreateOrConnectWithoutPackageInput | OrderCreateOrConnectWithoutPackageInput[]
     createMany?: OrderCreateManyPackageInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type PackageMediaUncheckedCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput> | PackageMediaCreateWithoutPackageInput[] | PackageMediaUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageMediaCreateOrConnectWithoutPackageInput | PackageMediaCreateOrConnectWithoutPackageInput[]
+    createMany?: PackageMediaCreateManyPackageInputEnvelope
+    connect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
   }
 
   export type FreelancerProfileUpdateOneRequiredWithoutPackagesNestedInput = {
@@ -43443,6 +46589,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type PackageMediaUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput> | PackageMediaCreateWithoutPackageInput[] | PackageMediaUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageMediaCreateOrConnectWithoutPackageInput | PackageMediaCreateOrConnectWithoutPackageInput[]
+    upsert?: PackageMediaUpsertWithWhereUniqueWithoutPackageInput | PackageMediaUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackageMediaCreateManyPackageInputEnvelope
+    set?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    disconnect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    delete?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    connect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    update?: PackageMediaUpdateWithWhereUniqueWithoutPackageInput | PackageMediaUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackageMediaUpdateManyWithWhereWithoutPackageInput | PackageMediaUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackageMediaScalarWhereInput | PackageMediaScalarWhereInput[]
+  }
+
   export type OrderUncheckedUpdateManyWithoutPackageNestedInput = {
     create?: XOR<OrderCreateWithoutPackageInput, OrderUncheckedCreateWithoutPackageInput> | OrderCreateWithoutPackageInput[] | OrderUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: OrderCreateOrConnectWithoutPackageInput | OrderCreateOrConnectWithoutPackageInput[]
@@ -43455,6 +46615,34 @@ export namespace Prisma {
     update?: OrderUpdateWithWhereUniqueWithoutPackageInput | OrderUpdateWithWhereUniqueWithoutPackageInput[]
     updateMany?: OrderUpdateManyWithWhereWithoutPackageInput | OrderUpdateManyWithWhereWithoutPackageInput[]
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type PackageMediaUncheckedUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput> | PackageMediaCreateWithoutPackageInput[] | PackageMediaUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackageMediaCreateOrConnectWithoutPackageInput | PackageMediaCreateOrConnectWithoutPackageInput[]
+    upsert?: PackageMediaUpsertWithWhereUniqueWithoutPackageInput | PackageMediaUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackageMediaCreateManyPackageInputEnvelope
+    set?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    disconnect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    delete?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    connect?: PackageMediaWhereUniqueInput | PackageMediaWhereUniqueInput[]
+    update?: PackageMediaUpdateWithWhereUniqueWithoutPackageInput | PackageMediaUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackageMediaUpdateManyWithWhereWithoutPackageInput | PackageMediaUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackageMediaScalarWhereInput | PackageMediaScalarWhereInput[]
+  }
+
+  export type PackageCreateNestedOneWithoutMediaInput = {
+    create?: XOR<PackageCreateWithoutMediaInput, PackageUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutMediaInput
+    connect?: PackageWhereUniqueInput
+  }
+
+  export type PackageUpdateOneRequiredWithoutMediaNestedInput = {
+    create?: XOR<PackageCreateWithoutMediaInput, PackageUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutMediaInput
+    upsert?: PackageUpsertWithoutMediaInput
+    connect?: PackageWhereUniqueInput
+    update?: XOR<XOR<PackageUpdateToOneWithWhereWithoutMediaInput, PackageUpdateWithoutMediaInput>, PackageUncheckedUpdateWithoutMediaInput>
   }
 
   export type ClientProfileCreateNestedOneWithoutJob_postsInput = {
@@ -44518,6 +47706,29 @@ export namespace Prisma {
     notIn?: $Enums.user_status[] | ListEnumuser_statusFieldRefInput<$PrismaModel>
     not?: NestedEnumuser_statusFilter<$PrismaModel> | $Enums.user_status
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumuser_statusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.user_status | Enumuser_statusFieldRefInput<$PrismaModel>
@@ -44819,6 +48030,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -44849,6 +48062,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -44914,6 +48129,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44944,6 +48161,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44999,6 +48218,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45029,6 +48250,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45083,6 +48306,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45113,6 +48338,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45159,6 +48386,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45189,6 +48418,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45255,6 +48486,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45285,6 +48518,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45362,6 +48597,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45392,6 +48629,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -45491,6 +48730,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45521,6 +48762,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45786,6 +49029,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     job_posts?: JobPostCreateNestedManyWithoutClientInput
@@ -45796,6 +49041,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     job_posts?: JobPostUncheckedCreateNestedManyWithoutClientInput
@@ -45811,6 +49058,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -45820,6 +49071,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateCreateNestedManyWithoutFreelancerInput
     experience_level?: ExperienceLevelCreateNestedOneWithoutFreelancersInput
     packages?: PackageCreateNestedManyWithoutFreelancerInput
   }
@@ -45830,6 +49082,10 @@ export namespace Prisma {
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
     experience_level_id?: string | null
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -45839,6 +49095,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateUncheckedCreateNestedManyWithoutFreelancerInput
     packages?: PackageUncheckedCreateNestedManyWithoutFreelancerInput
   }
 
@@ -46468,6 +49725,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     job_posts?: JobPostUpdateManyWithoutClientNestedInput
@@ -46478,6 +49737,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     job_posts?: JobPostUncheckedUpdateManyWithoutClientNestedInput
@@ -46499,6 +49760,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -46508,6 +49773,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUpdateManyWithoutFreelancerNestedInput
     experience_level?: ExperienceLevelUpdateOneWithoutFreelancersNestedInput
     packages?: PackageUpdateManyWithoutFreelancerNestedInput
   }
@@ -46518,6 +49784,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
     experience_level_id?: NullableStringFieldUpdateOperationsInput | string | null
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -46527,6 +49797,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUncheckedUpdateManyWithoutFreelancerNestedInput
     packages?: PackageUncheckedUpdateManyWithoutFreelancerNestedInput
   }
 
@@ -46991,6 +50262,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47021,6 +50294,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47088,6 +50363,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47118,6 +50395,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47175,6 +50454,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47205,6 +50486,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47240,6 +50523,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47270,6 +50555,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47316,6 +50603,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47346,6 +50635,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47387,6 +50678,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47417,6 +50710,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47447,6 +50742,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47477,6 +50774,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47561,6 +50860,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47591,6 +50892,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47649,11 +50952,39 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"JobPost"> | Date | string | null
   }
 
+  export type FreelancerCertificateCreateWithoutFreelancerInput = {
+    id?: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+  }
+
+  export type FreelancerCertificateUncheckedCreateWithoutFreelancerInput = {
+    id?: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+  }
+
+  export type FreelancerCertificateCreateOrConnectWithoutFreelancerInput = {
+    where: FreelancerCertificateWhereUniqueInput
+    create: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput>
+  }
+
+  export type FreelancerCertificateCreateManyFreelancerInputEnvelope = {
+    data: FreelancerCertificateCreateManyFreelancerInput | FreelancerCertificateCreateManyFreelancerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutFreelancer_profileInput = {
     id?: string
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47684,6 +51015,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47750,6 +51083,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     tier?: PackageTierCreateNestedOneWithoutPackagesInput
     orders?: OrderCreateNestedManyWithoutPackageInput
+    media?: PackageMediaCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutFreelancerInput = {
@@ -47765,6 +51099,7 @@ export namespace Prisma {
     updated_at?: Date | string
     deleted_at?: Date | string | null
     orders?: OrderUncheckedCreateNestedManyWithoutPackageInput
+    media?: PackageMediaUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutFreelancerInput = {
@@ -47775,6 +51110,34 @@ export namespace Prisma {
   export type PackageCreateManyFreelancerInputEnvelope = {
     data: PackageCreateManyFreelancerInput | PackageCreateManyFreelancerInput[]
     skipDuplicates?: boolean
+  }
+
+  export type FreelancerCertificateUpsertWithWhereUniqueWithoutFreelancerInput = {
+    where: FreelancerCertificateWhereUniqueInput
+    update: XOR<FreelancerCertificateUpdateWithoutFreelancerInput, FreelancerCertificateUncheckedUpdateWithoutFreelancerInput>
+    create: XOR<FreelancerCertificateCreateWithoutFreelancerInput, FreelancerCertificateUncheckedCreateWithoutFreelancerInput>
+  }
+
+  export type FreelancerCertificateUpdateWithWhereUniqueWithoutFreelancerInput = {
+    where: FreelancerCertificateWhereUniqueInput
+    data: XOR<FreelancerCertificateUpdateWithoutFreelancerInput, FreelancerCertificateUncheckedUpdateWithoutFreelancerInput>
+  }
+
+  export type FreelancerCertificateUpdateManyWithWhereWithoutFreelancerInput = {
+    where: FreelancerCertificateScalarWhereInput
+    data: XOR<FreelancerCertificateUpdateManyMutationInput, FreelancerCertificateUncheckedUpdateManyWithoutFreelancerInput>
+  }
+
+  export type FreelancerCertificateScalarWhereInput = {
+    AND?: FreelancerCertificateScalarWhereInput | FreelancerCertificateScalarWhereInput[]
+    OR?: FreelancerCertificateScalarWhereInput[]
+    NOT?: FreelancerCertificateScalarWhereInput | FreelancerCertificateScalarWhereInput[]
+    id?: UuidFilter<"FreelancerCertificate"> | string
+    freelancer_id?: UuidFilter<"FreelancerCertificate"> | string
+    name?: StringFilter<"FreelancerCertificate"> | string
+    issuer?: StringNullableFilter<"FreelancerCertificate"> | string | null
+    issued_date?: DateTimeNullableFilter<"FreelancerCertificate"> | Date | string | null
+    file_url?: StringNullableFilter<"FreelancerCertificate"> | string | null
   }
 
   export type UserUpsertWithoutFreelancer_profileInput = {
@@ -47793,6 +51156,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47823,6 +51188,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47911,11 +51278,121 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"Package"> | Date | string | null
   }
 
+  export type FreelancerProfileCreateWithoutCertificatesInput = {
+    id?: string
+    headline?: string | null
+    bio?: string | null
+    skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
+    success_rate?: Decimal | DecimalJsLike | number | string
+    total_earnings_mmk?: bigint | number
+    is_verified?: boolean
+    completed_projects_count?: number
+    ongoing_projects_count?: number
+    canceled_projects_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    deleted_at?: Date | string | null
+    user: UserCreateNestedOneWithoutFreelancer_profileInput
+    experience_level?: ExperienceLevelCreateNestedOneWithoutFreelancersInput
+    packages?: PackageCreateNestedManyWithoutFreelancerInput
+  }
+
+  export type FreelancerProfileUncheckedCreateWithoutCertificatesInput = {
+    id?: string
+    user_id: string
+    headline?: string | null
+    bio?: string | null
+    skills?: FreelancerProfileCreateskillsInput | string[]
+    experience_level_id?: string | null
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
+    success_rate?: Decimal | DecimalJsLike | number | string
+    total_earnings_mmk?: bigint | number
+    is_verified?: boolean
+    completed_projects_count?: number
+    ongoing_projects_count?: number
+    canceled_projects_count?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    deleted_at?: Date | string | null
+    packages?: PackageUncheckedCreateNestedManyWithoutFreelancerInput
+  }
+
+  export type FreelancerProfileCreateOrConnectWithoutCertificatesInput = {
+    where: FreelancerProfileWhereUniqueInput
+    create: XOR<FreelancerProfileCreateWithoutCertificatesInput, FreelancerProfileUncheckedCreateWithoutCertificatesInput>
+  }
+
+  export type FreelancerProfileUpsertWithoutCertificatesInput = {
+    update: XOR<FreelancerProfileUpdateWithoutCertificatesInput, FreelancerProfileUncheckedUpdateWithoutCertificatesInput>
+    create: XOR<FreelancerProfileCreateWithoutCertificatesInput, FreelancerProfileUncheckedCreateWithoutCertificatesInput>
+    where?: FreelancerProfileWhereInput
+  }
+
+  export type FreelancerProfileUpdateToOneWithWhereWithoutCertificatesInput = {
+    where?: FreelancerProfileWhereInput
+    data: XOR<FreelancerProfileUpdateWithoutCertificatesInput, FreelancerProfileUncheckedUpdateWithoutCertificatesInput>
+  }
+
+  export type FreelancerProfileUpdateWithoutCertificatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
+    success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    completed_projects_count?: IntFieldUpdateOperationsInput | number
+    ongoing_projects_count?: IntFieldUpdateOperationsInput | number
+    canceled_projects_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutFreelancer_profileNestedInput
+    experience_level?: ExperienceLevelUpdateOneWithoutFreelancersNestedInput
+    packages?: PackageUpdateManyWithoutFreelancerNestedInput
+  }
+
+  export type FreelancerProfileUncheckedUpdateWithoutCertificatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    skills?: FreelancerProfileUpdateskillsInput | string[]
+    experience_level_id?: NullableStringFieldUpdateOperationsInput | string | null
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
+    success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    completed_projects_count?: IntFieldUpdateOperationsInput | number
+    ongoing_projects_count?: IntFieldUpdateOperationsInput | number
+    canceled_projects_count?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    packages?: PackageUncheckedUpdateManyWithoutFreelancerNestedInput
+  }
+
   export type UserCreateWithoutIdentity_verificationInput = {
     id?: string
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47946,6 +51423,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -47981,6 +51460,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -48011,6 +51492,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -48057,6 +51540,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48087,6 +51572,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48128,6 +51615,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48158,6 +51647,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48250,6 +51741,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     freelancer: FreelancerProfileCreateNestedOneWithoutPackagesInput
     orders?: OrderCreateNestedManyWithoutPackageInput
+    media?: PackageMediaCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutTierInput = {
@@ -48265,6 +51757,7 @@ export namespace Prisma {
     updated_at?: Date | string
     deleted_at?: Date | string | null
     orders?: OrderUncheckedCreateNestedManyWithoutPackageInput
+    media?: PackageMediaUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutTierInput = {
@@ -48298,6 +51791,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -48307,6 +51804,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateCreateNestedManyWithoutFreelancerInput
     user: UserCreateNestedOneWithoutFreelancer_profileInput
     packages?: PackageCreateNestedManyWithoutFreelancerInput
   }
@@ -48317,6 +51815,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -48326,6 +51828,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateUncheckedCreateNestedManyWithoutFreelancerInput
     packages?: PackageUncheckedCreateNestedManyWithoutFreelancerInput
   }
 
@@ -48365,6 +51868,10 @@ export namespace Prisma {
     bio?: StringNullableFilter<"FreelancerProfile"> | string | null
     skills?: StringNullableListFilter<"FreelancerProfile">
     experience_level_id?: UuidNullableFilter<"FreelancerProfile"> | string | null
+    years_of_experience?: IntNullableFilter<"FreelancerProfile"> | number | null
+    portfolio_url?: StringNullableFilter<"FreelancerProfile"> | string | null
+    languages?: StringNullableListFilter<"FreelancerProfile">
+    location_city?: StringNullableFilter<"FreelancerProfile"> | string | null
     success_rate?: DecimalFilter<"FreelancerProfile"> | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFilter<"FreelancerProfile"> | bigint | number
     is_verified?: BoolFilter<"FreelancerProfile"> | boolean
@@ -48481,6 +51988,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -48490,6 +52001,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateCreateNestedManyWithoutFreelancerInput
     user: UserCreateNestedOneWithoutFreelancer_profileInput
     experience_level?: ExperienceLevelCreateNestedOneWithoutFreelancersInput
   }
@@ -48501,6 +52013,10 @@ export namespace Prisma {
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
     experience_level_id?: string | null
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -48510,6 +52026,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    certificates?: FreelancerCertificateUncheckedCreateNestedManyWithoutFreelancerInput
   }
 
   export type FreelancerProfileCreateOrConnectWithoutPackagesInput = {
@@ -48592,6 +52109,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PackageMediaCreateWithoutPackageInput = {
+    id?: string
+    type: string
+    url: string
+    sort_order?: number
+  }
+
+  export type PackageMediaUncheckedCreateWithoutPackageInput = {
+    id?: string
+    type: string
+    url: string
+    sort_order?: number
+  }
+
+  export type PackageMediaCreateOrConnectWithoutPackageInput = {
+    where: PackageMediaWhereUniqueInput
+    create: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackageMediaCreateManyPackageInputEnvelope = {
+    data: PackageMediaCreateManyPackageInput | PackageMediaCreateManyPackageInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FreelancerProfileUpsertWithoutPackagesInput = {
     update: XOR<FreelancerProfileUpdateWithoutPackagesInput, FreelancerProfileUncheckedUpdateWithoutPackagesInput>
     create: XOR<FreelancerProfileCreateWithoutPackagesInput, FreelancerProfileUncheckedCreateWithoutPackagesInput>
@@ -48608,6 +52149,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -48617,6 +52162,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUpdateManyWithoutFreelancerNestedInput
     user?: UserUpdateOneRequiredWithoutFreelancer_profileNestedInput
     experience_level?: ExperienceLevelUpdateOneWithoutFreelancersNestedInput
   }
@@ -48628,6 +52174,10 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
     experience_level_id?: NullableStringFieldUpdateOperationsInput | string | null
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -48637,6 +52187,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUncheckedUpdateManyWithoutFreelancerNestedInput
   }
 
   export type PackageTierUpsertWithoutPackagesInput = {
@@ -48684,11 +52235,120 @@ export namespace Prisma {
     data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutPackageInput>
   }
 
+  export type PackageMediaUpsertWithWhereUniqueWithoutPackageInput = {
+    where: PackageMediaWhereUniqueInput
+    update: XOR<PackageMediaUpdateWithoutPackageInput, PackageMediaUncheckedUpdateWithoutPackageInput>
+    create: XOR<PackageMediaCreateWithoutPackageInput, PackageMediaUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackageMediaUpdateWithWhereUniqueWithoutPackageInput = {
+    where: PackageMediaWhereUniqueInput
+    data: XOR<PackageMediaUpdateWithoutPackageInput, PackageMediaUncheckedUpdateWithoutPackageInput>
+  }
+
+  export type PackageMediaUpdateManyWithWhereWithoutPackageInput = {
+    where: PackageMediaScalarWhereInput
+    data: XOR<PackageMediaUpdateManyMutationInput, PackageMediaUncheckedUpdateManyWithoutPackageInput>
+  }
+
+  export type PackageMediaScalarWhereInput = {
+    AND?: PackageMediaScalarWhereInput | PackageMediaScalarWhereInput[]
+    OR?: PackageMediaScalarWhereInput[]
+    NOT?: PackageMediaScalarWhereInput | PackageMediaScalarWhereInput[]
+    id?: UuidFilter<"PackageMedia"> | string
+    package_id?: UuidFilter<"PackageMedia"> | string
+    type?: StringFilter<"PackageMedia"> | string
+    url?: StringFilter<"PackageMedia"> | string
+    sort_order?: IntFilter<"PackageMedia"> | number
+  }
+
+  export type PackageCreateWithoutMediaInput = {
+    id?: string
+    title: string
+    description?: string | null
+    price_mmk: bigint | number
+    delivery_days: number
+    features?: JsonNullValueInput | InputJsonValue
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    deleted_at?: Date | string | null
+    freelancer: FreelancerProfileCreateNestedOneWithoutPackagesInput
+    tier?: PackageTierCreateNestedOneWithoutPackagesInput
+    orders?: OrderCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageUncheckedCreateWithoutMediaInput = {
+    id?: string
+    freelancer_id: string
+    tier_id?: string | null
+    title: string
+    description?: string | null
+    price_mmk: bigint | number
+    delivery_days: number
+    features?: JsonNullValueInput | InputJsonValue
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    deleted_at?: Date | string | null
+    orders?: OrderUncheckedCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageCreateOrConnectWithoutMediaInput = {
+    where: PackageWhereUniqueInput
+    create: XOR<PackageCreateWithoutMediaInput, PackageUncheckedCreateWithoutMediaInput>
+  }
+
+  export type PackageUpsertWithoutMediaInput = {
+    update: XOR<PackageUpdateWithoutMediaInput, PackageUncheckedUpdateWithoutMediaInput>
+    create: XOR<PackageCreateWithoutMediaInput, PackageUncheckedCreateWithoutMediaInput>
+    where?: PackageWhereInput
+  }
+
+  export type PackageUpdateToOneWithWhereWithoutMediaInput = {
+    where?: PackageWhereInput
+    data: XOR<PackageUpdateWithoutMediaInput, PackageUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type PackageUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
+    delivery_days?: IntFieldUpdateOperationsInput | number
+    features?: JsonNullValueInput | InputJsonValue
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    freelancer?: FreelancerProfileUpdateOneRequiredWithoutPackagesNestedInput
+    tier?: PackageTierUpdateOneWithoutPackagesNestedInput
+    orders?: OrderUpdateManyWithoutPackageNestedInput
+  }
+
+  export type PackageUncheckedUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    freelancer_id?: StringFieldUpdateOperationsInput | string
+    tier_id?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
+    delivery_days?: IntFieldUpdateOperationsInput | number
+    features?: JsonNullValueInput | InputJsonValue
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orders?: OrderUncheckedUpdateManyWithoutPackageNestedInput
+  }
+
   export type ClientProfileCreateWithoutJob_postsInput = {
     id?: string
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutClient_profileInput
@@ -48700,6 +52360,8 @@ export namespace Prisma {
     company_name?: string | null
     industry?: string | null
     bio?: string | null
+    ocation_city?: string | null
+    website_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -48777,6 +52439,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutClient_profileNestedInput
@@ -48788,6 +52452,8 @@ export namespace Prisma {
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    ocation_city?: NullableStringFieldUpdateOperationsInput | string | null
+    website_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48813,6 +52479,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -48843,6 +52511,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -48889,6 +52559,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48919,6 +52591,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48996,6 +52670,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49026,6 +52702,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49061,6 +52739,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49091,6 +52771,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49190,6 +52872,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49220,6 +52904,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49261,6 +52947,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49291,6 +52979,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49368,6 +53058,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49398,6 +53090,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49433,6 +53127,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49463,6 +53159,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49562,6 +53260,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49592,6 +53292,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49633,6 +53335,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49663,6 +53367,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49739,6 +53445,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49769,6 +53477,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49858,6 +53568,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49888,6 +53600,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49967,6 +53681,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -49997,6 +53713,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -50032,6 +53750,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -50062,6 +53782,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -50105,6 +53827,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     freelancer: FreelancerProfileCreateNestedOneWithoutPackagesInput
     tier?: PackageTierCreateNestedOneWithoutPackagesInput
+    media?: PackageMediaCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutOrdersInput = {
@@ -50120,6 +53843,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+    media?: PackageMediaUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutOrdersInput = {
@@ -50386,6 +54110,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50416,6 +54142,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50457,6 +54185,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50487,6 +54217,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50536,6 +54268,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     freelancer?: FreelancerProfileUpdateOneRequiredWithoutPackagesNestedInput
     tier?: PackageTierUpdateOneWithoutPackagesNestedInput
+    media?: PackageMediaUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutOrdersInput = {
@@ -50551,6 +54284,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    media?: PackageMediaUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type JobPostUpsertWithoutOrdersInput = {
@@ -51037,6 +54771,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -51067,6 +54803,8 @@ export namespace Prisma {
     email: string
     full_name?: string | null
     avatar_url?: string | null
+    phone_number?: string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.user_status
     created_at?: Date | string
     updated_at?: Date | string
@@ -51240,6 +54978,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51270,6 +55010,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     full_name?: NullableStringFieldUpdateOperationsInput | string | null
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    social_links?: NullableJsonNullValueInput | InputJsonValue
     status?: Enumuser_statusFieldUpdateOperationsInput | $Enums.user_status
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52129,6 +55871,14 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type FreelancerCertificateCreateManyFreelancerInput = {
+    id?: string
+    name: string
+    issuer?: string | null
+    issued_date?: Date | string | null
+    file_url?: string | null
+  }
+
   export type PackageCreateManyFreelancerInput = {
     id?: string
     tier_id?: string | null
@@ -52141,6 +55891,30 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     deleted_at?: Date | string | null
+  }
+
+  export type FreelancerCertificateUpdateWithoutFreelancerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FreelancerCertificateUncheckedUpdateWithoutFreelancerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FreelancerCertificateUncheckedUpdateManyWithoutFreelancerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
+    issued_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    file_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PackageUpdateWithoutFreelancerInput = {
@@ -52156,6 +55930,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tier?: PackageTierUpdateOneWithoutPackagesNestedInput
     orders?: OrderUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutFreelancerInput = {
@@ -52171,6 +55946,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     orders?: OrderUncheckedUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateManyWithoutFreelancerInput = {
@@ -52270,6 +56046,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     freelancer?: FreelancerProfileUpdateOneRequiredWithoutPackagesNestedInput
     orders?: OrderUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutTierInput = {
@@ -52285,6 +56062,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     orders?: OrderUncheckedUpdateManyWithoutPackageNestedInput
+    media?: PackageMediaUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateManyWithoutTierInput = {
@@ -52307,6 +56085,10 @@ export namespace Prisma {
     headline?: string | null
     bio?: string | null
     skills?: FreelancerProfileCreateskillsInput | string[]
+    years_of_experience?: number | null
+    portfolio_url?: string | null
+    languages?: FreelancerProfileCreatelanguagesInput | string[]
+    location_city?: string | null
     success_rate?: Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: bigint | number
     is_verified?: boolean
@@ -52323,6 +56105,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -52332,6 +56118,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUpdateManyWithoutFreelancerNestedInput
     user?: UserUpdateOneRequiredWithoutFreelancer_profileNestedInput
     packages?: PackageUpdateManyWithoutFreelancerNestedInput
   }
@@ -52342,6 +56129,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -52351,6 +56142,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    certificates?: FreelancerCertificateUncheckedUpdateManyWithoutFreelancerNestedInput
     packages?: PackageUncheckedUpdateManyWithoutFreelancerNestedInput
   }
 
@@ -52360,6 +56152,10 @@ export namespace Prisma {
     headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     skills?: FreelancerProfileUpdateskillsInput | string[]
+    years_of_experience?: NullableIntFieldUpdateOperationsInput | number | null
+    portfolio_url?: NullableStringFieldUpdateOperationsInput | string | null
+    languages?: FreelancerProfileUpdatelanguagesInput | string[]
+    location_city?: NullableStringFieldUpdateOperationsInput | string | null
     success_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total_earnings_mmk?: BigIntFieldUpdateOperationsInput | bigint | number
     is_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -52458,6 +56254,13 @@ export namespace Prisma {
     deleted_at?: Date | string | null
   }
 
+  export type PackageMediaCreateManyPackageInput = {
+    id?: string
+    type: string
+    url: string
+    sort_order?: number
+  }
+
   export type OrderUpdateWithoutPackageInput = {
     id?: StringFieldUpdateOperationsInput | string
     source_type?: Enumorder_sourceFieldUpdateOperationsInput | $Enums.order_source
@@ -52513,6 +56316,27 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PackageMediaUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PackageMediaUncheckedUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PackageMediaUncheckedUpdateManyWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    sort_order?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrderCreateManyJob_postInput = {

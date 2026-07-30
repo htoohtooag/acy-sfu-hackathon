@@ -178,14 +178,16 @@ model Deliverable {
 
 // backend/prisma/schema/identity.prisma
 model User {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email      String      @unique @db.Citext
-  full_name  String?     @db.VarChar(255)
-  avatar_url String?
-  status     user_status @default(LEAD)
-  created_at DateTime    @default(now()) @db.Timestamptz
-  updated_at DateTime    @updatedAt @db.Timestamptz
-  deleted_at DateTime?   @db.Timestamptz
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String      @unique @db.Citext
+  full_name    String?     @db.VarChar(255)
+  avatar_url   String?
+  phone_number String?     @db.VarChar(20)
+  social_links Json?
+  status       user_status @default(LEAD)
+  created_at   DateTime    @default(now()) @db.Timestamptz
+  updated_at   DateTime    @updatedAt @db.Timestamptz
+  deleted_at   DateTime?   @db.Timestamptz
 
   identity_verification IdentityVerification?
   kyc_verifications     IdentityVerification[] @relation("KYCVerifier")
@@ -264,6 +266,8 @@ model ClientProfile {
   company_name String?   @db.VarChar(255)
   industry     String?   @db.VarChar(100)
   bio          String?
+  ocation_city String?   @db.VarChar(100) // Left for Profile Edit
+  website_url  String? // Left for Profile Edit
   created_at   DateTime  @default(now()) @db.Timestamptz
   updated_at   DateTime  @updatedAt @db.Timestamptz
   user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -279,6 +283,10 @@ model FreelancerProfile {
   bio                      String?
   skills                   String[]                     @default([])
   experience_level_id      String?                      @db.Uuid
+  years_of_experience      Int?
+  portfolio_url            String? // Left for Profile Edit
+  languages                String[]                     @default([]) // Left for Profile Edit
+  location_city            String?                      @db.VarChar(100) // Left for Profile Edit
   success_rate             Decimal                      @default(100.0) @db.Decimal(5, 2)
   total_earnings_mmk       BigInt                       @default(0)
   is_verified              Boolean                      @default(false)
@@ -290,12 +298,27 @@ model FreelancerProfile {
   updated_at               DateTime                     @updatedAt @db.Timestamptz
   deleted_at               DateTime?                    @db.Timestamptz
 
-  user             User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  experience_level ExperienceLevel? @relation(fields: [experience_level_id], references: [id])
+  certificates     FreelancerCertificate[]
+  user             User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  experience_level ExperienceLevel?        @relation(fields: [experience_level_id], references: [id])
   packages         Package[]
 
   @@index([skills], type: Gin, map: "idx_freelancer_skills")
   @@map("freelancer_profiles")
+}
+
+model FreelancerCertificate {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  freelancer_id String    @db.Uuid
+  name          String    @db.VarChar(255) // e.g., "AWS Certified Solutions Architect"
+  issuer        String?   @db.VarChar(255) // e.g., "Amazon Web Services"
+  issued_date   DateTime? @db.Date
+  file_url      String? // URL to the uploaded PDF/Image in Supabase Storage
+
+  freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
+
+  @@index([freelancer_id], map: "idx_certificates_freelancer")
+  @@map("freelancer_certificates")
 }
 
 // backend/prisma/schema/kyc.prisma
@@ -414,9 +437,23 @@ model Package {
   freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
   tier       PackageTier?      @relation(fields: [tier_id], references: [id])
   orders     Order[]
+  media      PackageMedia[]
 
   @@index([freelancer_id], map: "idx_packages_freelancer")
   @@map("packages")
+}
+
+model PackageMedia {
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  package_id String @db.Uuid
+  type       String @db.VarChar(20) // "IMAGE" or "VIDEO"
+  url        String // URL from Supabase Storage
+  sort_order Int    @default(0) // To order them in the UI gallery
+
+  package Package @relation(fields: [package_id], references: [id], onDelete: Cascade)
+
+  @@index([package_id], map: "idx_package_media_package")
+  @@map("package_media")
 }
 
 model JobPost {

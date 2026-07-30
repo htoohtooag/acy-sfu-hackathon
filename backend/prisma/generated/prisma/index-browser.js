@@ -171,6 +171,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   full_name: 'full_name',
   avatar_url: 'avatar_url',
+  phone_number: 'phone_number',
+  social_links: 'social_links',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -209,6 +211,8 @@ exports.Prisma.ClientProfileScalarFieldEnum = {
   company_name: 'company_name',
   industry: 'industry',
   bio: 'bio',
+  ocation_city: 'ocation_city',
+  website_url: 'website_url',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -220,6 +224,10 @@ exports.Prisma.FreelancerProfileScalarFieldEnum = {
   bio: 'bio',
   skills: 'skills',
   experience_level_id: 'experience_level_id',
+  years_of_experience: 'years_of_experience',
+  portfolio_url: 'portfolio_url',
+  languages: 'languages',
+  location_city: 'location_city',
   success_rate: 'success_rate',
   total_earnings_mmk: 'total_earnings_mmk',
   is_verified: 'is_verified',
@@ -229,6 +237,15 @@ exports.Prisma.FreelancerProfileScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at'
+};
+
+exports.Prisma.FreelancerCertificateScalarFieldEnum = {
+  id: 'id',
+  freelancer_id: 'freelancer_id',
+  name: 'name',
+  issuer: 'issuer',
+  issued_date: 'issued_date',
+  file_url: 'file_url'
 };
 
 exports.Prisma.IdentityVerificationScalarFieldEnum = {
@@ -303,6 +320,14 @@ exports.Prisma.PackageScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at'
+};
+
+exports.Prisma.PackageMediaScalarFieldEnum = {
+  id: 'id',
+  package_id: 'package_id',
+  type: 'type',
+  url: 'url',
+  sort_order: 'sort_order'
 };
 
 exports.Prisma.JobPostScalarFieldEnum = {
@@ -438,6 +463,11 @@ exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -563,6 +593,7 @@ exports.Prisma.ModelName = {
   UserModeration: 'UserModeration',
   ClientProfile: 'ClientProfile',
   FreelancerProfile: 'FreelancerProfile',
+  FreelancerCertificate: 'FreelancerCertificate',
   IdentityVerification: 'IdentityVerification',
   PaymentMethod: 'PaymentMethod',
   PackageTier: 'PackageTier',
@@ -570,6 +601,7 @@ exports.Prisma.ModelName = {
   AdminRole: 'AdminRole',
   AuditAction: 'AuditAction',
   Package: 'Package',
+  PackageMedia: 'PackageMedia',
   JobPost: 'JobPost',
   Notification: 'Notification',
   Review: 'Review',

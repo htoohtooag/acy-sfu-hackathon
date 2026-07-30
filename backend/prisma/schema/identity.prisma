@@ -1,121 +1,144 @@
 // backend/prisma/schema/identity.prisma
 model User {
-    id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    email      String      @unique @db.Citext
-    full_name  String?     @db.VarChar(255)
-    avatar_url String?
-    status     user_status @default(LEAD)
-    created_at DateTime    @default(now()) @db.Timestamptz
-    updated_at DateTime    @updatedAt @db.Timestamptz
-    deleted_at DateTime?   @db.Timestamptz
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String      @unique @db.Citext
+  full_name    String?     @db.VarChar(255)
+  avatar_url   String?
+  phone_number String?     @db.VarChar(20)
+  social_links Json?
+  status       user_status @default(LEAD)
+  created_at   DateTime    @default(now()) @db.Timestamptz
+  updated_at   DateTime    @updatedAt @db.Timestamptz
+  deleted_at   DateTime?   @db.Timestamptz
 
-    identity_verification IdentityVerification?
-    kyc_verifications     IdentityVerification[] @relation("KYCVerifier")
+  identity_verification IdentityVerification?
+  kyc_verifications     IdentityVerification[] @relation("KYCVerifier")
 
-    client_profile     ClientProfile?
-    freelancer_profile FreelancerProfile?
-    roles              UserRole[]
+  client_profile     ClientProfile?
+  freelancer_profile FreelancerProfile?
+  roles              UserRole[]
 
-    moderations       UserModeration[] @relation("UserModerations")
-    admin_moderations UserModeration[] @relation("AdminModerations")
+  moderations       UserModeration[] @relation("UserModerations")
+  admin_moderations UserModeration[] @relation("AdminModerations")
 
-    admin_profile        AdminProfile?
-    subscriptions        UserSubscription[]
-    orders_as_client     Order[]              @relation("ClientOrders")
-    orders_as_freelancer Order[]              @relation("FreelancerOrders")
-    messages             Message[]
-    reviews_written      Review[]             @relation("ReviewerReviews")
-    reviews_received     Review[]             @relation("RevieweeReviews")
-    disputes_raised      Dispute[]            @relation("DisputeRaiser")
-    disputes_resolved    Dispute[]            @relation("DisputeAdmin")
-    payments_verified    PaymentTransaction[] @relation("PaymentVerifier")
-    notifications        Notification[]
+  admin_profile        AdminProfile?
+  subscriptions        UserSubscription[]
+  orders_as_client     Order[]              @relation("ClientOrders")
+  orders_as_freelancer Order[]              @relation("FreelancerOrders")
+  messages             Message[]
+  reviews_written      Review[]             @relation("ReviewerReviews")
+  reviews_received     Review[]             @relation("RevieweeReviews")
+  disputes_raised      Dispute[]            @relation("DisputeRaiser")
+  disputes_resolved    Dispute[]            @relation("DisputeAdmin")
+  payments_verified    PaymentTransaction[] @relation("PaymentVerifier")
+  notifications        Notification[]
 
-    // ADD THESE TWO LINES:
-    audit_logs_as_admin  AdminAuditLog[] @relation("AuditLogAdmin")
-    audit_logs_as_target AdminAuditLog[] @relation("AuditLogTarget")
+  // ADD THESE TWO LINES:
+  audit_logs_as_admin  AdminAuditLog[] @relation("AuditLogAdmin")
+  audit_logs_as_target AdminAuditLog[] @relation("AuditLogTarget")
 
-    @@index([status], map: "idx_users_status")
-    @@map("users")
+  @@index([status], map: "idx_users_status")
+  @@map("users")
 }
 
 model Role {
-    id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name           String     @unique @db.VarChar(50)
-    description    String?
-    is_system_role Boolean    @default(false)
-    created_at     DateTime   @default(now()) @db.Timestamptz
-    users          UserRole[]
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String     @unique @db.VarChar(50)
+  description    String?
+  is_system_role Boolean    @default(false)
+  created_at     DateTime   @default(now()) @db.Timestamptz
+  users          UserRole[]
 
-    @@map("roles")
+  @@map("roles")
 }
 
 model UserRole {
-    id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    user_id     String   @db.Uuid
-    role_id     String   @db.Uuid
-    assigned_at DateTime @default(now()) @db.Timestamptz
-    user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    role        Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String   @db.Uuid
+  role_id     String   @db.Uuid
+  assigned_at DateTime @default(now()) @db.Timestamptz
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role        Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
 
-    @@unique([user_id, role_id])
-    @@index([user_id], map: "idx_user_roles_user")
-    @@map("user_roles")
+  @@unique([user_id, role_id])
+  @@index([user_id], map: "idx_user_roles_user")
+  @@map("user_roles")
 }
 
 model UserModeration {
-    id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    user_id    String            @db.Uuid
-    admin_id   String?           @db.Uuid
-    reason     String
-    status     moderation_status @default(ACTIVE)
-    expires_at DateTime?         @db.Timestamptz
-    created_at DateTime          @default(now()) @db.Timestamptz
-    updated_at DateTime          @updatedAt @db.Timestamptz
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String            @db.Uuid
+  admin_id   String?           @db.Uuid
+  reason     String
+  status     moderation_status @default(ACTIVE)
+  expires_at DateTime?         @db.Timestamptz
+  created_at DateTime          @default(now()) @db.Timestamptz
+  updated_at DateTime          @updatedAt @db.Timestamptz
 
-    user  User  @relation("UserModerations", fields: [user_id], references: [id], onDelete: Cascade)
-    admin User? @relation("AdminModerations", fields: [admin_id], references: [id], onDelete: SetNull)
+  user  User  @relation("UserModerations", fields: [user_id], references: [id], onDelete: Cascade)
+  admin User? @relation("AdminModerations", fields: [admin_id], references: [id], onDelete: SetNull)
 
-    @@index([user_id], map: "idx_moderations_user")
-    @@map("user_moderations")
+  @@index([user_id], map: "idx_moderations_user")
+  @@map("user_moderations")
 }
 
 model ClientProfile {
-    id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    user_id      String    @unique @db.Uuid
-    company_name String?   @db.VarChar(255)
-    industry     String?   @db.VarChar(100)
-    bio          String?
-    created_at   DateTime  @default(now()) @db.Timestamptz
-    updated_at   DateTime  @updatedAt @db.Timestamptz
-    user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    job_posts    JobPost[]
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String    @unique @db.Uuid
+  company_name String?   @db.VarChar(255)
+  industry     String?   @db.VarChar(100)
+  bio          String?
+  ocation_city String?   @db.VarChar(100) // Left for Profile Edit
+  website_url  String? // Left for Profile Edit
+  created_at   DateTime  @default(now()) @db.Timestamptz
+  updated_at   DateTime  @updatedAt @db.Timestamptz
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  job_posts    JobPost[]
 
-    @@map("client_profiles")
+  @@map("client_profiles")
 }
 
 model FreelancerProfile {
-    id                       String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    user_id                  String                       @unique @db.Uuid
-    headline                 String?                      @db.VarChar(255)
-    bio                      String?
-    skills                   String[]                     @default([])
-    experience_level_id      String?                      @db.Uuid
-    success_rate             Decimal                      @default(100.0) @db.Decimal(5, 2)
-    total_earnings_mmk       BigInt                       @default(0)
-    is_verified              Boolean                      @default(false)
-    completed_projects_count Int                          @default(0)
-    ongoing_projects_count   Int                          @default(0)
-    canceled_projects_count  Int                          @default(0)
-    embedding                Unsupported("vector(1536)")?
-    created_at               DateTime                     @default(now()) @db.Timestamptz
-    updated_at               DateTime                     @updatedAt @db.Timestamptz
-    deleted_at               DateTime?                    @db.Timestamptz
+  id                       String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                  String                       @unique @db.Uuid
+  headline                 String?                      @db.VarChar(255)
+  bio                      String?
+  skills                   String[]                     @default([])
+  experience_level_id      String?                      @db.Uuid
+  years_of_experience      Int?
+  portfolio_url            String? // Left for Profile Edit
+  languages                String[]                     @default([]) // Left for Profile Edit
+  location_city            String?                      @db.VarChar(100) // Left for Profile Edit
+  success_rate             Decimal                      @default(100.0) @db.Decimal(5, 2)
+  total_earnings_mmk       BigInt                       @default(0)
+  is_verified              Boolean                      @default(false)
+  completed_projects_count Int                          @default(0)
+  ongoing_projects_count   Int                          @default(0)
+  canceled_projects_count  Int                          @default(0)
+  embedding                Unsupported("vector(1536)")?
+  created_at               DateTime                     @default(now()) @db.Timestamptz
+  updated_at               DateTime                     @updatedAt @db.Timestamptz
+  deleted_at               DateTime?                    @db.Timestamptz
 
-    user             User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
-    experience_level ExperienceLevel? @relation(fields: [experience_level_id], references: [id])
-    packages         Package[]
+  certificates     FreelancerCertificate[]
+  user             User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  experience_level ExperienceLevel?        @relation(fields: [experience_level_id], references: [id])
+  packages         Package[]
 
-    @@index([skills], type: Gin, map: "idx_freelancer_skills")
-    @@map("freelancer_profiles")
+  @@index([skills], type: Gin, map: "idx_freelancer_skills")
+  @@map("freelancer_profiles")
+}
+
+model FreelancerCertificate {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  freelancer_id String    @db.Uuid
+  name          String    @db.VarChar(255) // e.g., "AWS Certified Solutions Architect"
+  issuer        String?   @db.VarChar(255) // e.g., "Amazon Web Services"
+  issued_date   DateTime? @db.Date
+  file_url      String? // URL to the uploaded PDF/Image in Supabase Storage
+
+  freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
+
+  @@index([freelancer_id], map: "idx_certificates_freelancer")
+  @@map("freelancer_certificates")
 }

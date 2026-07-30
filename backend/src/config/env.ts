@@ -10,6 +10,8 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   SUPABASE_JWT_SECRET: z.string().min(1),
   GEMINI_API_KEY: z.string().min(1),
+  GEMINI_EMBEDDING_MODEL: z.string().trim().min(1),
+  GEMINI_EMBEDDING_OUTPUT_DIMENSIONALITY: z.coerce.number().int().positive().default(1536),
 });
 
 const parsedEnvironment = envSchema.safeParse(process.env);
