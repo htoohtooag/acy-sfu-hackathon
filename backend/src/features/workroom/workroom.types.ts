@@ -70,6 +70,14 @@ export type WorkroomServerToClientEvents = {
   room_joined: (payload: { success: true; data: WorkroomRoom }) => void;
   room_left: (payload: { success: true; data: WorkroomRoom }) => void;
   new_message: (payload: { success: true; data: WorkroomMessage }) => void;
+  deliverable_submitted: (payload: {
+    success: true;
+    data: import('shared/schemas').DeliverableSubmittedEvent;
+  }) => void;
+  deliverable_unlocked: (payload: {
+    success: true;
+    data: import('shared/schemas').DeliverableUnlockedEvent;
+  }) => void;
   chat_error: (payload: {
     success: false;
     error: { code: string; message: string };

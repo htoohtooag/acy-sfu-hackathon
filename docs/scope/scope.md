@@ -1,0 +1,67 @@
+# Scope: Myanmar Freelance Marketplace backend
+
+The backend protects marketplace transactions, workroom communication, and delivery access for clients and freelancers.
+
+**Build approach:** Journey (finish each trust boundary end to end).
+**Workflow:** Beta (build, verify, then test).
+
+## At a glance
+
+| # | Feature | Phase | Status |
+|---|---------|-------|--------|
+| 1 | Backend foundation | Phase 1 | existing |
+| 2 | Identity and access | Phase 2 | existing |
+| 3 | Marketplace and AI search | Phase 3 | existing |
+| 4 | Orders, escrow, and admin trust engine | Phase 4 | existing |
+| 5 | Workroom chat and history | Phase 5 | existing |
+| 6 | Watermark delivery lock and completion | Phase 5 | in-progress |
+| 7 | Reviews and disputes | Phase 5 | planned |
+
+## Phase 1: Backend foundation
+
+### 1. Backend foundation · existing
+
+Express, Prisma, Supabase clients, environment validation, API envelopes, health checks, and graceful shutdown are implemented. Code in `backend/src/config/`, `backend/src/app.ts`, and `backend/src/server.ts`.
+
+## Phase 2: Identity and access
+
+### 2. Identity and access · existing
+
+Supabase JWT authentication, role checks, onboarding, profiles, and subscriptions are implemented. Code in `backend/src/auth/`, `backend/src/middlewares/`, and `backend/src/features/identity/`.
+
+## Phase 3: Marketplace and AI search
+
+### 3. Marketplace and AI search · existing
+
+Package and job APIs plus the guarded Gemini search agent are implemented. Code in `backend/src/features/marketplace/` and `backend/src/features/ai-search/`.
+
+## Phase 4: Orders, escrow, and admin trust engine
+
+### 4. Orders, escrow, and admin trust engine · existing
+
+Orders, payment proof uploads, escrow verification, payment rejection, moderation, and audit logging are implemented. Code in `backend/src/features/transactions/` and `backend/src/features/admin/`.
+
+## Phase 5: Workspace and resolution
+
+### 5. Workroom chat and history · existing
+
+Participant-only message history and Socket.io chat with the ACTIVE escrow lock are implemented. Code in `backend/src/features/workroom/`.
+
+### 6. Watermark delivery lock and completion · in-progress
+
+Let a freelancer submit an image deliverable, give the client a private watermarked preview, and release the clean file only after approval.
+**Done when:** a valid submission creates both private assets and moves the order to `IN_REVIEW`; approval completes the order and exposes only a signed clean URL; rejection returns the order to `ACTIVE`; unauthorized users and invalid state changes are blocked.
+- [x] Design it (spec): `/architect watermark delivery lock and completion`
+- [x] Build it: `/develop watermark delivery lock and completion`
+   - [x] Process and store clean and watermarked assets with Sharp and Supabase Storage
+   - [x] Persist deliverables, order transitions, freelancer completion stats, and workroom system events
+   - [x] Add ownership checks, signed URL release, validation, cleanup, and focused tests
+- [ ] Verify it: `/check verify watermark delivery lock and completion`
+- [ ] Test it: `/test watermark delivery lock and completion`
+Spec [0005](../specs/0005-watermark-delivery-lock-and-completion.md) · code in `backend/src/features/workroom/`
+
+### 7. Reviews and disputes · planned
+
+Allow both parties to review completed work and let administrators resolve disputes after the delivery flow is stable.
+**Done when:** completed orders can receive valid reviews and disputes follow the documented resolution state machine.
+- [ ] Design it (spec): `/architect reviews and disputes`

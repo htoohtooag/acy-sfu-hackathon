@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 5, Step 9 — Workroom Socket.io chat and history
-**Next:** Phase 5, Step 11 — Delivery & Reviews
+**Last completed:** Phase 5, Step 10 — Watermark delivery lock and completion
+**Next:** Phase 5, Step 11 — Reviews and disputes
 
 ---
 
@@ -34,7 +34,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 5 — Workspace & Resolution
 - [x] 09 Workroom Socket.io (Participant chat, history, escrow lock; file upload deferred)
-- [ ] 10 Watermark Delivery Lock & Completion (Sharp)
+- [x] 10 Watermark Delivery Lock & Completion (Sharp, private Supabase Storage, signed URL release)
 - [ ] 11 Reviews & Disputes
 
 ---
@@ -78,22 +78,6 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Session Notes
 *AI Agent Rules: Update this section at the end of every session. Keep notes under 3 bullet points. Focus on what was done, what is broken, and exactly where to pick up next. Do not write essays here.*
 
-- Prisma migration configuration continues to target `DIRECT_URL`; runtime connections may use pooled `DATABASE_URL`.
-- The existing Supabase schema matches the Prisma schema with no diff. A generated `prisma/migrations/0_init/migration.sql` baseline was marked applied without resetting or changing existing tables/data.
-- Lookup seed data is defined in `backend/prisma/seed.ts` and was executed twice successfully using Prisma's generated client and PostgreSQL adapter.
-- Core infrastructure is implemented under `backend/src`: validated environment, Prisma singleton, Supabase Admin client, API envelope utilities, global error handling, health endpoint, and graceful shutdown. The compiled server passed the health and SIGTERM checks.
-- Supabase JWT middleware is implemented under `backend/src/middlewares`: HS256 tokens are verified with the validated JWT secret, active database users are loaded with their roles, and role checks return the standard `401` or `403` envelope. The protected `GET /api/v1/users/me` route passed missing and malformed token checks. Next: implement onboarding APIs.
-- The authentication debug fix adds an idempotent Supabase `auth.users` trigger and reconciles existing Auth users into `public.users` with status `LEAD`. ES256 and RS256 tokens are verified through the Supabase JWKS endpoint, while legacy HS256 support remains available. Next: implement onboarding APIs.
-- Unified onboarding is implemented at `POST /api/v1/users/me/onboarding`. Shared Zod contracts cover client and freelancer payloads, Prisma transactions persist identity, role, profile, and activation data, and freelancer embeddings use configured Gemini settings with a parameterized pgvector write. The root build compiles shared contracts before the backend. Next: implement catalog APIs.
-- Phase 2 onboarding debug fixes are implemented with an identity repository layer. Active users can add their second role, existing KYC status is preserved, and embeddings use the Vercel AI SDK Google provider. Regression tests cover dual role rules and experience level UUID validation.
-- Phase 3 catalog APIs are implemented under `backend/src/features/marketplace`: package and job CRUD, pagination, ownership and role checks, subscription limits, soft deletion, Gemini embeddings, and shared frontend contracts. The subscription seed ran twice successfully. Root build and backend tests pass. Next: implement the AI Search Agent.
-- Onboarding now provisions the seeded active free plan for the completed role inside the onboarding transaction. Client and freelancer roles receive separate subscriptions, dual role onboarding is supported, duplicate user and plan subscriptions are prevented by a database constraint, and the migration plus seed were applied successfully. Build and all backend tests pass.
-- Phase 3 Step 6 is complete: the AI SDK UI stream route, plan-gated tools, exact package filters with pgvector ranking, platform-document retrieval, RLS migration, shared validation, rate limiting, and focused tests are implemented. The migration and idempotent seed were applied to Supabase, AI search was verified through Postman, and the root build plus backend tests pass. Next: Phase 3 Step 7 hardening and verification.
-- Phase 4 Step 7 is complete: package and custom offer orders enforce one source, freelancer plan limits, locked commission fees, and the AWAITING_ESCROW state. Clients can upload private payment proof images to Supabase Storage, with PENDING_ADMIN transactions and cleanup on persistence failure. The migration was applied and both order source constraints were verified live. Root build and backend tests pass. Next: Phase 4 Step 8 Workroom Socket.io.
-- The Order model now maps to the physical `orders` table. A data-preserving rename migration was applied with Prisma Migrate, Prisma Client was regenerated, and live foreign keys/check constraints were verified. Local `migrate dev` shadow replay remains blocked because the existing baseline migration uses `citext`/`vector` without creating those extensions; do not alter the already-applied baseline migration.
-- Phase 4 Step 8 is implemented under `backend/src/features/admin`: admin role middleware, transactional escrow verification, transactional user moderation, audit log writes, shared Zod contracts, idempotent SUPER_ADMIN linkage, and focused response and validation tests. Root build and all backend tests pass.
-- Live seed verification remains pending because `SUPER_ADMIN_USER_ID` is not configured and the existing Gemini embedding seed failed before completion. Configure the existing Supabase Auth user id and Gemini access before claiming live admin bootstrap verification.
-- Step 8 payment verification now reloads the payment after unlocking the order, preventing stale nested order state from causing a false verification failure. The same endpoint supports `REJECT` with a bounded reason and `REJECT_PAYMENT` audit logging. The `rejection_reason` migration is applied to the populated Supabase `postgres` database.
-- The verify request failure was traced to the unapplied `rejection_reason` column and malformed local database URLs, not the request body. The error handler now logs the original server error while keeping the safe API envelope.
-- Phase 5 Step 9 is implemented under `backend/src/features/workroom`: shared frontend contracts, paginated participant history, reusable Supabase Socket.io auth, authorized order rooms, serializable text message persistence, and the ACTIVE escrow chat lock. Root build, all backend tests, Prisma validation, formatting, and client generation pass.
-- Chat file upload remains deferred because Step 9 does not define its Supabase bucket, MIME policy, signed URL policy, or cleanup lifecycle. A live Socket.io TCP handshake check was skipped in the restricted sandbox because local listeners return `EPERM`.
+- Prisma continues to use `DIRECT_URL` for migrations and pooled `DATABASE_URL` for runtime connections.
+- Phase 5 Step 10 is implemented under `backend/src/features/workroom` with Sharp, private Supabase Storage, serializable delivery state changes, signed URL release, and typed Socket.io events.
+- Root build, all 14 backend tests, Prisma validation, and the live private `deliverables` bucket check pass. Next is formal Beta verification and Step 11 reviews and disputes.

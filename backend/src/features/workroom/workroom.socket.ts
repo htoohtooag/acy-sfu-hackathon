@@ -10,6 +10,7 @@ import {
   joinWorkroom,
   sendWorkroomMessage,
 } from './workroom.service.js';
+import { subscribeWorkroomEvents } from './workroom.events.js';
 import {
   workroomRoomName,
 } from './workroom.types.js';
@@ -156,5 +157,21 @@ export function initializeWorkroomSocket(io: WorkroomSocketServer): void {
 
   io.on('connection', (socket) => {
     registerWorkroomEvents(io, socket);
+  });
+
+  subscribeWorkroomEvents((event) => {
+    const room = workroomRoomName(event.order_id);
+
+    if (event.type === 'message') {
+      io.to(room).emit('new_message', success(event.message));
+      return;
+    }
+
+    if (event.type === 'deliverable_submitted') {
+      io.to(room).emit('deliverable_submitted', success(event.data));
+      return;
+    }
+
+    io.to(room).emit('deliverable_unlocked', success(event.data));
   });
 }

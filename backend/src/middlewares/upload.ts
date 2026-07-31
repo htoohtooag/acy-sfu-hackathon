@@ -5,6 +5,19 @@ import { ApiError } from '../utils/api-error.js';
 
 const supportedImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
+const deliverableUploadParser = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: env.DELIVERABLE_MAX_BYTES, files: 1 },
+  fileFilter: (_request, file, callback): void => {
+    if (!supportedImageTypes.has(file.mimetype)) {
+      callback(new ApiError(415, 'DELIVERABLE_TYPE_NOT_ALLOWED', 'Only JPEG, PNG, and WebP images are allowed.'));
+      return;
+    }
+
+    callback(null, true);
+  },
+});
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: env.PAYMENT_PROOF_MAX_BYTES, files: 1 },
@@ -51,6 +64,46 @@ export const paymentProofUpload: RequestHandler = (
 
     if (request.file === undefined) {
       next(new ApiError(422, 'PAYMENT_PROOF_REQUIRED', 'A payment proof image is required.'));
+      return;
+    }
+
+    next();
+  });
+};
+
+export const deliverableUpload: RequestHandler = (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+): void => {
+  deliverableUploadParser.single('file')(request, response, (error: unknown) => {
+    if (error instanceof ApiError) {
+      next(error);
+      return;
+    }
+
+    if (error instanceof multer.MulterError) {
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        next(new ApiError(413, 'DELIVERABLE_TOO_LARGE', 'The deliverable image is too large.'));
+        return;
+      }
+
+      if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+        next(new ApiError(422, 'DELIVERABLE_REQUIRED', 'Submit exactly one deliverable image.'));
+        return;
+      }
+
+      next(new ApiError(422, 'DELIVERABLE_UPLOAD_INVALID', 'The deliverable upload is invalid.'));
+      return;
+    }
+
+    if (error !== undefined && error !== null) {
+      next(new ApiError(422, 'DELIVERABLE_UPLOAD_INVALID', 'The deliverable upload is invalid.'));
+      return;
+    }
+
+    if (request.file === undefined) {
+      next(new ApiError(422, 'DELIVERABLE_REQUIRED', 'A deliverable image is required.'));
       return;
     }
 

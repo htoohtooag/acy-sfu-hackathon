@@ -73,3 +73,20 @@ export async function createTextMessage(
     select: workroomMessageSelect,
   });
 }
+
+export async function createSystemMessage(
+  orderId: string,
+  senderId: string,
+  content: string,
+  client: WorkroomTransactionClient,
+): Promise<WorkroomMessageRecord> {
+  return client.message.create({
+    data: {
+      order_id: orderId,
+      sender_id: senderId,
+      type: 'SYSTEM',
+      content,
+    },
+    select: workroomMessageSelect,
+  });
+}

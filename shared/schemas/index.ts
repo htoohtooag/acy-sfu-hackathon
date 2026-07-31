@@ -86,3 +86,17 @@ export type {
   WorkroomSocketError,
   WorkroomSocketSuccess,
 } from './workroom.js';
+export {
+  deliverableDecisionParamsSchema,
+  deliverableDecisionSchema,
+  deliverableOrderParamsSchema,
+} from './deliverables.js';
+export type {
+  DeliverableApprovalResponse,
+  DeliverableDecisionRequest,
+  DeliverableDecisionResponse,
+  DeliverableRejectionResponse,
+  DeliverableSubmittedEvent,
+  DeliverableSubmissionResponse,
+  DeliverableUnlockedEvent,
+} from './deliverables.js';
