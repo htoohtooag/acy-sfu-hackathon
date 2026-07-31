@@ -1,16 +1,33 @@
-import type { Server } from 'node:http';
+import { createServer, type Server } from 'node:http';
 import { app } from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './config/prisma.js';
+import { createSocketServer } from './config/socket.js';
+import type { WorkroomSocketServer } from './features/workroom/workroom.socket.js';
 
 let httpServer: Server | undefined;
+let socketServer: WorkroomSocketServer | undefined;
 let isShuttingDown = false;
 
 async function startServer(): Promise<void> {
   await prisma.$connect();
 
-  httpServer = app.listen(env.PORT, () => {
-    console.log(`Backend listening on port  http://localhost:${env.PORT}.`);
+  httpServer = createServer(app);
+  socketServer = createSocketServer(httpServer);
+
+  httpServer.listen(env.PORT, () => {
+    console.log(`Backend  listening on port http://localhost:${env.PORT}.`);
+  });
+}
+
+async function closeSocketServer(): Promise<void> {
+  await new Promise<void>((resolve) => {
+    if (socketServer === undefined) {
+      resolve();
+      return;
+    }
+
+    socketServer.close(() => resolve());
   });
 }
 
@@ -22,6 +39,8 @@ async function shutdown(signal: string): Promise<void> {
   isShuttingDown = true;
   console.log(`Received ${signal}, shutting down.`);
 
+  await closeSocketServer();
+
   await new Promise<void>((resolve, reject) => {
     if (!httpServer) {
       resolve();
@@ -30,6 +49,11 @@ async function shutdown(signal: string): Promise<void> {
 
     httpServer.close((error?: Error) => {
       if (error) {
+        if ('code' in error && error.code === 'ERR_SERVER_NOT_RUNNING') {
+          resolve();
+          return;
+        }
+
         reject(error);
         return;
       }
@@ -60,3 +84,4 @@ startServer().catch(async (error: unknown) => {
   await prisma.$disconnect();
   process.exitCode = 1;
 });
+

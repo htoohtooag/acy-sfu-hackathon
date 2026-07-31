@@ -7,6 +7,7 @@ import { identityRouter } from './features/identity/identity.routes.js';
 import { jobRouter } from './features/marketplace/job.routes.js';
 import { packageRouter } from './features/marketplace/package.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
+import { workroomRouter } from './features/workroom/workroom.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { successResponse } from './utils/api-response.js';
 
@@ -33,6 +34,7 @@ app.use('/api/v1/users', identityRouter);
 app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/ai', aiSearchRouter);
+app.use('/api/v1/orders', workroomRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/admin', adminRouter);
 

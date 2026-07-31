@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 4, Step 8 — Admin APIs & Audit Logs
-**Next:** Phase 5, Step 9 — Workroom Socket.io
+**Last completed:** Phase 5, Step 9 — Workroom Socket.io chat and history
+**Next:** Phase 5, Step 11 — Delivery & Reviews
 
 ---
 
@@ -32,9 +32,10 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 07 Order & Escrow APIs
 - [x] 08 Admin APIs & Audit Logs (Verify Escrow -> Unlock)
 
-### Phase 5 — Admin & Resolution
-- [ ] 09 Workroom Socket.io (Chat & Files)
-- [ ] 11 Delivery & Reviews
+### Phase 5 — Workspace & Resolution
+- [x] 09 Workroom Socket.io (Participant chat, history, escrow lock; file upload deferred)
+- [ ] 10 Watermark Delivery Lock & Completion (Sharp)
+- [ ] 11 Reviews & Disputes
 
 ---
 
@@ -94,3 +95,5 @@ Update this file after every completed feature. Any AI agent reading this should
 - Live seed verification remains pending because `SUPER_ADMIN_USER_ID` is not configured and the existing Gemini embedding seed failed before completion. Configure the existing Supabase Auth user id and Gemini access before claiming live admin bootstrap verification.
 - Step 8 payment verification now reloads the payment after unlocking the order, preventing stale nested order state from causing a false verification failure. The same endpoint supports `REJECT` with a bounded reason and `REJECT_PAYMENT` audit logging. The `rejection_reason` migration is applied to the populated Supabase `postgres` database.
 - The verify request failure was traced to the unapplied `rejection_reason` column and malformed local database URLs, not the request body. The error handler now logs the original server error while keeping the safe API envelope.
+- Phase 5 Step 9 is implemented under `backend/src/features/workroom`: shared frontend contracts, paginated participant history, reusable Supabase Socket.io auth, authorized order rooms, serializable text message persistence, and the ACTIVE escrow chat lock. Root build, all backend tests, Prisma validation, formatting, and client generation pass.
+- Chat file upload remains deferred because Step 9 does not define its Supabase bucket, MIME policy, signed URL policy, or cleanup lifecycle. A live Socket.io TCP handshake check was skipped in the restricted sandbox because local listeners return `EPERM`.

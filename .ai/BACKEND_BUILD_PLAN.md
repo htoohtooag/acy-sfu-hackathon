@@ -140,17 +140,46 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
 
 
 ### Phase 5: Execution & Resolution
-- [ ] **Step 9: Workroom Socket.io**
-  - Initialize Socket.io server.
-  - Implement room joining strictly based on `order_id` and user participation.
-  - Handle real-time messages and persist to `messages` table.
-  - *Done when:* Two users can chat in real-time; messages survive a refresh.
-- [ ] **Step 10: Delivery & Reviews**
-  - Implement `PATCH /api/v1/orders/:id/deliverables` (Client approves). Update Order to `COMPLETED`. Expose clean file URL.
-  - Implement `POST /api/v1/orders/:id/reviews`.
-  - *Done when:* Client approves work, clean file is downloadable, and review is saved.
+- [ ] **Step 9: Real-time Workroom Backend (Socket.io & Chat History)**
+  - **REST History Endpoint:** Implement `GET /api/v1/orders/:id/messages` (Paginated, e.g., 50 messages per page). Ensure the user is a participant of the order before returning data.
+  - **Socket.io Initialization:** Attach Socket.io to the Express HTTP server in `server.js`.
+  - **Auth Middleware:** Create a Socket.io middleware to extract and verify the Supabase JWT from the `auth` handshake object. Attach `socket.user.id`. Disconnect if invalid.
+  - **Room Authorization (`join_room` event):** When a user attempts to join an `order_id` room, query Prisma to verify they are the `client_id` or `freelancer_id` on that Order. If not, refuse the join.
+  - **The Escrow Lock (`send_message` event):** 
+    - When a message is received, query the Order `status`.
+    - If `status !== 'ACTIVE'`, emit a `chat_error` event back to the sender: *"Chat is locked until escrow is verified."* Do NOT broadcast the message.
+    - If `status === 'ACTIVE'`, save the message to the Prisma `messages` table, then broadcast the message to the room.
+  - *Done when:* The backend successfully authenticates connections, isolates rooms, persists messages, and strictly blocks chat for unverified escrow orders.
 
+- [ ] **Step 10: The Watermark Delivery Lock & Reviews (Trust Climax)**
+  - **Endpoint 1: `POST /api/v1/orders/:id/deliverables` (Freelancer Submits Work)**
+    - *Authorization:* Verify `req.user.id` is the `freelancer_id`. Verify Order `status` is `ACTIVE`.
+    - *File Handling:* Use `multer` (memory storage) to receive the high-res file.
+    - *Image Pipeline (`sharp`):* 
+      1. Resize image (max width 1200px).
+      2. Convert to `.webp`.
+      3. Composite a semi-transparent "DRAFT - UNPAID" text overlay.
+    - *Storage:* Upload BOTH the clean original and the watermarked version to Supabase Storage (`deliverables` bucket).
+    - *Database Logic:* Save both URLs to the `deliverables` table (`status = UNDER_REVIEW`).
+    - *System Action:* Update Order `status = IN_REVIEW`. Emit a Socket.io `SYSTEM` message to the Workroom: *"Freelancer submitted final work."*
+  - **Endpoint 2: `PATCH /api/v1/orders/:id/deliverables/:deliverableId` (Client Approves/Rejects)**
+    - *Authorization:* Verify `req.user.id` is the `client_id`. Verify Order `status` is `IN_REVIEW`.
+    - *If Approved:* 
+      1. Update Deliverable `status = APPROVED`, `approved_at = NOW()`.
+      2. Update Order `status = COMPLETED`.
+      3. Update Freelancer stats: increment `completed_projects_count`, add `agreed_price_mmk` to `total_earnings_mmk`.
+      4. Emit Socket.io event to unlock the clean file URL for the Client.
+    - *If Rejected (Request Revision):* 
+      1. Update Deliverable `status = REJECTED`.
+      2. Revert Order `status = ACTIVE` (so the freelancer can submit a new version later).
+  - *Done when:* Freelancer uploads a file -> Client sees watermarked version -> Client clicks Approve -> Order becomes COMPLETED -> Client can access the clean file.
 
+- [ ] **Step 11: Reputation & Reviews**
+  - **Endpoint: `POST /api/v1/orders/:id/reviews`**
+    - *Authorization:* Verify `req.user.id` is the `client_id` (or freelancer). Verify Order `status` is strictly `COMPLETED`.
+    - *Logic:* Validate `rating` (1-5) and `comment`. Save to the `reviews` table.
+    - *Stats Update:* Recalculate and update the Freelancer's `success_rate` in the `freelancer_profiles` table based on the new rating.
+  - *Done when:* A completed order receives a 5-star rating, and the freelancer's success rate updates in the database.
 
 
 
@@ -173,14 +202,3 @@ Socket.io is for *real-time* communication. When the user refreshes the page, th
 
 ---
 
-
-- [ ] **Step 9: Real-time Workroom Backend (Socket.io & Chat History)**
-  - **REST History Endpoint:** Implement `GET /api/v1/orders/:id/messages` (Paginated, e.g., 50 messages per page). Ensure the user is a participant of the order before returning data.
-  - **Socket.io Initialization:** Attach Socket.io to the Express HTTP server in `server.js`.
-  - **Auth Middleware:** Create a Socket.io middleware to extract and verify the Supabase JWT from the `auth` handshake object. Attach `socket.user.id`. Disconnect if invalid.
-  - **Room Authorization (`join_room` event):** When a user attempts to join an `order_id` room, query Prisma to verify they are the `client_id` or `freelancer_id` on that Order. If not, refuse the join.
-  - **The Escrow Lock (`send_message` event):** 
-    - When a message is received, query the Order `status`.
-    - If `status !== 'ACTIVE'`, emit a `chat_error` event back to the sender: *"Chat is locked until escrow is verified."* Do NOT broadcast the message.
-    - If `status === 'ACTIVE'`, save the message to the Prisma `messages` table, then broadcast the message to the room.
-  - *Done when:* The backend successfully authenticates connections, isolates rooms, persists messages, and strictly blocks chat for unverified escrow orders.

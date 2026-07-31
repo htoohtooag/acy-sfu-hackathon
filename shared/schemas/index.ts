@@ -68,3 +68,21 @@ export type {
   ModerationRequest,
   PaymentDecisionRequest,
 } from './admin.js';
+export {
+  joinRoomSchema,
+  sendMessageSchema,
+  workroomHistoryQuerySchema,
+  workroomOrderIdSchema,
+} from './workroom.js';
+export type {
+  JoinRoomRequest,
+  SendMessageRequest,
+  WorkroomHistoryQuery,
+  WorkroomMessage,
+  WorkroomMessageHistory,
+  WorkroomMessageType,
+  WorkroomOrderIdParams,
+  WorkroomRoom,
+  WorkroomSocketError,
+  WorkroomSocketSuccess,
+} from './workroom.js';
