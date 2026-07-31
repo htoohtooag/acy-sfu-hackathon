@@ -40939,6 +40939,7 @@ export namespace Prisma {
 
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    order_id_reviewer_id?: ReviewOrder_idReviewer_idCompoundUniqueInput
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
@@ -40953,7 +40954,7 @@ export namespace Prisma {
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
     reviewer?: XOR<UserScalarRelationFilter, UserWhereInput>
     reviewee?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "order_id_reviewer_id">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
@@ -45680,6 +45681,11 @@ export namespace Prisma {
     content?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type ReviewOrder_idReviewer_idCompoundUniqueInput = {
+    order_id: string
+    reviewer_id: string
   }
 
   export type ReviewCountOrderByAggregateInput = {

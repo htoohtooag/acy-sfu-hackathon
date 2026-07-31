@@ -174,12 +174,23 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
       2. Revert Order `status = ACTIVE` (so the freelancer can submit a new version later).
   - *Done when:* Freelancer uploads a file -> Client sees watermarked version -> Client clicks Approve -> Order becomes COMPLETED -> Client can access the clean file.
 
-- [ ] **Step 11: Reputation & Reviews**
+- [x] **Step 11: Reputation & Reviews**
+  - **Schema Constraint (The Rulebook):** 
+    - Add `@@unique([order_id, reviewer_id])` to the `reviews` table in Prisma. This physically prevents duplicate reviews at the database level.
   - **Endpoint: `POST /api/v1/orders/:id/reviews`**
-    - *Authorization:* Verify `req.user.id` is the `client_id` (or freelancer). Verify Order `status` is strictly `COMPLETED`.
-    - *Logic:* Validate `rating` (1-5) and `comment`. Save to the `reviews` table.
-    - *Stats Update:* Recalculate and update the Freelancer's `success_rate` in the `freelancer_profiles` table based on the new rating.
-  - *Done when:* A completed order receives a 5-star rating, and the freelancer's success rate updates in the database.
+    - **Layer 1: Authorization (The Bouncer):** 
+      - Fetch the Order. Verify `req.user.id` strictly matches `order.client_id`. 
+      - If it doesn't match, throw `403 Forbidden` (Other clients cannot review this order).
+      - Extract `order.freelancer_id` to use as the `reviewee_id` (Do NOT trust a freelancer ID sent from the frontend).
+    - **Layer 2: State Check:** Verify Order `status` is `COMPLETED`. If not, throw `403 Forbidden` (Cannot review unfinished work).
+    - **Layer 3: Duplicate Prevention:** Check if a review already exists for this `order_id`. If it does, throw `409 Conflict` ("You have already reviewed this order").
+    - **Validation (Zod):** Require `rating` (int, 1-5) and optional `comment` (string).
+    - **Database Logic (`prisma.$transaction`):**
+      1. Insert the review into the `reviews` table (`reviewer_id` = logged-in client, `reviewee_id` = order's freelancer).
+      2. Fetch the Freelancer's current `success_rate` from `freelancer_profiles`.
+      3. Recalculate the `success_rate` based on the new rating.
+      4. Update the `freelancer_profiles` table with the new `success_rate`.
+  - *Done when:* The specific client who owns a completed order successfully submits a 5-star review for the specific freelancer who worked on it. Other clients are blocked (403), and duplicate submissions are blocked (409).
 
 
 

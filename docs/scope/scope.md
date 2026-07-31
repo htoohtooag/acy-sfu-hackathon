@@ -15,7 +15,8 @@ The backend protects marketplace transactions, workroom communication, and deliv
 | 4 | Orders, escrow, and admin trust engine | Phase 4 | existing |
 | 5 | Workroom chat and history | Phase 5 | existing |
 | 6 | Watermark delivery lock and completion | Phase 5 | in-progress |
-| 7 | Reviews and disputes | Phase 5 | planned |
+| 7 | Client reviews | Phase 5 | in-progress |
+| 8 | Dispute resolution | Phase 5 | planned |
 
 ## Phase 1: Backend foundation
 
@@ -60,8 +61,21 @@ Let a freelancer submit an image deliverable, give the client a private watermar
 - [ ] Test it: `/test watermark delivery lock and completion`
 Spec [0005](../specs/0005-watermark-delivery-lock-and-completion.md) · code in `backend/src/features/workroom/`
 
-### 7. Reviews and disputes · planned
+### 7. Client reviews · in-progress
 
-Allow both parties to review completed work and let administrators resolve disputes after the delivery flow is stable.
-**Done when:** completed orders can receive valid reviews and disputes follow the documented resolution state machine.
-- [ ] Design it (spec): `/architect reviews and disputes`
+Allow the client who owns a completed order to review the freelancer who delivered it. Keep duplicate prevention and the success rate update inside the backend transaction.
+**Done when:** the owning client can submit one valid review for a completed order, unauthorized and duplicate submissions are blocked, and the freelancer success rate reflects all nondeleted reviews.
+- [x] Design it (spec): `/architect client reviews`
+- [x] Build it: `/develop client reviews`
+   - [x] Add review contracts and the database uniqueness constraint, satisfying AC-3, AC-4, and AC-7
+   - [x] Add the transactional review service and success rate calculation, satisfying AC-1, AC-2, and AC-5
+   - [x] Add route registration, response mapping, and focused tests, satisfying AC-1, AC-2, AC-3, AC-5, AC-6, and AC-7
+- [ ] Verify it: `/check verify client reviews`
+- [ ] Test it: `/test client reviews`
+Spec [0006](../specs/0006-client-reviews.md) · code in `backend/src/features/reputation/`
+
+### 8. Dispute resolution · planned
+
+Let either party raise a dispute during the permitted order states and let an administrator resolve it with an auditable state transition.
+**Done when:** dispute creation locks the workroom, administrator resolution follows the documented state machine, and every resolution is recorded in `admin_audit_logs`.
+- [ ] Design it (spec): `/architect dispute resolution`

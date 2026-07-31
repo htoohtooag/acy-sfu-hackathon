@@ -524,6 +524,7 @@ model Review {
   reviewer User  @relation("ReviewerReviews", fields: [reviewer_id], references: [id], onDelete: Cascade)
   reviewee User  @relation("RevieweeReviews", fields: [reviewee_id], references: [id], onDelete: Cascade)
 
+  @@unique([order_id, reviewer_id])
   @@index([reviewee_id], map: "idx_reviews_reviewee")
   @@map("reviews")
 }

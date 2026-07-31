@@ -6,6 +6,7 @@ import { adminRouter } from './features/admin/admin.routes.js';
 import { identityRouter } from './features/identity/identity.routes.js';
 import { jobRouter } from './features/marketplace/job.routes.js';
 import { packageRouter } from './features/marketplace/package.routes.js';
+import { reviewRouter } from './features/reputation/review.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
 import { workroomRouter } from './features/workroom/workroom.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
@@ -36,6 +37,7 @@ app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/ai', aiSearchRouter);
 app.use('/api/v1/orders', workroomRouter);
 app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/orders', reviewRouter);
 app.use('/api/v1/admin', adminRouter);
 
 app.use(errorHandler);

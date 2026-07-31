@@ -100,3 +100,5 @@ export type {
   DeliverableSubmissionResponse,
   DeliverableUnlockedEvent,
 } from './deliverables.js';
+export { createReviewSchema, reviewOrderParamsSchema } from './reviews.js';
+export type { CreateReviewRequest, ReviewResponse } from './reviews.js';

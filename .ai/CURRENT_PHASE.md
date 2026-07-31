@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 5, Step 10 — Watermark delivery lock and completion
-**Next:** Phase 5, Step 11 — Reviews and disputes
+**Last completed:** Phase 5, Step 11 — Client reviews implementation, migration, and self checks
+**Next:** Beta verification and test for client reviews, then frontend foundation work
 
 ---
 
@@ -35,7 +35,7 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 5 — Workspace & Resolution
 - [x] 09 Workroom Socket.io (Participant chat, history, escrow lock; file upload deferred)
 - [x] 10 Watermark Delivery Lock & Completion (Sharp, private Supabase Storage, signed URL release)
-- [ ] 11 Reviews & Disputes
+- [x] 11 Client Reviews (client-only review endpoint, transactional success rate update, unique review constraint)
 
 ---
 
@@ -80,4 +80,4 @@ Update this file after every completed feature. Any AI agent reading this should
 
 - Prisma continues to use `DIRECT_URL` for migrations and pooled `DATABASE_URL` for runtime connections.
 - Phase 5 Step 10 is implemented under `backend/src/features/workroom` with Sharp, private Supabase Storage, serializable delivery state changes, signed URL release, and typed Socket.io events.
-- Root build, all 14 backend tests, Prisma validation, and the live private `deliverables` bucket check pass. Next is formal Beta verification and Step 11 reviews and disputes.
+- Phase 5 Step 11 client reviews is implemented under `backend/src/features/reputation`, with a live unique review index, serializable success rate recalculation, root build, and 16 passing backend tests. Next is formal Beta verification and test; disputes remain a separate planned feature.
