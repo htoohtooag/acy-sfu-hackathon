@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 4, Step 7 — Order & Escrow APIs
-**Next:** Phase 4, Step 8 — Workroom Socket.io
+**Last completed:** Phase 4, Step 8 — Admin APIs & Audit Logs
+**Next:** Phase 5, Step 9 — Workroom Socket.io
 
 ---
 
@@ -30,11 +30,10 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 4 — Transactions & Workroom
 - [x] 07 Order & Escrow APIs
-- [ ] 08 Workroom Socket.io
-- [ ] 09 Watermark Pipeline (Sharp)
+- [x] 08 Admin APIs & Audit Logs (Verify Escrow -> Unlock)
 
 ### Phase 5 — Admin & Resolution
-- [ ] 10 Admin APIs & Audit Logs
+- [ ] 09 Workroom Socket.io (Chat & Files)
 - [ ] 11 Delivery & Reviews
 
 ---
@@ -91,3 +90,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - Phase 3 Step 6 is complete: the AI SDK UI stream route, plan-gated tools, exact package filters with pgvector ranking, platform-document retrieval, RLS migration, shared validation, rate limiting, and focused tests are implemented. The migration and idempotent seed were applied to Supabase, AI search was verified through Postman, and the root build plus backend tests pass. Next: Phase 3 Step 7 hardening and verification.
 - Phase 4 Step 7 is complete: package and custom offer orders enforce one source, freelancer plan limits, locked commission fees, and the AWAITING_ESCROW state. Clients can upload private payment proof images to Supabase Storage, with PENDING_ADMIN transactions and cleanup on persistence failure. The migration was applied and both order source constraints were verified live. Root build and backend tests pass. Next: Phase 4 Step 8 Workroom Socket.io.
 - The Order model now maps to the physical `orders` table. A data-preserving rename migration was applied with Prisma Migrate, Prisma Client was regenerated, and live foreign keys/check constraints were verified. Local `migrate dev` shadow replay remains blocked because the existing baseline migration uses `citext`/`vector` without creating those extensions; do not alter the already-applied baseline migration.
+- Phase 4 Step 8 is implemented under `backend/src/features/admin`: admin role middleware, transactional escrow verification, transactional user moderation, audit log writes, shared Zod contracts, idempotent SUPER_ADMIN linkage, and focused response and validation tests. Root build and all backend tests pass.
+- Live seed verification remains pending because `SUPER_ADMIN_USER_ID` is not configured and the existing Gemini embedding seed failed before completion. Configure the existing Supabase Auth user id and Gemini access before claiming live admin bootstrap verification.
+- Step 8 payment verification now reloads the payment after unlocking the order, preventing stale nested order state from causing a false verification failure. The same endpoint supports `REJECT` with a bounded reason and `REJECT_PAYMENT` audit logging. The `rejection_reason` migration is applied to the populated Supabase `postgres` database.
+- The verify request failure was traced to the unapplied `rejection_reason` column and malformed local database URLs, not the request body. The error handler now logs the original server error while keeping the safe API envelope.

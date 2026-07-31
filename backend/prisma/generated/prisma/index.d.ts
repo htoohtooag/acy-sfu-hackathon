@@ -37172,6 +37172,7 @@ export namespace Prisma {
     transaction_ref: string | null
     screenshot_url: string | null
     status: $Enums.payment_status | null
+    rejection_reason: string | null
     verified_by: string | null
     verified_at: Date | null
     created_at: Date | null
@@ -37187,6 +37188,7 @@ export namespace Prisma {
     transaction_ref: string | null
     screenshot_url: string | null
     status: $Enums.payment_status | null
+    rejection_reason: string | null
     verified_by: string | null
     verified_at: Date | null
     created_at: Date | null
@@ -37202,6 +37204,7 @@ export namespace Prisma {
     transaction_ref: number
     screenshot_url: number
     status: number
+    rejection_reason: number
     verified_by: number
     verified_at: number
     created_at: number
@@ -37227,6 +37230,7 @@ export namespace Prisma {
     transaction_ref?: true
     screenshot_url?: true
     status?: true
+    rejection_reason?: true
     verified_by?: true
     verified_at?: true
     created_at?: true
@@ -37242,6 +37246,7 @@ export namespace Prisma {
     transaction_ref?: true
     screenshot_url?: true
     status?: true
+    rejection_reason?: true
     verified_by?: true
     verified_at?: true
     created_at?: true
@@ -37257,6 +37262,7 @@ export namespace Prisma {
     transaction_ref?: true
     screenshot_url?: true
     status?: true
+    rejection_reason?: true
     verified_by?: true
     verified_at?: true
     created_at?: true
@@ -37359,6 +37365,7 @@ export namespace Prisma {
     transaction_ref: string | null
     screenshot_url: string
     status: $Enums.payment_status
+    rejection_reason: string | null
     verified_by: string | null
     verified_at: Date | null
     created_at: Date
@@ -37393,6 +37400,7 @@ export namespace Prisma {
     transaction_ref?: boolean
     screenshot_url?: boolean
     status?: boolean
+    rejection_reason?: boolean
     verified_by?: boolean
     verified_at?: boolean
     created_at?: boolean
@@ -37412,6 +37420,7 @@ export namespace Prisma {
     transaction_ref?: boolean
     screenshot_url?: boolean
     status?: boolean
+    rejection_reason?: boolean
     verified_by?: boolean
     verified_at?: boolean
     created_at?: boolean
@@ -37431,6 +37440,7 @@ export namespace Prisma {
     transaction_ref?: boolean
     screenshot_url?: boolean
     status?: boolean
+    rejection_reason?: boolean
     verified_by?: boolean
     verified_at?: boolean
     created_at?: boolean
@@ -37450,13 +37460,14 @@ export namespace Prisma {
     transaction_ref?: boolean
     screenshot_url?: boolean
     status?: boolean
+    rejection_reason?: boolean
     verified_by?: boolean
     verified_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type PaymentTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "order_id" | "milestone_id" | "amount_mmk" | "payment_method_id" | "transaction_ref" | "screenshot_url" | "status" | "verified_by" | "verified_at" | "created_at" | "updated_at", ExtArgs["result"]["paymentTransaction"]>
+  export type PaymentTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "order_id" | "milestone_id" | "amount_mmk" | "payment_method_id" | "transaction_ref" | "screenshot_url" | "status" | "rejection_reason" | "verified_by" | "verified_at" | "created_at" | "updated_at", ExtArgs["result"]["paymentTransaction"]>
   export type PaymentTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
     milestone?: boolean | PaymentTransaction$milestoneArgs<ExtArgs>
@@ -37493,6 +37504,7 @@ export namespace Prisma {
       transaction_ref: string | null
       screenshot_url: string
       status: $Enums.payment_status
+      rejection_reason: string | null
       verified_by: string | null
       verified_at: Date | null
       created_at: Date
@@ -37932,6 +37944,7 @@ export namespace Prisma {
     readonly transaction_ref: FieldRef<"PaymentTransaction", 'String'>
     readonly screenshot_url: FieldRef<"PaymentTransaction", 'String'>
     readonly status: FieldRef<"PaymentTransaction", 'payment_status'>
+    readonly rejection_reason: FieldRef<"PaymentTransaction", 'String'>
     readonly verified_by: FieldRef<"PaymentTransaction", 'String'>
     readonly verified_at: FieldRef<"PaymentTransaction", 'DateTime'>
     readonly created_at: FieldRef<"PaymentTransaction", 'DateTime'>
@@ -38846,6 +38859,7 @@ export namespace Prisma {
     transaction_ref: 'transaction_ref',
     screenshot_url: 'screenshot_url',
     status: 'status',
+    rejection_reason: 'rejection_reason',
     verified_by: 'verified_by',
     verified_at: 'verified_at',
     created_at: 'created_at',
@@ -41469,6 +41483,7 @@ export namespace Prisma {
     transaction_ref?: StringNullableFilter<"PaymentTransaction"> | string | null
     screenshot_url?: StringFilter<"PaymentTransaction"> | string
     status?: Enumpayment_statusFilter<"PaymentTransaction"> | $Enums.payment_status
+    rejection_reason?: StringNullableFilter<"PaymentTransaction"> | string | null
     verified_by?: UuidNullableFilter<"PaymentTransaction"> | string | null
     verified_at?: DateTimeNullableFilter<"PaymentTransaction"> | Date | string | null
     created_at?: DateTimeFilter<"PaymentTransaction"> | Date | string
@@ -41488,6 +41503,7 @@ export namespace Prisma {
     transaction_ref?: SortOrderInput | SortOrder
     screenshot_url?: SortOrder
     status?: SortOrder
+    rejection_reason?: SortOrderInput | SortOrder
     verified_by?: SortOrderInput | SortOrder
     verified_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -41510,6 +41526,7 @@ export namespace Prisma {
     transaction_ref?: StringNullableFilter<"PaymentTransaction"> | string | null
     screenshot_url?: StringFilter<"PaymentTransaction"> | string
     status?: Enumpayment_statusFilter<"PaymentTransaction"> | $Enums.payment_status
+    rejection_reason?: StringNullableFilter<"PaymentTransaction"> | string | null
     verified_by?: UuidNullableFilter<"PaymentTransaction"> | string | null
     verified_at?: DateTimeNullableFilter<"PaymentTransaction"> | Date | string | null
     created_at?: DateTimeFilter<"PaymentTransaction"> | Date | string
@@ -41529,6 +41546,7 @@ export namespace Prisma {
     transaction_ref?: SortOrderInput | SortOrder
     screenshot_url?: SortOrder
     status?: SortOrder
+    rejection_reason?: SortOrderInput | SortOrder
     verified_by?: SortOrderInput | SortOrder
     verified_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -41552,6 +41570,7 @@ export namespace Prisma {
     transaction_ref?: StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
     screenshot_url?: StringWithAggregatesFilter<"PaymentTransaction"> | string
     status?: Enumpayment_statusWithAggregatesFilter<"PaymentTransaction"> | $Enums.payment_status
+    rejection_reason?: StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
     verified_by?: UuidNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
     verified_at?: DateTimeNullableWithAggregatesFilter<"PaymentTransaction"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"PaymentTransaction"> | Date | string
@@ -43980,6 +43999,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -43998,6 +44018,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -44010,6 +44031,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44028,6 +44050,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44043,6 +44066,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -44055,6 +44079,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44069,6 +44094,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46145,6 +46171,7 @@ export namespace Prisma {
     transaction_ref?: SortOrder
     screenshot_url?: SortOrder
     status?: SortOrder
+    rejection_reason?: SortOrder
     verified_by?: SortOrder
     verified_at?: SortOrder
     created_at?: SortOrder
@@ -46164,6 +46191,7 @@ export namespace Prisma {
     transaction_ref?: SortOrder
     screenshot_url?: SortOrder
     status?: SortOrder
+    rejection_reason?: SortOrder
     verified_by?: SortOrder
     verified_at?: SortOrder
     created_at?: SortOrder
@@ -46179,6 +46207,7 @@ export namespace Prisma {
     transaction_ref?: SortOrder
     screenshot_url?: SortOrder
     status?: SortOrder
+    rejection_reason?: SortOrder
     verified_by?: SortOrder
     verified_at?: SortOrder
     created_at?: SortOrder
@@ -50757,6 +50786,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -50774,6 +50804,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -51377,6 +51408,7 @@ export namespace Prisma {
     transaction_ref?: StringNullableFilter<"PaymentTransaction"> | string | null
     screenshot_url?: StringFilter<"PaymentTransaction"> | string
     status?: Enumpayment_statusFilter<"PaymentTransaction"> | $Enums.payment_status
+    rejection_reason?: StringNullableFilter<"PaymentTransaction"> | string | null
     verified_by?: UuidNullableFilter<"PaymentTransaction"> | string | null
     verified_at?: DateTimeNullableFilter<"PaymentTransaction"> | Date | string | null
     created_at?: DateTimeFilter<"PaymentTransaction"> | Date | string
@@ -52920,6 +52952,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -52936,6 +52969,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -55166,6 +55200,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -55182,6 +55217,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -55746,6 +55782,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -55762,6 +55799,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -56425,6 +56463,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -56907,6 +56946,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56924,6 +56964,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56938,6 +56979,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57211,6 +57253,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -57223,6 +57266,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57239,6 +57283,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57253,6 +57298,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57710,6 +57756,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -57807,6 +57854,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57823,6 +57871,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57837,6 +57886,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57995,6 +58045,7 @@ export namespace Prisma {
     transaction_ref?: string | null
     screenshot_url: string
     status?: $Enums.payment_status
+    rejection_reason?: string | null
     verified_by?: string | null
     verified_at?: Date | string | null
     created_at?: Date | string
@@ -58019,6 +58070,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58035,6 +58087,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58049,6 +58102,7 @@ export namespace Prisma {
     transaction_ref?: NullableStringFieldUpdateOperationsInput | string | null
     screenshot_url?: StringFieldUpdateOperationsInput | string
     status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     verified_by?: NullableStringFieldUpdateOperationsInput | string | null
     verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -1,11 +1,13 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from './generated/prisma/client.js';
 import { config } from 'dotenv';
+import { z } from 'zod';
 import { createTextEmbedding } from '../src/config/gemini.js';
 import { normalizePostgresConnectionString } from '../src/config/postgres-connection.js';
 
 type LoadedEnvironment = {
   DATABASE_URL: string;
+  SUPER_ADMIN_USER_ID?: string;
 };
 
 const loadedEnvironment = config();
@@ -17,6 +19,7 @@ if (!databaseUrl) {
 
 const environment: LoadedEnvironment = {
   DATABASE_URL: normalizePostgresConnectionString(databaseUrl),
+  SUPER_ADMIN_USER_ID: z.string().uuid().optional().parse(loadedEnvironment.parsed?.SUPER_ADMIN_USER_ID),
 };
 
 const adapter = new PrismaPg({ connectionString: environment.DATABASE_URL });
@@ -54,6 +57,7 @@ const adminRoles = [
 
 const auditActions = [
   { name: 'VERIFY_PAYMENT', category: 'PAYMENTS' },
+  { name: 'REJECT_PAYMENT', category: 'PAYMENTS' },
   { name: 'MODERATE_USER', category: 'USERS' },
   { name: 'RESOLVE_DISPUTE', category: 'DISPUTES' },
 ];
@@ -128,6 +132,64 @@ function toVectorLiteral(values: number[]): string {
   return `[${values.join(',')}]`;
 }
 
+async function bootstrapSuperAdmin(userId: string): Promise<void> {
+  const user = await prisma.user.findFirst({
+    where: { id: userId, deleted_at: null },
+    select: { id: true },
+  });
+
+  if (user === null) {
+    throw new Error('SUPER_ADMIN_USER_ID must reference an existing nondeleted public user.');
+  }
+
+  const role = await prisma.role.findUnique({
+    where: { name: 'SUPER_ADMIN' },
+    select: { id: true },
+  });
+  const adminRole = await prisma.adminRole.findUnique({
+    where: { name: 'SUPER_ADMIN' },
+    select: { id: true },
+  });
+
+  if (role === null || adminRole === null) {
+    throw new Error('SUPER_ADMIN role configuration is missing.');
+  }
+
+  await prisma.$transaction(async (transaction) => {
+    await transaction.user.update({
+      where: { id: userId },
+      data: { status: 'ACTIVE' },
+    });
+
+    await transaction.userRole.upsert({
+      where: {
+        user_id_role_id: {
+          user_id: userId,
+          role_id: role.id,
+        },
+      },
+      update: {},
+      create: {
+        user_id: userId,
+        role_id: role.id,
+      },
+    });
+
+    await transaction.adminProfile.upsert({
+      where: { user_id: userId },
+      update: {
+        admin_role_id: adminRole.id,
+        is_active: true,
+      },
+      create: {
+        user_id: userId,
+        admin_role_id: adminRole.id,
+        is_active: true,
+      },
+    });
+  });
+}
+
 async function main(): Promise<void> {
   for (const role of roles) {
     await prisma.role.upsert({
@@ -175,6 +237,12 @@ async function main(): Promise<void> {
       update: auditAction,
       create: auditAction,
     });
+  }
+
+  if (environment.SUPER_ADMIN_USER_ID !== undefined) {
+    await bootstrapSuperAdmin(environment.SUPER_ADMIN_USER_ID);
+  } else {
+    console.warn('SUPER_ADMIN_USER_ID is not configured. Admin bootstrap was skipped.');
   }
 
   for (const subscriptionPlan of subscriptionPlans) {

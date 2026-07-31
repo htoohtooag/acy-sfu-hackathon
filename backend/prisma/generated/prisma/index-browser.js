@@ -456,6 +456,7 @@ exports.Prisma.PaymentTransactionScalarFieldEnum = {
   transaction_ref: 'transaction_ref',
   screenshot_url: 'screenshot_url',
   status: 'status',
+  rejection_reason: 'rejection_reason',
   verified_by: 'verified_by',
   verified_at: 'verified_at',
   created_at: 'created_at',

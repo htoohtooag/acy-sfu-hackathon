@@ -13,7 +13,7 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, _ne
     return;
   }
 
-  console.error('Unhandled request error.');
+  console.error('Unhandled request error.', error);
   response.status(500).json(
     errorResponse('INTERNAL_SERVER_ERROR', 'An unexpected error occurred.'),
   );

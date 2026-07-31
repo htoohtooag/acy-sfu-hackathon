@@ -54,3 +54,17 @@ export type {
   PaymentProofFields,
   PaymentResponse,
 } from './orders.js';
+export {
+  adminEmptyBodySchema,
+  adminPaymentIdSchema,
+  paymentDecisionSchema,
+  moderationRequestSchema,
+  moderationTargetIdSchema,
+} from './admin.js';
+export type {
+  AdminModerationResponse,
+  AdminPaymentRejectionResponse,
+  AdminPaymentVerificationResponse,
+  ModerationRequest,
+  PaymentDecisionRequest,
+} from './admin.js';

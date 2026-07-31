@@ -48,6 +48,68 @@ WHERE auth_user.email IS NOT NULL
 
 ----------- 
 
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$ BEGIN
+    IF NEW.email IS NULL THEN
+        RETURN NEW;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM public.users
+        WHERE id = NEW.id OR email = NEW.email
+    ) THEN
+        RETURN NEW;
+    END IF;
+
+    -- MODIFIED: Added full_name extraction from raw_user_meta_data
+    INSERT INTO public.users (id, email, full_name, status, updated_at)
+    VALUES (
+        NEW.id, 
+        NEW.email, 
+        COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', NEW.email),
+        'LEAD'::public.user_status, 
+        CURRENT_TIMESTAMP
+    );
+
+    RETURN NEW;
+END;
+ $$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION public.handle_new_user();
+
+-- Reconcile Auth users created before this trigger existed.
+-- MODIFIED: Added full_name extraction for existing users too
+INSERT INTO public.users (id, email, full_name, status, updated_at)
+SELECT 
+    auth_user.id, 
+    auth_user.email, 
+    COALESCE(auth_user.raw_user_meta_data->>'full_name', auth_user.raw_user_meta_data->>'name', auth_user.email),
+    'LEAD'::public.user_status, 
+    CURRENT_TIMESTAMP
+FROM auth.users AS auth_user
+WHERE auth_user.email IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM public.users AS application_user
+      WHERE application_user.id = auth_user.id
+         OR application_user.email = auth_user.email
+  );
+
+
+
+----------------
+
 CREATE INDEX IF NOT EXISTS idx_freelancer_embedding ON "freelancer_profiles" USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS idx_packages_embedding ON "packages" USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS idx_jobposts_embedding ON "job_posts" USING hnsw (embedding vector_cosine_ops);

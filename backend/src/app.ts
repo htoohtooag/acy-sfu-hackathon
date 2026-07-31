@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { env } from './config/env.js';
 import { aiSearchRouter } from './features/ai-search/ai-search.routes.js';
+import { adminRouter } from './features/admin/admin.routes.js';
 import { identityRouter } from './features/identity/identity.routes.js';
 import { jobRouter } from './features/marketplace/job.routes.js';
 import { packageRouter } from './features/marketplace/package.routes.js';
@@ -33,5 +34,6 @@ app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/ai', aiSearchRouter);
 app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/admin', adminRouter);
 
 app.use(errorHandler);

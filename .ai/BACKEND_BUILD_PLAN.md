@@ -118,11 +118,25 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
   - in order can not be that order both , only have to one job post or package
   - Implement `POST /api/v1/orders/:id/payments` (Upload screenshot to Supabase Storage, save to `payment_transactions`).
   - *Done when:* Order is created and payment proof is uploaded.
-- [ ] **Step 8: Admin APIs**
-  - Implement `PATCH /api/v1/admin/payments/:id` (Verify escrow). Update Order to `ACTIVE`.
-  - Implement `POST /api/v1/admin/users/:id/moderations` (Ban user).
-  - ALL admin actions MUST insert a row into `admin_audit_logs`.
-  - *Done when:* Admin verifies payment, Workroom unlocks, and audit log is recorded.
+
+- [ ] **Step 8: Admin APIs & Audit Logs (The Trust Engine)**
+  - **Setup & Seeding:** 
+    - Update `seed.ts` to create a default `SUPER_ADMIN` user (linking tables we need to link  we have lot of tables user, roles, admin_roles, admin_profiles).
+    - Create a strict `admin.middleware.js` (RBAC) that checks the  array for `SUPER_ADMIN` or `FINANCE_ADMIN` and etc.
+  - **Architecture:** Isolate all admin logic in `src/features/admin/` (`admin.routes.js`, `admin.controller.js`, `admin.service.js`, `admin.repo file`).
+  - **Endpoint 1: `PATCH /api/v1/admin/payments/:id` (Verify Escrow)**
+    - *Logic:* Verify the payment `status` is `PENDING_ADMIN`. 
+    - *Atomic Transaction (`prisma.$transaction`):* 
+      1. Update `payment_transactions` (`status = VERIFIED`, `verified_by = admin_id`).
+      2. Update related `orders` (`status = ACTIVE`, `is_escrow_funded = true`).
+      3. Insert into `admin_audit_logs` (`action = VERIFY_PAYMENT`).
+  - **Endpoint 2: `POST /api/v1/admin/users/:id/moderations` (Ban User)**
+    - *Logic:* Prevent self-banning and banning other admins.
+    - *Atomic Transaction (`prisma.$transaction`):*
+      1. Insert into `user_moderations` (`status = ACTIVE`).
+      2. Update `users` (`status = SUSPENDED`).
+      3. Insert into `admin_audit_logs` (`action = MODERATE_USER`).
+  - *Done when:* The seeded Super Admin can verify an escrow payment (unlocking the Workroom) and ban a user, with all actions strictly logged in the audit DB via transactions.
 
 
 ### Phase 5: Execution & Resolution
@@ -135,3 +149,38 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
   - Implement `PATCH /api/v1/orders/:id/deliverables` (Client approves). Update Order to `COMPLETED`. Expose clean file URL.
   - Implement `POST /api/v1/orders/:id/reviews`.
   - *Done when:* Client approves work, clean file is downloadable, and review is saved.
+
+
+
+
+
+
+To build an enterprise-grade Workroom, the backend must act as a strict gatekeeper. You cannot rely on the frontend to "disable" the chat input, because a hacker could bypass the UI and send a raw WebSocket event to your server. 
+
+**All security and business rules must be enforced on the backend.**
+
+Here is exactly what you need to prepare on the backend *before* the frontend can build the chat UI:
+
+### 1. The 3-Step Backend Security Pipeline for Socket.io
+When a user connects and tries to chat, your Socket.io server must run these 3 checks:
+1. **Authentication Check (On Connect):** Extract the Supabase JWT from the connection handshake. Verify it. If invalid, reject the connection.
+2. **Room Authorization Check (On `join_room`):** When the user tries to join `order_123`, query Prisma: `Does Order 123 exist, and is this user either the client_id or freelancer_id?` If no, reject the join.
+3. **The Escrow Lock (On `send_message`):** When a user sends a message, query Prisma: `What is the status of this Order?` If `status !== 'ACTIVE'` (e.g., it is `AWAITING_ESCROW`), reject the message and emit an error back to the user.
+
+### 2. REST Endpoint for Chat History
+Socket.io is for *real-time* communication. When the user refreshes the page, they need to see old messages. You must build a standard REST endpoint in your `workroom` feature:
+* **`GET /api/v1/orders/:id/messages`**: Fetches paginated messages for that order (ordered by `created_at DESC`). 
+
+---
+
+
+- [ ] **Step 9: Real-time Workroom Backend (Socket.io & Chat History)**
+  - **REST History Endpoint:** Implement `GET /api/v1/orders/:id/messages` (Paginated, e.g., 50 messages per page). Ensure the user is a participant of the order before returning data.
+  - **Socket.io Initialization:** Attach Socket.io to the Express HTTP server in `server.js`.
+  - **Auth Middleware:** Create a Socket.io middleware to extract and verify the Supabase JWT from the `auth` handshake object. Attach `socket.user.id`. Disconnect if invalid.
+  - **Room Authorization (`join_room` event):** When a user attempts to join an `order_id` room, query Prisma to verify they are the `client_id` or `freelancer_id` on that Order. If not, refuse the join.
+  - **The Escrow Lock (`send_message` event):** 
+    - When a message is received, query the Order `status`.
+    - If `status !== 'ACTIVE'`, emit a `chat_error` event back to the sender: *"Chat is locked until escrow is verified."* Do NOT broadcast the message.
+    - If `status === 'ACTIVE'`, save the message to the Prisma `messages` table, then broadcast the message to the room.
+  - *Done when:* The backend successfully authenticates connections, isolates rooms, persists messages, and strictly blocks chat for unverified escrow orders.

@@ -30,7 +30,6 @@ model Order {
   @@index([freelancer_id], map: "idx_orders_freelancer")
   @@index([status], map: "idx_orders_status")
   @@map("orders")
-
 }
 
 model Milestone {
@@ -61,6 +60,7 @@ model PaymentTransaction {
   transaction_ref   String?        @db.VarChar(255)
   screenshot_url    String
   status            payment_status @default(PENDING_ADMIN)
+  rejection_reason  String?
   verified_by       String?        @db.Uuid
   verified_at       DateTime?      @db.Timestamptz
   created_at        DateTime       @default(now()) @db.Timestamptz
