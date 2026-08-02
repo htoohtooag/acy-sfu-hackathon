@@ -18,75 +18,105 @@ This document defines the implementation logic and architectural rules for the f
 
 ## 2. Implementation Steps
 
-### Phase 1: Foundation & Infrastructure
-- [ ] **Step 1: App & Provider Setup**
-  - Initialize Next.js App Router, Tailwind, and shadcn/ui.
-  - Setup root `providers.tsx` to wrap the app with React Query Client and Zustand.
-  - Setup `lib/api-client.ts` (Axios instance with Supabase JWT interceptor).
-- [ ] **Step 2: Route Groups & Layouts**
-  - Create three route groups: `(public)`, `(auth)`, and `(app)`.
-  - Implement the distinct layouts for each group (Top Navbar for public, Minimal for auth, Sidebar for app).
-  - *Done when:* Navigation between route groups renders the correct layout shell without errors.
+# 🎨 Frontend Build Plan & Logic
+**Target:** Next.js App Router + React Query + Zustand + TailwindCSS + shadcn/ui
+**Prerequisite:** Base Next.js app is initialized. Tailwind colors, fonts, global CSS, base providers (React Query, Zustand), and the Axios API client are already configured.
 
-### Phase 2: Authentication & Onboarding
-- [ ] **Step 3: Supabase Auth Integration**
-  - Implement Login/Signup pages using `@supabase/ssr`.
-  - Implement OAuth (Google) and Email/Password logic.
-  - *Done when:* User can log in, JWT is stored in cookies, and unauthenticated users are redirected to `/login`.
-- [ ] **Step 4: Onboarding Flow**
-  - Implement Role Selection page (Client vs. Freelancer).
-  - Implement dynamic Profile Form based on selected role.
-  - Use React Hook Form + Zod for form validation.
-  - On submit, call backend API; on success, update user state and redirect to `/dashboard`.
-  - *Done when:* User completes onboarding and profile is saved in the backend.
+This document defines the implementation logic for the frontend. AI agents MUST follow this sequence. Do not skip steps or build features out of order.
 
-### Phase 3: Public Storefront (SSR)
-- [ ] **Step 5: Public Pages & Routing**
-  - Implement Landing, Browse Freelancers, and Browse Jobs pages as Server Components.
-  - Fetch data directly from the Node backend using server-side `fetch`.
-  - Implement Next.js Intercepting Routes (`(..)`) and Parallel Routes (`@modal`) for viewing freelancer/package details in a modal pop-up.
-  - *Done when:* Public pages load fast (SSR), are SEO friendly, and clicking a card opens a detail modal without losing background context.
-- [ ] **Step 6: Reusable Catalog Components**
-  - Build `<PackageCard />` and `<FreelancerAvatar />` components.
-  - Ensure these components accept props and can be reused in both the public grid and the authenticated dashboard.
-  - *Done when:* Components render correctly in multiple different parent containers.
+---
 
-### Phase 4: Authenticated Dashboard
-- [ ] **Step 7: App Layout & Role Switcher**
-  - Implement the Sidebar and Topbar for the `(app)` layout.
-  - Create a Zustand store (`useAppStore`) to track `activeRole` ('CLIENT' | 'FREELANCER').
-  - Conditionally render Sidebar navigation links based on `activeRole`.
-  - *Done when:* Clicking the Role Switcher toggle instantly updates the sidebar navigation.
-- [ ] **Step 8: Dashboard Data & React Query**
-  - Implement React Query hooks in `features/identity/api.ts` to fetch user profile and stats.
-  - Build the Dashboard overview page, mapping data based on the active role.
-  - *Done when:* Dashboard displays correct stats for Client vs. Freelancer.
+## Phase 1: Before Login (Public Storefront)
+*Goal: SEO, discovery, and conversion.*
 
-### Phase 5: AI Search & Marketplace Management
-- [ ] **Step 9: AI Search Interface**
-  - Build the AI Search page using Vercel AI SDK `useChat` hook pointing to `/api/v1/ai/search`.
-  - Parse the streamed response. If the backend sends structured UI data, render the reusable `<PackageCard />` inside the chat stream.
-  - *Done when:* User types a prompt, AI streams text, and interactive package cards appear in the chat.
-- [ ] **Step 10: CRUD Pages (Posts & Jobs)**
-  - Implement pages for Clients to manage Job Posts and Freelancers to manage Packages.
+- [ ] **Step 1: Public Navbar & Layout**
+  - Create the `(public)` route group layout.
+  - Build a sticky Top Navbar: Left (Logo + "Find Talent" / "Find Work" mega-menu dropdowns), Center (Global Search bar), Right (Log in & Join Now buttons).
+  - *Mobile:* Collapse menus and search into a full-screen `Sheet` with an `Accordion`.
+- [ ] **Step 2: Catalog Page (Find Talent)**
+  - Build the `/(public)/freelancers` page (Server Component).
+  - Layout: Left Sidebar (Filters: Category, Budget Slider, Delivery Time) + Right Main Area (Sort dropdown + Results Grid).
+  - Fetch data using server-side `fetch` with URL search params (`?search=...&min_price=...`).
+- [ ] **Step 3: Premium Line Grid & Detail Modal**
+  - Build the reusable `<PackageCard />` (Horizontal row layout: large image left, info/right right).
+  - Implement Next.js Parallel (`@modal`) and Intercepting (`(..)`) Routes for `/(public)/freelancers/[id]`.
+  - When a card is clicked, a large Modal opens over the catalog grid, displaying portfolio images, description, and pricing tiers.
+  - *Done when:* User can browse packages, filter via the sidebar (without page reloads), and view details in a pop-up modal.
+
+## Phase 2: Authentication & Onboarding
+*Goal: Frictionless capture of user data and role context.*
+
+- [ ] **Step 4: Split-Screen Auth UI**
+  - Create the `(auth)` route group layout (Split screen: Left visual/progress, Right form).
+  - **Login Page (`/login`):** Standard email/password and Google OAuth.
+  - **Signup Step 1 (`/signup`):** "The Fork". Two large cards (I'm Hiring / I'm Looking for Work). Hover reveals a character illustration.
+  - **Signup Step 2:** Email/Password (or Google OAuth). Handle the "User already exists" error gracefully by switching UI to a "Go to Login" prompt.
+- [ ] **Step 5: Dynamic Onboarding Wizard**
+  - **Signup Step 3:** Interactive form based on the role chosen in Step 1. Use underline-only inputs and pill buttons (not standard boxed forms).
+  - *Client Form:* Phone, NRC, Company Name, Industry (Pill buttons + "Others" text input).
+  - *Freelancer Form:* Phone, NRC, Headline, Skills (Tag input bubbles).
+  - **Signup Step 4 (Freelancer Only):** Years of Experience (Slider) + Experience Level (Pill buttons).
+  - On submit, call `POST /api/v1/users/me/onboarding`. On success, route to `/dashboard`.
+  - *Done when:* A new user can select a role, authenticate, and complete their profile via a multi-step wizard.
+
+## Phase 3: After Login (Dashboard Foundation)
+*Goal: SaaS-level workspace for managing work.*
+
+- [ ] **Step 6: App Layout & Grouped Sidebar**
+  - Create the `(app)` route group layout.
+  - Build the collapsible Left Sidebar with a Role Switcher Card at the top.
+  - Group navigation links: GENERAL (Home, Search, Notifications), WORK (Find Work/Talent, My Posts, My Orders), COMMUNICATION (Messages).
+  - Use Zustand (`useAppStore`) to track `activeRole` ('CLIENT' | 'FREELANCER'). Conditionally render the WORK links based on the active role.
+- [ ] **Step 7: Home Dashboard (Stats & Activity)**
+  - Build the `/(app)/dashboard` page.
+  - Row 1: 3 Stat Cards (e.g., Active Orders, Earnings, Success Rate).
+  - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
+  - Use React Query to fetch data based on `activeRole`.
+  - *Done when:* User logs in, sees the SaaS sidebar, and can toggle between Client/Freelancer views, updating the dashboard stats accordingly.
+
+## Phase 4: Marketplace Management
+*Goal: Users managing their own listings.*
+
+- [ ] **Step 8: My Packages & Job Posts (CRUD)**
+  - Build the `/(app)/posts` page (Table/List view).
+  - *Freelancer View:* List of their Packages. "Create New Package" button. Dropdown actions (Edit, Pause, Delete).
+  - *Client View:* List of their Job Posts. "Create New Job Post" button.
   - Use React Query `useMutation` for create/update/delete operations.
-  - Enforce UI limits (e.g., disable "Create New" button if the user hits their plan limit).
-  - *Done when:* Users can successfully create, edit, and soft-delete their posts via the UI.
+  - *Plan Limit UI:* If user hits their `max_packages` or `max_job_posts` limit, disable the "Create" button and show an "Upgrade Plan" tooltip.
+  - *Done when:* Users can successfully create, edit, and soft-delete their listings via the UI.
 
-### Phase 6: Transactions & Workroom
-- [ ] **Step 11: Orders & Escrow Flow**
-  - Implement the "My Orders" list pages.
-  - Implement the checkout/escrow flow (e.g., uploading KBZ Pay screenshot).
-  - Use React Query to fetch order status. Lock UI actions if `status !== 'ACTIVE'`.
-  - *Done when:* Client can view orders and upload payment proof; status badges update correctly.
-- [ ] **Step 12: Real-time Workroom**
-  - Initialize Socket.io client in `lib/socket.ts`.
-  - Build the Workroom page (`/workroom/[orderId]`).
-  - Create a `useSocketChat` hook to bridge Socket.io events and React Query state.
-  - Persist messages to DB via backend, update UI instantly via Socket.
-  - *Done when:* Two users can chat in real-time; messages survive page refresh.
-- [ ] **Step 13: Watermark Delivery Review**
-  - Build the Freelancer "Submit Work" component (file upload).
-  - Build the Client "Review Work" component.
-  - Client UI MUST conditionally render the `file_url_watermarked` if Order status is `IN_REVIEW`, and only swap to `file_url_clean` when status becomes `COMPLETED`.
-  - *Done when:* Freelancer uploads file, Client sees watermarked preview, Client approves, Client can download clean file.
+## Phase 5: AI Search & Hiring Flow
+*Goal: The core "Wow" feature for clients to find talent.*
+
+- [ ] **Step 9: AI Search Interface**
+  - Build the `/(app)/ai-search` page (Full screen, ChatGPT style).
+  - Use Vercel AI SDK `useChat` hook pointing to `/api/v1/ai/search`.
+  - Render streamed text. When the backend sends a `toolInvocations` array, render the reusable `<PackageCard />` components directly inside the chat stream.
+  - Implement Intercepting Routes so clicking a card inside the chat opens the Detail Modal over the chat UI.
+- [ ] **Step 10: Checkout & Escrow Flow**
+  - In the Detail Modal, if a Client clicks "Hire", route them to the Checkout page `/(app)/orders/checkout`.
+  - UI: Show Order Summary (Price + Platform Fee). Provide a file upload component for the KBz/Wave screenshot.
+  - Call `POST /api/v1/orders` and `POST /api/v1/orders/:id/payments`.
+  - Show a "Waiting for Admin Verification" state.
+  - *Done when:* Client uses AI to find a package, clicks hire, uploads payment proof, and sees the `AWAITING_ESCROW` status.
+
+## Phase 6: Messaging & Final Review
+*Goal: Project execution, trust delivery, and reputation.*
+
+- [ ] **Step 11: Workroom Inbox & Real-time Chat**
+  - Build the `/(app)/messages` page (2-Pane Layout: Left inbox list, Right chat view).
+  - Left Pane: Tabs (`All`, `Active`, `In Review`, `Completed`) filtering the Workroom list.
+  - Right Pane: Connect to Socket.io via `lib/socket.ts`.
+  - *Escrow Lock UI:* If the Order status is `AWAITING_ESCROW`, replace the chat input with a yellow "Chat is locked" banner.
+  - Implement file sharing (REST upload -> Socket broadcast URL).
+- [ ] **Step 12: Watermark Delivery & Approval**
+  - In the Workroom Right Pane (or a dedicated Deliverables tab):
+  - *Freelancer UI:* "Submit Final Work" file uploader.
+  - *Client UI:* If Order status is `IN_REVIEW`, display the `file_url_watermarked` image. Show a giant "Approve & Release Payment" button.
+  - On Approve, call `PATCH /api/v1/orders/:id/deliverables/:deliverableId`. Swap the image `src` to `file_url_clean` so the client can download it.
+- [ ] **Step 13: Reviews**
+  - Once Order status is `COMPLETED`, show a "Leave a Review" prompt.
+  - Modal with Star Rating (1-5) and Comment text area.
+  - Call `POST /api/v1/orders/:id/reviews`.
+  - *Done when:* Two users can chat in real-time, share files, the freelancer submits work, the client approves it, downloads the clean file, and leaves a 5-star review.
+```

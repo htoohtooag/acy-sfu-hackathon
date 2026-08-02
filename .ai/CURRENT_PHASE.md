@@ -9,7 +9,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Backend
 **Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Phase 5, Step 11 — Client reviews implementation, migration, and self checks
+**Last completed:** Backend endpoint contract documentation for frontend integration
 **Next:** Beta verification and test for client reviews, then frontend foundation work
 
 ---
@@ -81,3 +81,4 @@ Update this file after every completed feature. Any AI agent reading this should
 - Prisma continues to use `DIRECT_URL` for migrations and pooled `DATABASE_URL` for runtime connections.
 - Phase 5 Step 10 is implemented under `backend/src/features/workroom` with Sharp, private Supabase Storage, serializable delivery state changes, signed URL release, and typed Socket.io events.
 - Phase 5 Step 11 client reviews is implemented under `backend/src/features/reputation`, with a live unique review index, serializable success rate recalculation, root build, and 16 passing backend tests. Next is formal Beta verification and test; disputes remain a separate planned feature.
+- Frontend integration reference is documented in `shared/BACKEND_API.md`, covering all 22 HTTP routes and the Socket.IO workroom contract.
