@@ -42,33 +42,32 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Frontend Progress
 *(Do not start until Backend Progress is 100% complete)*
 
-### Phase 1 — Foundation & Infrastructure
-- [ ] 01 App & Provider Setup (Next.js, React Query, Zustand)
-- [ ] 02 Route Groups & Layouts (Public, Auth, App)
+### Phase 1 — Before Login (Public Storefront)
+- [ ] 01 Public Navbar & Layout
+- [ ] 02 Catalog Page (Find Talent)
+- [ ] 03 Premium Line Grid & Detail Modal
 
 ### Phase 2 — Authentication & Onboarding
-- [ ] 03 Supabase Auth Integration
-- [ ] 04 Onboarding Flow (Role & Profile Forms)
+- [ ] 04 Split-Screen Auth UI
+- [ ] 05 Dynamic Onboarding Wizard
 
-### Phase 3 — Public Storefront (SSR)
-- [ ] 05 Public Pages & Routing (SEO)
-- [ ] 06 Reusable Catalog Components
+### Phase 3 — After Login (Dashboard Foundation)
+- [ ] 06 App Layout & Grouped Sidebar
+- [ ] 07 Home Dashboard (Stats & Activity)
 
-### Phase 4 — Authenticated Dashboard
-- [ ] 07 App Layout & Role Switcher
-- [ ] 08 Dashboard Data & React Query
+### Phase 4 — Marketplace Management
+- [ ] 08 My Packages & Job Posts (CRUD)
 
-### Phase 5 — AI Search & Marketplace
-- [ ] 09 AI Search Interface (Chat UI)
-- [ ] 10 CRUD Pages (Posts & Jobs)
+### Phase 5 — AI Search & Hiring Flow
+- [ ] 09 AI Search Interface
+- [ ] 10 Checkout & Escrow Flow
 
-### Phase 6 — Transactions & Workroom
-- [ ] 11 Orders & Escrow Flow
-- [ ] 12 Real-time Workroom
-- [ ] 13 Watermark Delivery Review
+### Phase 6 — Messaging & Final Review
+- [ ] 11 Workroom Inbox & Real-time Chat
+- [ ] 12 Watermark Delivery & Approval
+- [ ] 13 Reviews
 
----
-
+-------
 
 ## Decisions Made During Build
 

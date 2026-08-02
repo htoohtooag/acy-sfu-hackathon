@@ -31,6 +31,14 @@ The AI agent on this project operates as a senior engineer. This means:
 
 ---
 
+## Next.js App Router & Rendering
+
+- **Server-First:** Every component is a React Server Component (RSC) by default. 
+- **Isolate `"use client"`:** Only add `"use client"` to the specific component that requires interactivity (e.g., a form input, a button with `onClick`). Do not mark whole pages as client components if only a small part is interactive.
+- **No Global State for Server Data:** NEVER fetch data on the server and pass it into a Zustand store. Server data should be passed as props to Client Components or fetched directly via React Query inside Client Components.
+- **Intercepting Routes:** NEVER use `useState` to open modals for viewing entities (like a freelancer profile). Use Next.js Parallel (`@modal`) and Intercepting (`(..)`) Routes so URLs are shareable and the Back button works naturally.
+
+---
 
 ## Tailwind CSS 
 
@@ -55,25 +63,42 @@ className="bg-[#F6F7FB] text-[#101828]"
 className="bg-purple-500 text-gray-600"
 ```
 
+### Custom CSS Rules (Inline vs. Tailwind Utilities)
+- **Inline Styles:** Use inline `style={{ ... }}` ONLY for minor, dynamic, one-off values (e.g., `style={{ zIndex: 999 }}` or `style={{ width: `${progress}%` }}`).
+- **Complex/Reusable CSS:** If you need substantial custom CSS or reusable class combinations, do NOT use inline styles. Instead, use Tailwind v4's native directives in `globals.css`:
+  - Use `@utility` for custom utility classes that can be used alongside standard Tailwind classes.
+  - Use `@layer components` for complex component classes (e.g., `.chat-bubble-tail`) utilizing the `@apply` directive.
 
----
+```css
+/* globals.css example */
+@utility custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
 
-## Next.js App Router & Rendering
+@layer components {
+  .chat-bubble-tail {
+    @apply relative rounded-2xl bg-muted p-3;
+    /* complex pseudo-elements can go here */
+  }
+}
+```
 
-- **Server-First:** Every component is a React Server Component (RSC) by default. 
-- **Isolate `"use client"`:** Only add `"use client"` to the specific component that requires interactivity (e.g., a form input, a button with `onClick`). Do not mark whole pages as client components if only a small part is interactive.
-- **No Global State for Server Data:** NEVER fetch data on the server and pass it into a Zustand store. Server data should be passed as props to Client Components or fetched directly via React Query inside Client Components.
-- **Intercepting Routes:** NEVER use `useState` to open modals for viewing entities (like a freelancer profile). Use Next.js Parallel (`@modal`) and Intercepting (`(..)`) Routes so URLs are shareable and the Back button works naturally.
-
----
-
-
+---------
 ## SEO Optimization
 
 - **Metadata API:** All public routes MUST export a `generateMetadata` function or a static `metadata` object. Include `title`, `description`, and `openGraph` tags.
 - **Semantic HTML:** Use `<main>`, `<article>`, `<nav>`, `<section>`, and proper heading hierarchies (`<h1>`, `<h2>`) instead of generic `<div>` tags.
 - **Sitemaps:** Public entity pages (Freelancer Profiles, Job Posts) must be included in `app/sitemap.ts`.
 - **Image Optimization:** Always use `next/image` for static images and user avatars to ensure WebP conversion and lazy loading.
+
+---
+
+## Next.js Image Optimization (next/image)
+- Mandatory Usage: ALWAYS use the next/image component for all images (static assets, user avatars, portfolio thumbnails, and Supabase file URLs). Never use standard <img> tags.
+- Read the Docs (CRITICAL): Before writing any image components, you MUST read the official documentation bundled in this project. Look inside node_modules/next/dist/docs/01-app/01-getting-started/12-images.md Do not rely on outdated next/image props from your training data.
+- Props: Verify supported props (like fill, sizes, priority, and placeholder) directly from the bundled docs before using them.
+- Remote Patterns: For images hosted on Supabase Storage, configure remotePatterns in next.config.ts according to the bundled documentation. Do not use the deprecated domains array.
 
 ---
 

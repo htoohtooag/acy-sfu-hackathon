@@ -7,6 +7,11 @@ This document defines the frontend architecture constraints and rendering strate
 
 ---
 
+# 🚨 0. Next.js Documentation Rule (CRITICAL)
+Before writing ANY Next.js code, you MUST find and read the relevant guide in node_modules/next/dist/docs/. Your training data is outdated — the bundled docs are the source of truth for App Router, Server Components, and caching. Heed deprecation notices.
+
+
+
 ## 🧠 1. Core Architectural Philosophy
 We use a **Server-First Architecture**. Every component is a React Server Component (RSC) by default. JavaScript is only sent to the browser when absolutely necessary for interactivity.
 
@@ -128,3 +133,4 @@ frontend/src/
 3. **Do not use standard `useState` for modals** when navigating to a specific entity (like a Freelancer Profile). Use Next.js Intercepting/Parallel Routes.
 4. **Do not hardcode API response types.** Always import shared types/Zod schemas from the root `/shared` folder.
 5. **Do not block the main thread.** Always use `<Suspense>` for data-heavy Server Components to improve First Contentful Paint (FCP).
+6. **Do not hardcode styles or fonts.** Always check globals.css first and use the established Tailwind v4 CSS variables (e.g., bg-card, text-muted-foreground).
