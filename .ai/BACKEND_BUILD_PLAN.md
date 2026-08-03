@@ -193,6 +193,22 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
   - *Done when:* The specific client who owns a completed order successfully submits a 5-star review for the specific freelancer who worked on it. Other clients are blocked (403), and duplicate submissions are blocked (409).
 
 
+### Phase 6 — API Gaps & Dashboard Support
+*Goal: Provide the missing read endpoints required for the Frontend Public Storefront and Dashboard.*
+
+- [ ] **Step 12: Freelancer Profile API (Public)**
+  - **Endpoint: `GET /api/v1/freelancers/:id`**
+  - *Logic:* Fetch the `freelancer_profiles` record by ID. Include the related `users` table (for name, avatar) and their active `packages` (title, price, tier, delivery_days).
+  - *Security:* Ensure `deleted_at` is null. Do not return sensitive data (like NRC or email).
+  - *Done when:* This endpoint successfully returns the data needed for both the Freelancer Profile Drawer and the Full Profile Page.
+- [ ] **Step 13: Orders List & Details APIs (Protected)**
+  - **Endpoint 1: `GET /api/v1/orders`**
+    - *Query Params:* `?role=client` or `?role=freelancer` and `?status=active|completed|in_review`.
+    - *Logic:* Fetch orders where `req.user.id` matches the requested role. Return basic order info, the other party's name/avatar, and the package/job title.
+  - **Endpoint 2: `GET /api/v1/orders/:id`**
+    - *Logic:* Fetch a single order's full details, including the participants, package details, and current escrow/delivery status. Verify `req.user.id` is a participant.
+  - *Done when:* The frontend can fetch the list of orders for the dashboard tables and the specific order details for the Workroom header.
+
 
 
 To build an enterprise-grade Workroom, the backend must act as a strict gatekeeper. You cannot rely on the frontend to "disable" the chat input, because a hacker could bypass the UI and send a raw WebSocket event to your server. 
