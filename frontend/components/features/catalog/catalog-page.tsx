@@ -6,13 +6,13 @@ import { CatalogResults } from "@/components/features/catalog/catalog-results";
 import { MobileCatalogFilters } from "@/components/features/catalog/mobile-catalog-filters";
 import type { CatalogFilters as CatalogFilterValues } from "@/features/catalog/catalog-data";
 
-type CatalogPageProps = { filters: CatalogFilterValues; items: CatalogPackage[] };
+type CatalogPageProps = { filters: CatalogFilterValues; items: CatalogPackage[]; total: number };
 
 function ResultsLoading() {
   return <div className="mt-6 space-y-5" role="status" aria-label="Loading catalog results"><div className="h-64 animate-pulse rounded-2xl bg-muted" /><div className="h-64 animate-pulse rounded-2xl bg-muted" /><span className="sr-only">Loading services</span></div>;
 }
 
-export function CatalogPage({ filters, items }: CatalogPageProps) {
+export function CatalogPage({ filters, items, total }: CatalogPageProps) {
   return (
     <main id="main-content" className="flex-1 bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
@@ -26,7 +26,7 @@ export function CatalogPage({ filters, items }: CatalogPageProps) {
         </div>
         <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[17rem_minmax(0,1fr)]">
           <aside className="hidden h-fit max-h-[calc(100vh-7rem)] self-start overflow-y-auto rounded-2xl bg-card p-5 shadow-sm lg:sticky lg:top-24 lg:block"><CatalogFilters filters={filters} /></aside>
-          <Suspense fallback={<ResultsLoading />}><CatalogResults items={items} filters={filters} total={items.length} /></Suspense>
+          <Suspense fallback={<ResultsLoading />}><CatalogResults items={items} filters={filters} total={total} /></Suspense>
         </div>
       </div>
     </main>

@@ -1,4 +1,10 @@
-import type { CreateOrderRequest, OrderResponse } from 'shared/schemas';
+import type {
+  CreateOrderRequest,
+  OrderDetail,
+  OrderListItem,
+  OrderListQuery,
+  OrderResponse,
+} from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
 import { ApiError } from '../../utils/api-error.js';
@@ -10,8 +16,11 @@ import {
   findAvailablePackage,
   findFreelancerAccount,
   findOrderById,
+  findParticipantOrderDetails,
+  listOrdersForUser,
   markJobPostHiring,
 } from './order.repository.js';
+import { mapOrderDetail, mapOrderListItem } from './order.types.js';
 import type { FreelancerPlan } from './order.types.js';
 
 function isPrismaError(error: unknown, code: string): boolean {
@@ -168,6 +177,26 @@ export async function createMarketplaceOrder(
 
     throw error;
   }
+}
+
+export async function listMarketplaceOrders(
+  userId: string,
+  query: OrderListQuery,
+): Promise<OrderListItem[]> {
+  const records = await listOrdersForUser(userId, query);
+  return records.map((record) => mapOrderListItem(record, query.role));
+}
+
+export async function getMarketplaceOrder(
+  userId: string,
+  orderId: string,
+): Promise<OrderDetail> {
+  const record = await findParticipantOrderDetails(orderId, userId);
+  if (record === null) {
+    throw new ApiError(404, 'ORDER_NOT_FOUND', 'The order was not found.');
+  }
+
+  return mapOrderDetail(record);
 }
 
 export function mapOrder(order: {

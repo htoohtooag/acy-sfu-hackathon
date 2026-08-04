@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PackageDetailInteractive } from "@/components/features/catalog/package-detail-interactive";
 import { PackageReportIssue } from "@/components/features/catalog/package-report-issue";
 import { PackageTierContext } from "@/components/features/catalog/package-tier-context";
-import { catalogPackagePresentation, findCatalogPackageDetailPresentation, getFreelancerPackages, mockCatalogPackages } from "@/features/catalog/mock-data";
+import { catalogPackagePresentation, createFallbackCatalogPackageDetailPresentation, findCatalogPackageDetailPresentation, getFreelancerPackages, mockCatalogPackages } from "@/features/catalog/mock-data";
 import { cn } from "@/lib/utils";
 
 interface PackageDetailContentProps {
@@ -15,18 +15,16 @@ interface PackageDetailContentProps {
 }
 
 export function PackageDetailContent({ item, mode }: PackageDetailContentProps) {
-  const presentation = findCatalogPackageDetailPresentation(item.id);
+  const presentation = findCatalogPackageDetailPresentation(item.id) ?? createFallbackCatalogPackageDetailPresentation(item);
   const fallbackPresentation = catalogPackagePresentation[item.id];
   const freelancerName = item.freelancer.user.full_name ?? "TalentScout freelancer";
   const initials = freelancerName.split(" ").map((part) => part[0]).join("").slice(0, 2);
-
-  if (!presentation || !fallbackPresentation) return null;
 
   const relatedPackages = presentation.relatedPackageIds.map((id) => mockCatalogPackages.find((packageItem) => packageItem.id === id) ?? undefined).filter((packageItem): packageItem is CatalogPackage => Boolean(packageItem));
   const otherPackages = getFreelancerPackages(item.freelancer_id).filter((packageItem) => packageItem.id !== item.id);
   const related = relatedPackages.length > 0 ? relatedPackages : otherPackages;
   const visibleSkills = presentation.skillsAndDeliverables.slice(0, 4);
-  const context = <dl className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-4 text-xs"><div><dt className="text-muted-foreground">Published</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><CalendarDays aria-hidden="true" className="size-3.5 text-muted-foreground" /><time dateTime={presentation.publishedOn}>{new Date(`${presentation.publishedOn}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time></dd></div><div><dt className="text-muted-foreground">Based in</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><MapPin aria-hidden="true" className="size-3.5 text-muted-foreground" />{item.freelancer.location_city ?? "Myanmar"}</dd></div><div><dt className="text-muted-foreground">Rating</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><Star aria-hidden="true" className="size-3.5 fill-current text-primary" />{presentation.rating.toFixed(1)} <span className="font-normal text-muted-foreground">({presentation.reviewCount})</span></dd></div></dl>;
+  const context = <dl className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-4 text-xs"><div><dt className="text-muted-foreground">Published</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><CalendarDays aria-hidden="true" className="size-3.5 text-muted-foreground" /><time dateTime={presentation.publishedOn}>{new Date(`${presentation.publishedOn}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time></dd></div><div><dt className="text-muted-foreground">Based in</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><MapPin aria-hidden="true" className="size-3.5 text-muted-foreground" />{item.freelancer.location_city ?? "Myanmar"}</dd></div><div><dt className="text-muted-foreground">Rating</dt><dd className="mt-1 flex items-center gap-1.5 font-medium text-foreground"><Star aria-hidden="true" className="size-3.5 fill-current text-primary" />{fallbackPresentation ? `${presentation.rating.toFixed(1)} (${presentation.reviewCount})` : "New profile"}</dd></div></dl>;
   const identity = <Link href={`/freelancers/profile/${item.freelancer.id}`} className="mt-4 inline-flex items-center gap-2 rounded-xl text-start focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"><span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground" aria-hidden="true">{initials}</span><span><span className="flex items-center gap-1 text-sm font-semibold text-foreground">{freelancerName}{item.freelancer.is_verified ? <BadgeCheck aria-label="Verified freelancer" className="size-3.5 text-primary" /> : null}</span><span className="mt-0.5 block text-xs text-muted-foreground">{item.freelancer.headline ?? "Independent professional"}</span></span></Link>;
 
   return <article className={cn("mx-auto w-full", mode === "page" && "max-w-5xl")}>

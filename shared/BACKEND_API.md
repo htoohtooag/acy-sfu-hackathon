@@ -46,11 +46,14 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | DELETE | `/api/v1/packages/:id` | Yes | `FREELANCER` | 200 |
 | GET | `/api/v1/jobs` | No | None | 200 |
 | GET | `/api/v1/jobs/:id` | No | None | 200 |
+| GET | `/api/v1/freelancers/:id` | No | None | 200 |
 | POST | `/api/v1/jobs` | Yes | `CLIENT` | 201 |
 | PATCH | `/api/v1/jobs/:id` | Yes | `CLIENT` | 200 |
 | DELETE | `/api/v1/jobs/:id` | Yes | `CLIENT` | 200 |
 | POST | `/api/v1/ai/search` | Yes | `CLIENT` | Streaming response |
 | POST | `/api/v1/orders` | Yes | `CLIENT` | 201 |
+| GET | `/api/v1/orders` | Yes | Authenticated role | 200 |
+| GET | `/api/v1/orders/:id` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/payments` | Yes | `CLIENT` | 201 |
 | GET | `/api/v1/orders/:id/messages` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/deliverables` | Yes | Order freelancer | 201 |
@@ -59,7 +62,80 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | PATCH | `/api/v1/admin/payments/:id` | Yes | `SUPER_ADMIN` or `FINANCE_ADMIN` | 200 |
 | POST | `/api/v1/admin/users/:id/moderations` | Yes | `SUPER_ADMIN` or `MODERATION_ADMIN` | 200 |
 
-There are currently no HTTP routes for listing orders or fetching one order by ID.
+The public freelancer profile route and protected order read routes are described below.
+
+## Public freelancer profiles
+
+### Get a public freelancer profile
+
+```http
+GET /api/v1/freelancers/:id
+```
+
+`id` is the `freelancer_profiles.id` UUID. The response contains public profile fields, public statistics, the related user's name and avatar, active nondeleted package summaries, and bounded public work history. Work history includes completed orders and active or in review orders only. It does not contain email, phone, NRC, identity verification data, client identity, payment data, messages, deliverables, embeddings, or private storage paths.
+
+Success: `200` with `data` containing:
+
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "headline": "Product designer",
+  "bio": "Designs useful products.",
+  "skills": ["Product design"],
+  "years_of_experience": 5,
+  "location_city": "Yangon",
+  "success_rate": "94.50",
+  "is_verified": true,
+  "completed_projects_count": 12,
+  "ongoing_projects_count": 1,
+  "experience_level": { "id": "uuid", "name": "MID", "display_name": "Mid level" },
+  "user": { "id": "uuid", "full_name": "Aye Aye", "avatar_url": null },
+  "packages": [],
+  "work_history": [
+    {
+      "id": "uuid",
+      "title": "Brand identity",
+      "rating": 5,
+      "contract_type": "PACKAGE",
+      "rate_mmk": "200000",
+      "start_date": "2026-07-01T00:00:00.000Z",
+      "end_date": "2026-07-08T00:00:00.000Z",
+      "review": "Clear communication and thoughtful work.",
+      "skills": ["Branding"],
+      "status": "completed"
+    }
+  ]
+}
+```
+
+Important errors: `VALIDATION_ERROR` for a malformed UUID and `FREELANCER_NOT_FOUND` for a missing, deleted, or unavailable profile.
+
+## Order read routes
+
+### List the authenticated user's orders
+
+```http
+GET /api/v1/orders?role=client&status=active
+Authorization: Bearer <token>
+```
+
+`role` is required and must be `client` or `freelancer`. `status` is optional and must be `active`, `completed`, or `in_review`. The backend matches the requested role to the authenticated user's order foreign key. It never returns another user's orders.
+
+Each list item includes order ids, source type and ids, string money values, status, escrow funding state, timestamps, the other participant's name and avatar, and the package or job title. Deleted orders and deleted source records are excluded from the visible source summary.
+
+Important errors: `UNAUTHORIZED` and `VALIDATION_ERROR`.
+
+### Get an order detail
+
+```http
+GET /api/v1/orders/:id
+Authorization: Bearer <token>
+```
+
+The authenticated user must be either the order client or freelancer. A participant receives both participant identities, package or job details, escrow state, payment statuses, and deliverable metadata and statuses. Monetary values and file sizes are strings, dates are ISO date time strings, and clean, watermarked, and payment screenshot storage paths are never returned.
+
+Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, and `ORDER_NOT_FOUND`.
 
 ## Health
 

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   createOrderSchema,
+  orderListQuerySchema,
   paymentProofFieldsSchema,
 } from 'shared/schemas';
 
@@ -33,4 +34,13 @@ test('payment proof fields reject client controlled transaction state', () => {
     payment_method_id: '00000000-0000-4000-8000-000000000001',
     status: 'VERIFIED',
   }).success, false);
+});
+
+test('order list query requires a supported role and accepts a supported status', () => {
+  assert.deepEqual(orderListQuerySchema.parse({ role: 'client', status: 'in_review' }), {
+    role: 'client',
+    status: 'in_review',
+  });
+  assert.equal(orderListQuerySchema.safeParse({ role: 'admin' }).success, false);
+  assert.equal(orderListQuerySchema.safeParse({ role: 'client', status: 'active', page: '1' }).success, false);
 });

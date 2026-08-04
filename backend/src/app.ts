@@ -6,6 +6,7 @@ import { adminRouter } from './features/admin/admin.routes.js';
 import { identityRouter } from './features/identity/identity.routes.js';
 import { jobRouter } from './features/marketplace/job.routes.js';
 import { packageRouter } from './features/marketplace/package.routes.js';
+import { freelancerProfileRouter } from './features/marketplace/freelancer-profile.routes.js';
 import { reviewRouter } from './features/reputation/review.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
 import { workroomRouter } from './features/workroom/workroom.routes.js';
@@ -34,6 +35,7 @@ app.get('/api/v1/health', (_request, response) => {
 app.use('/api/v1/users', identityRouter);
 app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/freelancers', freelancerProfileRouter);
 app.use('/api/v1/ai', aiSearchRouter);
 app.use('/api/v1/orders', workroomRouter);
 app.use('/api/v1/orders', orderRouter);

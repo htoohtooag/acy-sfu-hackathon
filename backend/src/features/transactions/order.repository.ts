@@ -1,4 +1,4 @@
-import type { CreateOrderRequest, PaymentProofFields } from 'shared/schemas';
+import type { CreateOrderRequest, OrderListQuery, PaymentProofFields } from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
 import type {
@@ -9,8 +9,10 @@ import type {
   PackageOrderSource,
   PaymentOrderRecord,
   PaymentRecord,
+  OrderDetailReadRecord,
+  OrderListReadRecord,
 } from './order.types.js';
-import { orderSelect } from './order.types.js';
+import { orderDetailReadSelect, orderListReadSelect, orderSelect } from './order.types.js';
 
 export type TransactionClient = Prisma.TransactionClient;
 export type OrderClient = TransactionClient | typeof prisma;
@@ -165,6 +167,43 @@ export async function findOrderById(
   return client.order.findFirst({
     where: { id: orderId, deleted_at: null },
     select: orderSelect,
+  });
+}
+
+function toOrderStatus(status: OrderListQuery['status']): 'ACTIVE' | 'COMPLETED' | 'IN_REVIEW' | undefined {
+  if (status === undefined) return undefined;
+  return status === 'active' ? 'ACTIVE' : status === 'completed' ? 'COMPLETED' : 'IN_REVIEW';
+}
+
+export async function listOrdersForUser(
+  userId: string,
+  query: OrderListQuery,
+): Promise<OrderListReadRecord[]> {
+  const where: Prisma.OrderWhereInput = {
+    deleted_at: null,
+    ...(query.role === 'client' ? { client_id: userId } : { freelancer_id: userId }),
+  };
+  const status = toOrderStatus(query.status);
+  if (status !== undefined) where.status = status;
+
+  return prisma.order.findMany({
+    where,
+    orderBy: [{ created_at: 'desc' }, { id: 'desc' }],
+    select: orderListReadSelect,
+  });
+}
+
+export async function findParticipantOrderDetails(
+  orderId: string,
+  userId: string,
+): Promise<OrderDetailReadRecord | null> {
+  return prisma.order.findFirst({
+    where: {
+      id: orderId,
+      deleted_at: null,
+      OR: [{ client_id: userId }, { freelancer_id: userId }],
+    },
+    select: orderDetailReadSelect,
   });
 }
 

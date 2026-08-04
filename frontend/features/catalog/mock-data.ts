@@ -278,6 +278,27 @@ export function findCatalogPackageDetailPresentation(id: string): CatalogPackage
   return catalogPackageDetailPresentation[id];
 }
 
+export function createFallbackCatalogPackageDetailPresentation(item: CatalogPackage): CatalogPackageDetailPresentation {
+  const price = item.price_mmk;
+  return {
+    categories: [],
+    languages: [],
+    skills: item.features,
+    englishLevel: "Not specified",
+    imageUrl: "",
+    rating: 0,
+    reviewCount: 0,
+    revisions: "Details on request",
+    visualTone: "primary",
+    role: item.freelancer.headline ?? "Independent professional",
+    publishedOn: item.created_at.slice(0, 10),
+    skillsAndDeliverables: item.features,
+    gallery: [],
+    tiers: [{ id: "default", name: "Basic", priceMmk: price, summary: item.description ?? "A tailored service from this freelancer.", deliveryDays: item.delivery_days, revisions: "Details on request", features: item.features }],
+    relatedPackageIds: [],
+  };
+}
+
 export function findFreelancerProfilePresentation(id: string): FreelancerProfilePresentation | undefined {
   return freelancerProfilePresentation[id];
 }

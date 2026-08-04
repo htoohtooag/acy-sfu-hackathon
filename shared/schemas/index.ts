@@ -4,6 +4,8 @@ export {
   onboardingRequestSchema,
 } from './onboarding.js';
 export type { OnboardingRequest, OnboardingResponse } from './onboarding.js';
+export { freelancerProfileIdSchema } from './freelancers.js';
+export type { FreelancerPublicPackage, FreelancerPublicProfile, FreelancerWorkHistoryItem } from './freelancers.js';
 export {
   catalogPageQuerySchema,
   createJobPostSchema,
@@ -46,6 +48,7 @@ export type {
 export {
   createOrderSchema,
   orderIdSchema,
+  orderListQuerySchema,
   paymentProofFieldsSchema,
 } from './orders.js';
 export type {
@@ -53,6 +56,13 @@ export type {
   OrderResponse,
   PaymentProofFields,
   PaymentResponse,
+  OrderDetail,
+  OrderDeliverableSummary,
+  OrderListItem,
+  OrderListQuery,
+  OrderParticipant,
+  OrderPaymentSummary,
+  OrderSourceSummary,
 } from './orders.js';
 export {
   adminEmptyBodySchema,

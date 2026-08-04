@@ -42,6 +42,16 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - Implement Next.js Parallel (`@modal`) and Intercepting (`(..)`) Routes for `/(public)/freelancers/[id]`.
   - When a card is clicked, a large Modal opens over the catalog grid, displaying portfolio images, description, and pricing tiers.
   - *Done when:* User can browse packages, filter via the sidebar (without page reloads), and view details in a pop-up modal.
+- [ ] **Step 3.2: Job Posts Catalog (Find Work)**
+  - Build the `/(public)/jobs` page (Server Component) to display open job posts posted by clients.
+  - Layout: Clean list or split-pane view showing Job Title, Budget Range, Expected Deadline, and Client Company Name.
+  - *Data Fetching:* Use server-side `fetch` to `GET /api/v1/jobs`.
+  - *SEO:* Export a static `metadata` object with title "Find Work | TalentScout" and description.
+- [ ] **Step 3.3: Sitemap & Robots.txt (SEO Finalization)**
+  - Create `app/sitemap.ts` to dynamically fetch all active packages and freelancers, generating a sitemap for Google Search Console.
+  - Create `app/robots.ts` to allow search engine crawling of public `(public)` routes while blocking `(auth)` and `(app)` routes.
+  - *Done when:* The public storefront is fully browseable, modals/drawers work seamlessly, and all pages have proper SEO metadata and a valid sitemap.
+
 
 ## Phase 2: Authentication & Onboarding
 *Goal: Frictionless capture of user data and role context.*
