@@ -127,6 +127,7 @@ export async function authenticateSupabaseUser(token: string): Promise<Authentic
   return {
     id: databaseUser.id,
     email: databaseUser.email,
+    status: databaseUser.status,
     roles,
   };
 }

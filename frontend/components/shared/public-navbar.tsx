@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 type MenuKey = "talent" | "work" | null;
 
-export function PublicNavbar() {
+export function PublicNavbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
 
   useEffect(() => {
@@ -70,16 +70,13 @@ export function PublicNavbar() {
             <label className="sr-only" htmlFor="desktop-service-search">Search services</label>
             <input id="desktop-service-search" name="search" type="search" placeholder="Search services" className="min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground" />
           </form>
-          <Link href="/login" className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
-            Log in
-          </Link>
-          <Button nativeButton={false} render={<Link href="/signup">Join now</Link>} />
+          {isAuthenticated ? <Button nativeButton={false} render={<Link href="/dashboard">Go to Dashboard</Link>} /> : <><Link href="/login" className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Log in</Link><Button nativeButton={false} render={<Link href="/signup">Join now</Link>} /></>}
         </div>
         <div className="ms-auto flex items-center gap-2 lg:hidden">
           <Link href="/freelancers" aria-label="Search services" className="inline-flex size-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
             <Search aria-hidden="true" className="size-5" />
           </Link>
-          <MobileNavbar />
+          <MobileNavbar isAuthenticated={isAuthenticated} />
         </div>
         {openMenu === "talent" ? (
           <div onPointerEnter={() => setOpenMenu("talent")}>

@@ -39,6 +39,7 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | GET | `/api/v1/health` | No | None | 200 |
 | GET | `/api/v1/users/me` | Yes | Any active user | 200 |
 | POST | `/api/v1/users/me/onboarding` | Yes | Any active user | 200 |
+| GET | `/api/v1/lookups/experience-levels` | Yes | Any authenticated user | 200 |
 | GET | `/api/v1/packages` | No | None | 200 |
 | GET | `/api/v1/packages/:id` | No | None | 200 |
 | POST | `/api/v1/packages` | Yes | `FREELANCER` | 201 |
@@ -230,6 +231,15 @@ This route is useful for checking that the backend process is reachable.
 `budget_min_mmk`, `budget_max_mmk`, `expected_deadline`, `company_name`, `industry`, `full_name`, and `avatar_url` may be `null` where the database has no value. Job status is one of `OPEN`, `HIRING`, or `CLOSED`.
 
 ## Identity
+
+### List active experience levels
+
+```http
+GET /api/v1/lookups/experience-levels
+Authorization: Bearer <token>
+```
+
+Success: `200` with the active experience levels ordered by `sort_order`.
 
 ### Get the current user
 

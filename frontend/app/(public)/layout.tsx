@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
-import { PublicNavbar } from "@/components/shared/public-navbar";
+import { PublicNavbarServer } from "@/components/shared/public-navbar-server";
 
 export default function PublicLayout({ children, modal, drawer }: { children: ReactNode; modal?: ReactNode; drawer?: ReactNode }) {
   return (
     <>
-      <PublicNavbar />
+      <PublicNavbarServer />
       {children}
       {modal ?? null}
       {drawer ?? null}

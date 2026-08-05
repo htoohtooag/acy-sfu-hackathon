@@ -10,6 +10,7 @@ import { freelancerProfileRouter } from './features/marketplace/freelancer-profi
 import { reviewRouter } from './features/reputation/review.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
 import { workroomRouter } from './features/workroom/workroom.routes.js';
+import { lookupRouter } from './features/lookups/lookup.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { successResponse } from './utils/api-response.js';
 
@@ -33,6 +34,7 @@ app.get('/api/v1/health', (_request, response) => {
 });
 
 app.use('/api/v1/users', identityRouter);
+app.use('/api/v1/lookups', lookupRouter);
 app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/jobs', jobRouter);
 app.use('/api/v1/freelancers', freelancerProfileRouter);
@@ -43,5 +45,4 @@ app.use('/api/v1/orders', reviewRouter);
 app.use('/api/v1/admin', adminRouter);
 
 app.use(errorHandler);
-
 

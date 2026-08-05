@@ -16,7 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-export function MobileNavbar() {
+export function MobileNavbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   return (
     <div className="lg:hidden">
       <Sheet>
@@ -77,8 +77,7 @@ export function MobileNavbar() {
             </ul>
           </nav>
           <div className="mt-auto grid gap-3 border-t border-border pt-5 sm:grid-cols-2">
-            <SheetClose render={<Button nativeButton={false} variant="outline" render={<Link href="/login">Log in</Link>} />} />
-            <SheetClose render={<Button nativeButton={false} render={<Link href="/signup">Join now</Link>} />} />
+            {isAuthenticated ? <SheetClose render={<Button nativeButton={false} render={<Link href="/dashboard">Go to Dashboard</Link>} />} /> : <><SheetClose render={<Button nativeButton={false} variant="outline" render={<Link href="/login">Log in</Link>} />} /><SheetClose render={<Button nativeButton={false} render={<Link href="/signup">Join now</Link>} />} /></>}
           </div>
         </SheetContent>
       </Sheet>

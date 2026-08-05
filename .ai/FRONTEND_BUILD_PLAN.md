@@ -56,33 +56,80 @@ This document defines the implementation logic for the frontend. AI agents MUST 
 ## Phase 2: Authentication & Onboarding
 *Goal: Frictionless capture of user data and role context.*
 
-- [ ] **Step 4: Split-Screen Auth UI**
+- [ ] **Step 4: Split-Screen Auth UI & Supabase Integration**
   - Create the `(auth)` route group layout (Split screen: Left visual/progress, Right form).
-  - **Login Page (`/login`):** Standard email/password and Google OAuth.
-  - **Signup Step 1 (`/signup`):** "The Fork". Two large cards (I'm Hiring / I'm Looking for Work). Hover reveals a character illustration.
-  - **Signup Step 2:** Email/Password (or Google OAuth). Handle the "User already exists" error gracefully by switching UI to a "Go to Login" prompt.
-- [ ] **Step 5: Dynamic Onboarding Wizard**
-  - **Signup Step 3:** Interactive form based on the role chosen in Step 1. Use underline-only inputs and pill buttons (not standard boxed forms).
-  - *Client Form:* Phone, NRC, Company Name, Industry (Pill buttons + "Others" text input).
-  - *Freelancer Form:* Phone, NRC, Headline, Skills (Tag input bubbles).
-  - **Signup Step 4 (Freelancer Only):** Years of Experience (Slider) + Experience Level (Pill buttons).
-  - On submit, call `POST /api/v1/users/me/onboarding`. On success, route to `/dashboard`.
-  - *Done when:* A new user can select a role, authenticate, and complete their profile via a multi-step wizard.
+  - **Login Page (`/login`):** Standard email/password and Google OAuth using `@supabase/ssr` i have already eanabled in the supabase and .env GOOGLE_OAUTH_REDIRECT_URL already have callback url form supabase. (left image from frontend/public/auth/logins1)
+  - **Signup Step 1 (`/signup`):** "The Fork". Two large cards (I'm Hiring / I'm Looking for Work). Hover reveals a character illustration (svg image under frontend/public/masscot/mascot-auth2 and mascot-auth). (left image from frontend/public/auth/signups1_choice)
+  - **Signup Step 2:** Email/Password (or Google OAuth). (left image from frontend/public/auth/signups2)
+  - *Enterprise Security/UX:* 
+    - Use Zustand to persist the selected role across the OAuth redirect.
+    - Handle the Supabase "User already registered" error gracefully by switching the UI to a "Go to Login" prompt instead of showing a raw error.
+    - Implement a Smart Router (`/auth/callback`): Upon returning from Supabase, fetch `GET /api/v1/users/me`. If `status === 'ACTIVE'`, route to `/dashboard`. If `status === 'LEAD'`, route to Step 5 (Onboarding).
+
+- [ ] **Step 5: Dynamic Onboarding Wizard (Interactive UI)**
+  - Build a multi-step wizard (`/onboarding`). Use React Hook Form + Zod for validation.
+  - *Design System:* Use underline-only inputs and pill buttons (not standard boxed forms) for a modern, frictionless feel. 
+  - **Client Form (Step 3):** (left image from frontend/public/auth/obs3)
+    - *Phone Number* (Input with `+95` prefix).
+    - *NRC Number* (Formatted Input).
+    - *Company Name* (Input).
+    - *Industry* (Selectable Pill buttons: Tech, F&B, Retail, Fashion, Media + "Others" text input).
+  - **Freelancer Form (Step 3 & 4):** (left image from frontend/public/auth/obs3 and obs4)
+    - *Step 3:* *Phone Number*, *NRC Number*, *Headline* (Large centered text input).
+    - *Step 3 (Skills):* Tag Input component. User types a skill, presses Enter, and it appears as a removable badge/bubble.
+    - *Step 4:* *Years of Experience* (Visual Range Slider) + *Experience Level* (Pill buttons: Entry, Intermediate, Expert).
+  - *Backend Connection:* On submit, call `POST /api/v1/users/me/onboarding` with the JWT. 
+  - *Production Rules:*
+    - Do not send sensitive data (like NRC) in URL params.
+    - Map the selected Experience Level pill to the correct `experience_level_id` (UUID) by fetching lookup tables from the backend if necessary.
+    - On API success (backend flips `status` to `ACTIVE` and generates embedding), route the user to `/dashboard`.
+    - On API error (e.g., validation fail), show inline field errors using React Hook Form.
+  - *Done when:* A new user can select a role, authenticate via Supabase, complete the interactive profile form, and successfully hit the onboarding API to become an `ACTIVE` user.
+
 
 ## Phase 3: After Login (Dashboard Foundation)
 *Goal: SaaS-level workspace for managing work.*
 
-- [ ] **Step 6: App Layout & Grouped Sidebar**
+- [x] **Step 6: App Layout, React Query & Role-Based Sidebar**
   - Create the `(app)` route group layout.
-  - Build the collapsible Left Sidebar with a Role Switcher Card at the top.
-  - Group navigation links: GENERAL (Home, Search, Notifications), WORK (Find Work/Talent, My Posts, My Orders), COMMUNICATION (Messages).
-  - Use Zustand (`useAppStore`) to track `activeRole` ('CLIENT' | 'FREELANCER'). Conditionally render the WORK links based on the active role.
-- [ ] **Step 7: Home Dashboard (Stats & Activity)**
+  - **Data Layer (React Query):**  Setup a useCurrentUser hook (fetches GET /api/v1/users/me for roles/plan). Setup a useRecentWorkrooms hook (fetches top 3 recent workrooms for the sidebar quick-access).
+  - Setup useSidebarData (fetches recent workrooms, active packages/jobs, and unread notification counts).
+  - **State Sync (Zustand):** Create a `useAppStore` Zustand store. Sync the React Query data to set `activeRole` (defaulting to 'CLIENT' or 'FREELANCER' based on what profiles they have) and `planLevel` (FREE, GOLD, DIAMOND).
+  - **Sidebar UI (Grouped & Role-Specific):**
+    - Build a collapsible Left Sidebar wiht shadcn base ui nad with out system color.
+    - **Profile Pop-up Box (Top):** A clickable card showing the user's Avatar, Name, and `activeRole`. Clicking it opens a `shadcn/ui Popover` containing:
+      1. **Role Switcher:** Radio buttons/toggles to switch between 'Client View' and 'Freelancer View' (only if they have both profiles). Update Zustand `activeRole` on click.
+      2. **Plan CTA:** If `planLevel === 'FREE'`, show a highlighted "Upgrade to Gold" button. If Pro, show "Manage Membership".
+      3. **Links:** "My Profile", "Settings". 
+      4. **Accout health:**: health of our acc
+    - **Navigation Links (Conditionally Rendered based on `activeRole`):**
+      - *GENERAL:* Home, Search, Notifications (, Notifications (with a red unread count badge if > 0).)
+      - *WORK (CLIENT):* AI Talent Search, My Job Posts, My Orders
+      - *WORK (FREELANCER):* Find Work, My Packages, My Orders
+      - *COMMUNICATION:* Messages  
+    - Packages or job posts (base on user role)
+        - (with a colorful Package icon).show top 2-3 active packages or posts with a distinct icon color 
+    - RECENT CHATS (Dynamic):
+        - Label: "Recent Messages".
+        - Render the top 3 workrooms from useRecentWorkrooms data.
+        - Each item shows a small avatar, the client/freelancer name, and a 1-line preview.
+        - Clicking it routes directly to /messages/[orderId].
+        - COMMUNICATION: "View All Messages" link at the bottom.
+    - **Bottom Pinned:** Settings.
+
+
+- [ ] **Step 7: Home Dashboard (Analytics & Stats)**
   - Build the `/(app)/dashboard` page.
-  - Row 1: 3 Stat Cards (e.g., Active Orders, Earnings, Success Rate).
-  - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
-  - Use React Query to fetch data based on `activeRole`.
-  - *Done when:* User logs in, sees the SaaS sidebar, and can toggle between Client/Freelancer views, updating the dashboard stats accordingly.
+  - **UI:** Standard SaaS analytics dashboard. 
+    - Row 1: 3 Stat Cards (Active Orders, Earnings/Spent, Success Rate/Reviews).
+    - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
+  - *Note:* NO AI Chat on this page. Use React Query to fetch `GET /api/v1/orders`.
+- [ ] **Step 7.1: Notifications Page (Mail-Style)**
+  - Build the `/(app)/notifications` page.
+  - **UI:** A clean, email-style list of system alerts (Offer Received, Escrow Verified, etc.).
+  - Fetch `GET /api/v1/notifications`. Mark as read when clicked.
+
+
 
 ## Phase 4: Marketplace Management
 *Goal: Users managing their own listings.*
@@ -109,6 +156,18 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - Call `POST /api/v1/orders` and `POST /api/v1/orders/:id/payments`.
   - Show a "Waiting for Admin Verification" state.
   - *Done when:* Client uses AI to find a package, clicks hire, uploads payment proof, and sees the `AWAITING_ESCROW` status.
+- [ ] **Step 9: Dedicated AI Search Page (Docs Chat Style)**
+  - Build the `/(app)/ai-search` page (Full screen, dedicated route).
+  - Use Vercel AI SDK `useChat` hook. The user gets a clean, full-screen chat interface (like ChatGPT/Docs AI) to find talent.
+  - Package Cards render inside the stream.
+- [ ] **Step 10: Package Checkout & Escrow Flow**
+  - In the Package Detail Modal, Client clicks "Hire". Route to Checkout.
+  - Upload payment proof -> Status `AWAITING_ESCROW`.
+- [ ] **Step 10.1: Custom Offer & Proposal Flow (Upwork Style)**
+  - **Client UI:** On Freelancer Profile, "Request Project Offer" modal -> Calls `POST /api/v1/orders/custom-request`.
+  - **Freelancer UI:** On Job Post Detail, "Submit Proposal" modal -> Calls `POST /api/v1/orders/custom-offer`.
+  - **Acceptance:** Client gets a notification, clicks "Accept Offer" -> Routes to Escrow Checkout.
+
 
 ## Phase 6: Messaging & Final Review
 *Goal: Project execution, trust delivery, and reputation.*

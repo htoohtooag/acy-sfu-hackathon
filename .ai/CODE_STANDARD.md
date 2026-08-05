@@ -40,6 +40,12 @@ The AI agent on this project operates as a senior engineer. This means:
 
 ---
 
+## API Contract & Documentation
+- Source of Truth: The authoritative guide for all backend routes, HTTP methods, and request/response payloads is the shared/BACKEND_API.md file.
+- Frontend Implementation: Before making any API calls from the frontend, you MUST consult shared/BACKEND_API.md to verify the exact endpoint paths, expected query parameters, and response envelope structure.
+- Backend Synchronization: Whenever you create, modify, or delete an API route in the backend, you MUST immediately update shared/BACKEND_API.md so the frontend implementation stays accurate.
+- Shared Types: Never hardcode API response types in the frontend. Always import Zod schemas and TypeScript types from the /shared folder.
+
 ## Tailwind CSS 
 
 This project uses **Tailwind CSS v4**. All design tokens are defined using the `@theme` directive in `app/globals.css`. No `tailwind.config.ts` needed for colors or tokens.
