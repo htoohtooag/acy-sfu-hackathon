@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Frontend
 **Active Plan File:** `FRONTEND_BUILD_PLAN.md`
-**Last completed:** Frontend Phase 3 Step 6 app layout and grouped sidebar
-**Next:** Frontend Phase 3 Step 7 home dashboard stats and activity
+**Last completed:** Authenticated dashboard search routing fix after Frontend Phase 4 Step 8
+**Next:** Frontend Phase 5 Step 9 AI Search Interface
 
 ---
 
@@ -51,7 +51,7 @@ Update this file after every completed feature. Any AI agent reading this should
   - `POST /api/v1/orders/custom-offer` (Freelancer only) - Freelancer sends a custom offer to a client (creates an Order with `source_type = CUSTOM_OFFER` and `status = AWAITING_ACCEPTANCE`). Triggers a notification to the Client.
   - `POST /api/v1/orders/custom-request` (Client only) - Client requests a custom offer from a freelancer's profile. Triggers a notification to the Freelancer.
   - `PATCH /api/v1/orders/:id/accept` (Client only) - Client accepts the custom offer, flipping the order to `AWAITING_ESCROW`.
-```
+
 *(Note: If you don't have an `AWAITING_ACCEPTANCE` enum in your Prisma schema, you can just reuse `AWAITING_ESCROW` and send a notification to the client saying "You have a pending offer to fund".)*
 
 ---
@@ -74,11 +74,11 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 3 — After Login (Dashboard Foundation)
 - [x] 06 App Layout & Grouped Sidebar (TanStack Query provider, role aware Zustand state, responsive sidebar, profile popover, recent order previews)
-- [ ] 07 Home Dashboard (Stats & Activity)
-- [ ] 7.1 Notifications Page (Mail-Style)
+- [x] 07 Home Dashboard (Stats & Activity) (skipped per user direction)
+- [x] 7.1 Notifications Page (Mail-Style) (skipped per user direction)
 
 ### Phase 4 — Marketplace Management
-- [ ] 08 My Packages & Job Posts (CRUD)
+- [x] 08 My Packages & Job Posts (Enterprise CRUD)
 
 ### Phase 5 — AI Search & Hiring Flow
 - [ ] 09 AI Search Interface
@@ -102,4 +102,6 @@ Update this file after every completed feature. Any AI agent reading this should
 
 - Frontend Phase 2 remains complete, including Supabase auth, role persistence, callback routing, onboarding, and lookup backed experience selection.
 - Phase 3 Step 6 is complete. The protected app shell now has TanStack Query, typed current user and recent order queries, Zustand role state, a responsive grouped sidebar, collapsible desktop navigation, role switching, profile membership actions, and corrected collapsed tooltips and popovers.
-- Frontend type checking and production build pass. Lint still reports only the three existing unused variable warnings in the installed template skill. Next is Phase 3 Step 7, the home dashboard stats and activity.
+- Frontend Phase 4 Step 8 is implemented with role routed package cards and job post table CRUD. Package tier lookup is now available through the authenticated backend endpoint and wired into the form. All shared, backend, and frontend checks pass. The catalog owner query and inactive package listing still need backend support.
+- Dashboard sidebar Find Work and Find talent now use protected `/find-work` and `/find-talent` routes, keeping logged in users inside the app shell while public catalog routes remain unchanged.
+- Dashboard shell now uses a fixed viewport height with an isolated content scroll area, so the desktop sidebar stays in place while dashboard content scrolls.

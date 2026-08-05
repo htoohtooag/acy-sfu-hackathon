@@ -40,6 +40,7 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | GET | `/api/v1/users/me` | Yes | Any active user | 200 |
 | POST | `/api/v1/users/me/onboarding` | Yes | Any active user | 200 |
 | GET | `/api/v1/lookups/experience-levels` | Yes | Any authenticated user | 200 |
+| GET | `/api/v1/lookups/package-tiers` | Yes | Any authenticated user | 200 |
 | GET | `/api/v1/packages` | No | None | 200 |
 | GET | `/api/v1/packages/:id` | No | None | 200 |
 | POST | `/api/v1/packages` | Yes | `FREELANCER` | 201 |
@@ -240,6 +241,30 @@ Authorization: Bearer <token>
 ```
 
 Success: `200` with the active experience levels ordered by `sort_order`.
+
+### List active package tiers
+
+```http
+GET /api/v1/lookups/package-tiers
+Authorization: Bearer <token>
+```
+
+This read only lookup requires any authenticated user. It returns only active package tiers, ordered by `sort_order` ascending.
+
+Success: `200` with `data`:
+
+```json
+[
+  {
+    "id": "uuid",
+    "name": "BASIC",
+    "display_name": "Basic",
+    "sort_order": 1
+  }
+]
+```
+
+`display_name` may be `null`. Important errors: `UNAUTHORIZED` and server errors from the standard API envelope.
 
 ### Get the current user
 

@@ -112,3 +112,5 @@ export type {
 } from './deliverables.js';
 export { createReviewSchema, reviewOrderParamsSchema } from './reviews.js';
 export type { CreateReviewRequest, ReviewResponse } from './reviews.js';
+export { packageTierLookupListSchema, packageTierLookupSchema } from './lookups.js';
+export type { PackageTierLookup } from './lookups.js';

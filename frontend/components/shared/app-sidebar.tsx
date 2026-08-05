@@ -23,12 +23,12 @@ const generalItems: NavItem[] = [
 
 const workItems: Record<AppRole, NavItem[]> = {
   CLIENT: [
-    { href: "/ai-search", label: "AI talent search", icon: Sparkles },
+    { href: "/find-talent", label: "Find talent", icon: Sparkles },
     { href: "/posts", label: "My job posts", icon: FileText },
     { href: "/orders", label: "My orders", icon: ClipboardList },
   ],
   FREELANCER: [
-    { href: "/jobs", label: "Find work", icon: Compass },
+    { href: "/find-work", label: "Find work", icon: Compass },
     { href: "/posts", label: "My packages", icon: Package },
     { href: "/orders", label: "My orders", icon: ClipboardList },
   ],

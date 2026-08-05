@@ -134,39 +134,63 @@ This document defines the implementation logic for the frontend. AI agents MUST 
 ## Phase 4: Marketplace Management
 *Goal: Users managing their own listings.*
 
-- [ ] **Step 8: My Packages & Job Posts (CRUD)**
-  - Build the `/(app)/posts` page (Table/List view).
-  - *Freelancer View:* List of their Packages. "Create New Package" button. Dropdown actions (Edit, Pause, Delete).
-  - *Client View:* List of their Job Posts. "Create New Job Post" button.
-  - Use React Query `useMutation` for create/update/delete operations.
+
+- [ ] **Step 8: My Packages & Job Posts (Enterprise CRUD)**
+  - **Data Fetching & Caching (React Query):**
+    - Use `useQuery` to fetch the user's packages (`GET /api/v1/packages?owner=true`) or jobs (`GET /api/v1/jobs?owner=true`).
+    - Set `staleTime: 1000 * 60 * 2` (2 minute) to prevent aggressive refetching on window focus.
+    - Use `useMutation` for Create/Update/Delete. On success, `invalidateQueries(['my-packages'])` or `['my-jobs']` to update the UI cache.
+  - **Security (IDOR Protection):** 
+    - Frontend: Only render the Edit/Delete buttons if the logged-in user's ID matches the `freelancer_id` or `client_id` on the record.
+    - Backend Constraint (Reminder): The backend must strictly verify ownership before allowing PATCH/DELETE operations. 
+  - **Freelancer View (My Packages - Fiverr Style):**
+    - *UI Layout:* A responsive grid (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6`) of clean, vertical `<PackageCard />` components. No boxed tables.
+    - *Card UI:* Tier Badge (Basic/Standard/Premium), Title, Large Price (`font-mono`), Delivery Days, Top 3 Features (with checkmarks), and a `DropdownMenu` (...) for Edit / Activate-Pause / Delete.
+    - *Activation Limit Logic (Crucial):* A freelancer can create *many* packages, but can only have 3 `is_active = true` at a time (or based on their plan's `max_packages`). 
+      - If they try to "Activate" a paused package while already at the limit, block the request and show a Toast Error: *"Active package limit reached. Upgrade to activate more."*
+      - Show a "Paused" badge (gray) for inactive packages.
+    - *Create/Edit Modal:* `shadcn/ui Dialog`. Form via React Hook Form + Zod. Fields: Title, Description, Tier (Select), Price, Delivery Days, Features (Tag Input).
+  - **Client View (My Job Posts - Enterprise Table):**
+    - *UI Layout:* A clean, dense data table or list view (SaaS style).
+    - *Table Columns:* Title | Budget Range (Min - Max MMK) | Deadline | Status Badge (`OPEN` green, `CLOSED` gray) | Actions (`...` menu).
+    - *Status Toggle:* Client can change status between `OPEN` and `CLOSED` via the dropdown to pause receiving proposals.
+    - *Create/Edit Modal:* `shadcn/ui Dialog`. Fields: Title, Description, Budget Min, Budget Max, Expected Deadline (Date Picker).
+  - **Delete Confirmation:**
+    - Clicking "Delete" opens a `shadcn/ui AlertDialog` to confirm soft-deletion (`deleted_at = NOW()`).
   - *Plan Limit UI:* If user hits their `max_packages` or `max_job_posts` limit, disable the "Create" button and show an "Upgrade Plan" tooltip.
-  - *Done when:* Users can successfully create, edit, and soft-delete their listings via the UI.
+  - *Done when:* Freelancers can create multiple packages but are strictly capped at 3 active by the UI/backend. Clients can manage job posts. Data is cached efficiently, and users cannot edit each other's data.
+
 
 ## Phase 5: AI Search & Hiring Flow
 *Goal: The core "Wow" feature for clients to find talent.*
 
-- [ ] **Step 9: AI Search Interface**
-  - Build the `/(app)/ai-search` page (Full screen, ChatGPT style).
-  - Use Vercel AI SDK `useChat` hook pointing to `/api/v1/ai/search`.
-  - Render streamed text. When the backend sends a `toolInvocations` array, render the reusable `<PackageCard />` components directly inside the chat stream.
-  - Implement Intercepting Routes so clicking a card inside the chat opens the Detail Modal over the chat UI.
+- [ ] **Step 9: AI Search Interface (Floating Docs Bot UI & Mock Data)**
+  - **Floating Button:** Create a `<FloatingAiButton />` component (fixed bottom-right). Use `usePathname()` to ONLY render this button on: `dashboard`, `orders`, `posts`, and `notifications`. Hide it on messages/settings.
+  - **Chat UI Shell:** Inside the panel, use the shadcn `MessageScroller`, `Message`, `Bubble`, `Marker`, and `InputGroup` components. 
+  - **Custom Overlap Carousel (UI):** Create an `<OverlapCardCarousel />` component based on the design image. Use mock data (placeholder images, fake names, fake prices) for now. Render this component inside a mock chat bubble to visualize how the AI suggestions will look. (/design/aichatOverlapCardCarouselsample.png in that image you can reference that slider carousel sample to add out chat)
+  - **Intercepting Routes Setup:** Configure the `(app)/layout.tsx` to support `@modal`. When a user clicks a card in the mock carousel, it triggers the intercepting route (e.g., `/packages/[id]`) and opens the detail modal over the dashboard.
+  - *Done when:* The floating bot appears on the correct pages, opens the chat panel, displays mock chat data with the overlapping carousel, and clicking a card opens the detail modal.
+  
+- [ ] **Step 9.1: AI Backend Connection (Vercel AI SDK Streaming)**
+  - Connect the `useChat` hook inside the Sheet to the Node.js backend (`POST /api/v1/ai/search`).
+  - Render the streamed text inside the `Bubble` components. Use the `Marker` component with a `Spinner` to show "Searching database..." while the AI executes a tool.
+  - Parse the `message.toolInvocations` array from the stream. Pass the real database results into the `<OverlapCardCarousel />`.
+  - *Note:* AI streaming is handled natively by the Vercel AI SDK over HTTP. Do NOT use Socket.io for the AI search.
+
+
 - [ ] **Step 10: Checkout & Escrow Flow**
   - In the Detail Modal, if a Client clicks "Hire", route them to the Checkout page `/(app)/orders/checkout`.
   - UI: Show Order Summary (Price + Platform Fee). Provide a file upload component for the KBz/Wave screenshot.
   - Call `POST /api/v1/orders` and `POST /api/v1/orders/:id/payments`.
   - Show a "Waiting for Admin Verification" state.
   - *Done when:* Client uses AI to find a package, clicks hire, uploads payment proof, and sees the `AWAITING_ESCROW` status.
-- [ ] **Step 9: Dedicated AI Search Page (Docs Chat Style)**
-  - Build the `/(app)/ai-search` page (Full screen, dedicated route).
-  - Use Vercel AI SDK `useChat` hook. The user gets a clean, full-screen chat interface (like ChatGPT/Docs AI) to find talent.
-  - Package Cards render inside the stream.
-- [ ] **Step 10: Package Checkout & Escrow Flow**
-  - In the Package Detail Modal, Client clicks "Hire". Route to Checkout.
-  - Upload payment proof -> Status `AWAITING_ESCROW`.
+
 - [ ] **Step 10.1: Custom Offer & Proposal Flow (Upwork Style)**
   - **Client UI:** On Freelancer Profile, "Request Project Offer" modal -> Calls `POST /api/v1/orders/custom-request`.
   - **Freelancer UI:** On Job Post Detail, "Submit Proposal" modal -> Calls `POST /api/v1/orders/custom-offer`.
   - **Acceptance:** Client gets a notification, clicks "Accept Offer" -> Routes to Escrow Checkout.
+
+  
 
 
 ## Phase 6: Messaging & Final Review
