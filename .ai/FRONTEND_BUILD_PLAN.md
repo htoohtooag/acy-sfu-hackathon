@@ -165,7 +165,7 @@ This document defines the implementation logic for the frontend. AI agents MUST 
 *Goal: The core "Wow" feature for clients to find talent.*
 
 - [ ] **Step 9: AI Search Interface (Floating Docs Bot UI & Mock Data)**
-  - **Floating Button:** Create a `<FloatingAiButton />` component (fixed bottom-right). Use `usePathname()` to ONLY render this button on: `dashboard`, `orders`, `posts`, and `notifications`. Hide it on messages/settings.
+  - **Floating Button:** Create a `<FloatingAiButton />` component (fixed bottom-right).  (like in the /design/aichatbuttonsample.png) Use `usePathname()` to ONLY render this button on: `dashboard`, `orders`, `posts`, and `notifications`. Hide it on messages/settings.
   - **Chat UI Shell:** Inside the panel, use the shadcn `MessageScroller`, `Message`, `Bubble`, `Marker`, and `InputGroup` components. 
   - **Custom Overlap Carousel (UI):** Create an `<OverlapCardCarousel />` component based on the design image. Use mock data (placeholder images, fake names, fake prices) for now. Render this component inside a mock chat bubble to visualize how the AI suggestions will look. (/design/aichatOverlapCardCarouselsample.png in that image you can reference that slider carousel sample to add out chat)
   - **Intercepting Routes Setup:** Configure the `(app)/layout.tsx` to support `@modal`. When a user clicks a card in the mock carousel, it triggers the intercepting route (e.g., `/packages/[id]`) and opens the detail modal over the dashboard.
@@ -196,12 +196,27 @@ This document defines the implementation logic for the frontend. AI agents MUST 
 ## Phase 6: Messaging & Final Review
 *Goal: Project execution, trust delivery, and reputation.*
 
-- [ ] **Step 11: Workroom Inbox & Real-time Chat**
-  - Build the `/(app)/messages` page (2-Pane Layout: Left inbox list, Right chat view).
-  - Left Pane: Tabs (`All`, `Active`, `In Review`, `Completed`) filtering the Workroom list.
-  - Right Pane: Connect to Socket.io via `lib/socket.ts`.
-  - *Escrow Lock UI:* If the Order status is `AWAITING_ESCROW`, replace the chat input with a yellow "Chat is locked" banner.
-  - Implement file sharing (REST upload -> Socket broadcast URL).
+- [ ] **Step 11: Workroom Inbox & Chat UI Shell (Mock Data)** (reference the /design/chatmessagesample.png)
+  - Build the `/(app)/messages` layout as a 2-Pane Split Screen inside the main app content area.
+  - **Left Pane (Inbox List - approx 350px):**
+    - *Header:* A clean search input to filter chats.
+    - *Tabs:* `shadcn/ui Tabs` for `All`, `Active`, `In Review`, `Completed`.
+    - *List Items:* A scrollable list of mock conversations. Each item shows a circular Avatar, the Client/Freelancer Name, a 1-line message preview, and a timestamp. Use a subtle active state highlight.
+  - **Right Pane (Chat View - flex-1):**
+    - *Empty State:* If no conversation is selected, render a clean empty state (/public/emptystate/message-empty-state-light.png) with an icon and "Select a conversation to view messages."
+    - *Active Chat State:* If a mock conversation is clicked, render the chat UI using shadcn `MessageScroller`, `Message`, and `Bubble` components.
+    - *Input Area:* Use `InputGroup` at the bottom with a text input, a paperclip icon (for files), and a send button.
+    - *Escrow Lock UI (Mock):* For one of the mock conversations, simulate the `AWAITING_ESCROW` state by replacing the input area with a yellow warning banner: "Chat is locked until escrow is verified."
+  - *Done when:* The 2-pane layout renders flawlessly, tabs/search filter the mock list, clicking an item shows the mock chat UI, and the empty state matches the design.
+
+- [ ] **Step 11.1: Real-time Implementation (Socket.io & Backend)**
+  - **Data Fetching:** Replace mock inbox list with React Query fetching `GET /api/v1/orders?role=client/freelancer`.
+  - **Socket Connection:** Initialize `socket.io-client` in `lib/socket.ts`. Connect using the Supabase JWT.
+  - **Room Joining:** When a conversation is clicked, emit `join_room` with the `order_id`. and etc need based on our backends and types  form shared fodler
+  - **Real-time Messaging:** Listen for `receive_message` events and append them to the `MessageScroller`. Use `send_message` to emit new messages.
+  - **Escrow Lock Logic:** Fetch the actual Order status. If `status !== 'ACTIVE'`, enforce the UI lock (hide input, show banner). Listen for socket events that flip the status to unlock the chat.
+  - **File Sharing:** Implement REST upload to Supabase Storag
+
 - [ ] **Step 12: Watermark Delivery & Approval**
   - In the Workroom Right Pane (or a dedicated Deliverables tab):
   - *Freelancer UI:* "Submit Final Work" file uploader.
