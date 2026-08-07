@@ -9,11 +9,12 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Tabs, TabsIndicator, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   formatTimestamp,
+  getFreelancerName,
   getConversationStatusLabel,
   getInitials,
-  getParticipantName,
   workroomConversationFilters,
   type WorkroomConversationFilter,
+  type WorkroomRole,
 } from "@/features/workroom/workroom-types";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,9 @@ interface WorkroomInboxListProps {
   onSearchChange: (value: string) => void;
   onFilterChange: (value: unknown) => void;
   onSelectOrder: (id: string) => void;
+  role: WorkroomRole;
+  currentUserId: string | null;
+  currentUserName: string | null;
 }
 
 export function WorkroomInboxList({
@@ -41,6 +45,9 @@ export function WorkroomInboxList({
   onSearchChange,
   onFilterChange,
   onSelectOrder,
+  role,
+  currentUserId,
+  currentUserName,
 }: WorkroomInboxListProps): React.ReactNode {
   return (
     <aside className="flex min-h-0 flex-col border-b border-border bg-card lg:border-b-0 lg:border-e" aria-label="Conversation inbox">
@@ -81,7 +88,7 @@ export function WorkroomInboxList({
           <ul className="flex flex-col gap-1" aria-label="Workroom conversations">
             {orders.map((order) => {
               const selected = order.id === selectedOrderId;
-              const participantName = getParticipantName(order);
+              const participantName = getFreelancerName(order, role, currentUserId, currentUserName);
               return (
                 <li key={order.id}>
                   <button
@@ -94,7 +101,7 @@ export function WorkroomInboxList({
                     )}
                   >
                     <Avatar size="lg" className="mt-0.5">
-                      <AvatarImage src={order.other_party.avatar_url ?? undefined} alt={`${participantName} avatar`} />
+                      <AvatarImage src={order.freelancer.avatar_url ?? undefined} alt={`${participantName} avatar`} />
                       <AvatarFallback>{getInitials(participantName)}</AvatarFallback>
                     </Avatar>
                     <span className="min-w-0 flex-1">

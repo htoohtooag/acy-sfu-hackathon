@@ -17,6 +17,60 @@ export const deliverableDecisionSchema = z
   })
   .strict();
 
+export const deliverableSubmissionResponseSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    order_id: z.uuid(),
+    file_name: z.string(),
+    file_size_bytes: z.string(),
+    deliverable_status: z.literal('UNDER_REVIEW'),
+    order_status: z.literal('IN_REVIEW'),
+    submitted_at: z.iso.datetime({ offset: true }),
+    watermarked_url: z.url(),
+  })
+  .strict();
+
+export const deliverableApprovalResponseSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    order_id: z.uuid(),
+    deliverable_status: z.literal('APPROVED'),
+    order_status: z.literal('COMPLETED'),
+    approved_at: z.iso.datetime({ offset: true }),
+    clean_url: z.url(),
+  })
+  .strict();
+
+export const deliverableRejectionResponseSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    order_id: z.uuid(),
+    deliverable_status: z.literal('REJECTED'),
+    order_status: z.literal('ACTIVE'),
+  })
+  .strict();
+
+export const deliverableDecisionResponseSchema = z.union([
+  deliverableApprovalResponseSchema,
+  deliverableRejectionResponseSchema,
+]);
+
+export const deliverableSubmittedEventSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    order_id: z.uuid(),
+    watermarked_url: z.url(),
+  })
+  .strict();
+
+export const deliverableUnlockedEventSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    order_id: z.uuid(),
+    clean_url: z.url(),
+  })
+  .strict();
+
 export type DeliverableDecisionRequest = z.infer<typeof deliverableDecisionSchema>;
 
 export type DeliverableSubmissionResponse = {

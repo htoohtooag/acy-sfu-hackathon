@@ -23,6 +23,14 @@ export const createOrderSchema = z.union([
   customOfferOrderSchema,
 ]);
 
+export const orderQuoteRequestSchema = packageOrderSchema;
+
+export const orderQuoteResponseSchema = z.object({
+  package_id: z.uuid(),
+  agreed_price_mmk: positiveMoneyString,
+  platform_fee_mmk: z.string().regex(/^[0-9]+$/, 'Money must be a nonnegative integer string.'),
+}).strict();
+
 export const orderIdSchema = z.object({ id: z.uuid() });
 
 export const orderListQuerySchema = z.object({
@@ -59,6 +67,8 @@ export const paymentProofFieldsSchema = z
   .strict();
 
 export type CreateOrderRequest = z.infer<typeof createOrderSchema>;
+export type OrderQuoteRequest = z.infer<typeof orderQuoteRequestSchema>;
+export type OrderQuoteResponse = z.infer<typeof orderQuoteResponseSchema>;
 export type PaymentProofFields = z.infer<typeof paymentProofFieldsSchema>;
 export type OrderListQuery = z.infer<typeof orderListQuerySchema>;
 
@@ -112,6 +122,7 @@ export type OrderListItem = {
   is_escrow_funded: boolean;
   created_at: string;
   updated_at: string;
+  freelancer: OrderParticipant;
   other_party: OrderParticipant;
   source: OrderSourceSummary | null;
 };
@@ -129,6 +140,7 @@ export const orderListItemSchema = z.object({
   is_escrow_funded: z.boolean(),
   created_at: z.iso.datetime({ offset: true }),
   updated_at: z.iso.datetime({ offset: true }),
+  freelancer: orderParticipantSchema,
   other_party: orderParticipantSchema,
   source: orderSourceSummarySchema.nullable(),
 }).strict();
@@ -154,6 +166,56 @@ export type OrderDeliverableSummary = {
   submitted_at: string;
   approved_at: string | null;
 };
+
+const orderPaymentSummarySchema = z.object({
+  id: z.uuid(),
+  amount_mmk: z.string(),
+  status: z.enum(['PENDING_ADMIN', 'VERIFIED', 'REJECTED']),
+  transaction_ref: z.string().nullable(),
+  created_at: z.iso.datetime({ offset: true }),
+  updated_at: z.iso.datetime({ offset: true }),
+}).strict();
+
+const orderDeliverableSummarySchema = z.object({
+  id: z.uuid(),
+  file_name: z.string(),
+  file_size_bytes: z.string().nullable(),
+  status: z.enum(['UNDER_REVIEW', 'APPROVED', 'REJECTED']),
+  submitted_at: z.iso.datetime({ offset: true }),
+  approved_at: z.iso.datetime({ offset: true }).nullable(),
+}).strict();
+
+const orderTierSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  display_name: z.string().nullable(),
+}).strict();
+
+const orderPackageSchema = z.object({
+  id: z.uuid(),
+  title: z.string(),
+  description: z.string().nullable(),
+  price_mmk: z.string(),
+  delivery_days: z.number().int().positive(),
+  tier: orderTierSchema.nullable(),
+}).strict();
+
+const orderJobPostSchema = z.object({
+  id: z.uuid(),
+  title: z.string(),
+  description: z.string(),
+  budget_min_mmk: z.string().nullable(),
+  budget_max_mmk: z.string().nullable(),
+}).strict();
+
+export const orderDetailSchema = orderListItemSchema.extend({
+  client: orderParticipantSchema,
+  freelancer: orderParticipantSchema,
+  package: orderPackageSchema.nullable(),
+  job_post: orderJobPostSchema.nullable(),
+  payments: z.array(orderPaymentSummarySchema),
+  deliverables: z.array(orderDeliverableSummarySchema),
+}).strict();
 
 export type OrderDetail = OrderListItem & {
   client: OrderParticipant;

@@ -12,16 +12,22 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { aiAssistantIdentity } from "@/features/ai-search/mock-data";
 
 const aiSearchPathPrefixes = ["/dashboard", "/orders", "/posts", "/notifications"] as const;
+const aiSearchExcludedPaths = ["/orders/checkout"] as const;
 
 function isAiSearchPath(pathname: string | null): boolean {
+  if (aiSearchExcludedPaths.some((path) => pathname === path || pathname?.startsWith(`${path}/`))) return false;
   return aiSearchPathPrefixes.some((prefix) => pathname === prefix || pathname?.startsWith(`${prefix}/`));
 }
 
 export function FloatingAiButton() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-
   if (!isAiSearchPath(pathname)) return null;
+
+  return <FloatingAiButtonContent key={pathname} />;
+}
+
+function FloatingAiButtonContent() {
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

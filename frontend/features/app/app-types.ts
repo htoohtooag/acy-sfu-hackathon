@@ -46,17 +46,19 @@ export function normalizeAppUser(value: unknown): AppUser | null {
   };
 }
 
-export function normalizeRecentWorkroom(value: unknown): RecentWorkroom | null {
+export function normalizeRecentWorkroom(value: unknown, role: AppRole, currentUserId: string | null, currentUserName: string | null = null): RecentWorkroom | null {
   if (typeof value !== "object" || value === null) return null;
   const record = value as Record<string, unknown>;
-  const otherParty = typeof record.other_party === "object" && record.other_party !== null ? record.other_party as Record<string, unknown> : null;
+  const freelancer = typeof record.freelancer === "object" && record.freelancer !== null ? record.freelancer as Record<string, unknown> : null;
   const source = typeof record.source === "object" && record.source !== null ? record.source as Record<string, unknown> : null;
   if (typeof record.id !== "string" || typeof record.status !== "string") return null;
+  const backendFreelancerName = typeof freelancer?.full_name === "string" && freelancer.full_name.trim().length > 0 ? freelancer.full_name.trim() : null;
+  const authenticatedFreelancerName = role === "FREELANCER" && record.freelancer_id === currentUserId && typeof currentUserName === "string" && currentUserName.trim().length > 0 ? currentUserName.trim() : null;
   return {
     id: record.id,
     title: typeof source?.title === "string" ? source.title : "Active workroom",
-    participantName: typeof otherParty?.full_name === "string" ? otherParty.full_name : "Your collaborator",
-    participantAvatarUrl: typeof otherParty?.avatar_url === "string" ? otherParty.avatar_url : null,
+    participantName: backendFreelancerName ?? authenticatedFreelancerName ?? "Freelancer",
+    participantAvatarUrl: typeof freelancer?.avatar_url === "string" ? freelancer.avatar_url : null,
     status: record.status as RecentWorkroom["status"],
   };
 }

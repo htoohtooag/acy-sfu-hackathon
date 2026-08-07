@@ -26,6 +26,17 @@ export const sendMessageSchema = z
   })
   .strict();
 
+export const typingStatusRequestSchema = z
+  .object({
+    order_id: z.uuid(),
+    is_typing: z.boolean(),
+  })
+  .strict();
+
+export const typingStatusEventSchema = typingStatusRequestSchema
+  .extend({ user_id: z.uuid() })
+  .strict();
+
 export const workroomMessageSchema = z.object({
   id: z.uuid(),
   order_id: z.uuid(),
@@ -58,6 +69,8 @@ export type WorkroomOrderIdParams = z.infer<typeof workroomOrderIdSchema>;
 export type WorkroomHistoryQuery = z.infer<typeof workroomHistoryQuerySchema>;
 export type JoinRoomRequest = z.infer<typeof joinRoomSchema>;
 export type SendMessageRequest = z.infer<typeof sendMessageSchema>;
+export type TypingStatusRequest = z.infer<typeof typingStatusRequestSchema>;
+export type TypingStatusEvent = z.infer<typeof typingStatusEventSchema>;
 
 export type WorkroomMessageType = 'TEXT' | 'FILE' | 'SYSTEM' | 'CUSTOM_OFFER';
 
@@ -103,12 +116,14 @@ export type WorkroomClientToServerEvents = {
   join_room: (payload: JoinRoomRequest) => void;
   leave_room: (payload: JoinRoomRequest) => void;
   send_message: (payload: SendMessageRequest) => void;
+  typing_status: (payload: TypingStatusRequest) => void;
 };
 
 export type WorkroomServerToClientEvents = {
   room_joined: (payload: WorkroomSocketSuccess<WorkroomRoom>) => void;
   room_left: (payload: WorkroomSocketSuccess<WorkroomRoom>) => void;
   new_message: (payload: WorkroomSocketSuccess<WorkroomMessage>) => void;
+  typing_status: (payload: WorkroomSocketSuccess<TypingStatusEvent>) => void;
   deliverable_submitted: (payload: WorkroomSocketSuccess<DeliverableSubmittedEvent>) => void;
   deliverable_unlocked: (payload: WorkroomSocketSuccess<DeliverableUnlockedEvent>) => void;
   chat_error: (payload: WorkroomSocketError) => void;

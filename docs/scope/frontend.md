@@ -10,6 +10,7 @@ The frontend gives clients and freelancers a clear way to discover talent and ma
 | # | Feature | Phase | Status |
 |---|---------|-------|--------|
 | 9 | AI Search Interface and backend connection | Phase 5 | existing |
+| 10 | Checkout and escrow flow | Phase 5 | complete |
 | 11 | Workroom Inbox and Chat UI Shell | Phase 6 | in-progress |
 | 11.1 | Workroom real time implementation | Phase 6 | in-progress |
 
@@ -20,6 +21,12 @@ The frontend gives clients and freelancers a clear way to discover talent and ma
 Give authenticated users a floating AI search panel with streamed backend responses and live package suggestions.
 **Done when:** the assistant button appears only on the planned workspace routes, opens an accessible responsive chat panel, sends the Supabase bearer token to the backend AI stream, renders streamed text and validated package results, and opens a real package detail view through an intercepted route.
 - [x] Build it: `/develop AI Search Interface and backend connection` · code in `frontend/components/features/ai-search/`, `frontend/features/ai-search/`, `frontend/app/(app)/`, and `shared/schemas/`
+
+### 10. Checkout and escrow flow · complete
+Give clients a protected package checkout with real order pricing, payment method instructions, receipt validation, and admin escrow submission.
+**Done when:** a client can hire a real package, review the backend quoted fee, submit a valid payment proof once, and reach the locked awaiting escrow workroom.
+- [x] Design it (spec): `docs/specs/frontend/0005-checkout-and-escrow-flow.md`
+- [x] Build it: protected checkout route, backend payment lookup/quote contracts, React Hook Form validation, TanStack Query mutations, and escrow workroom redirect.
 
 ## Phase 6: Messaging and Final Review
 
@@ -46,7 +53,8 @@ Connect the authenticated workroom inbox to role aware orders, message history, 
    - [x] Add shared response schemas, Socket.IO event types, and the pinned client dependency
    - [x] Add React Query order and message history queries with Supabase authenticated socket lifecycle
    - [x] Replace mock inbox and transcript data with real orders, room messaging, locking, and order routes
+   - [x] Add role aware status presentation, explicit freelancer identity, deliverable actions, and completed order review UI
 - [ ] Verify it: `/check verify Workroom real time implementation`
 - [ ] Test it: `/test Workroom real time implementation`
 
-Spec [0004](../specs/frontend/0004-workroom-realtime-implementation.md) · code in `frontend/lib/socket.ts`, `frontend/features/workroom/`, and `frontend/components/features/workroom/`
+Spec [0004](../specs/frontend/0004-workroom-realtime-implementation.md) and [0006](../specs/frontend/0006-workroom-status-and-participant-names.md) · code in `frontend/lib/socket.ts`, `frontend/features/workroom/`, and `frontend/components/features/workroom/`

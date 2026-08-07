@@ -9,8 +9,8 @@ Update this file after every completed feature. Any AI agent reading this should
 
 **Active Stack:** Frontend
 **Active Plan File:** `FRONTEND_BUILD_PLAN.md`
-**Last completed:** Frontend Phase 6 Step 11.1 Workroom Real-time Implementation
-**Next:** Frontend Phase 6 Step 12 Watermark Delivery and Approval
+**Last completed:** Frontend Phase 6 Step 11.1 Workroom status UI, participant names, and real time typing indicator
+**Next:** Frontend Phase 6 Step 12 Watermark Delivery and Approval verification
 
 ---
 
@@ -28,6 +28,9 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 05 Catalog APIs (Packages & Jobs)
 - [x] 06 AI Search Agent (Vercel AI SDK + Gemini)
 
+### Phase 3.1: Real-Time Notifications System (Frontend)
+- [ ] 6.1 Notifications Page & Real-Time Integration
+
 ### Phase 4 — Transactions & Workroom
 - [x] 07 Order & Escrow APIs
 - [x] 08 Admin APIs & Audit Logs (Verify Escrow -> Unlock)
@@ -39,20 +42,11 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 6 - API Gaps
 - [x] 12 Freelancer Profile API (Public)
-- [x] 13 Orders List & Details APIs (Protected)
+- [x] 13 Orders List & Details APIs (Protected) 
 
-### Phase 7 - Proposals & Notifications Support
-*Goal: Support Upwork-style custom offers and a dedicated notifications feed.*
-
-- [ ] **Step 14: Notifications APIs**
-  - `GET /api/v1/notifications` - Fetch the logged-in user's notifications (offer sent, payment verified, etc.).
-  - `PATCH /api/v1/notifications/:id` - Mark a specific notification as read.
-- [ ] **Step 15: Custom Offer APIs (The Upwork Flow)**
-  - `POST /api/v1/orders/custom-offer` (Freelancer only) - Freelancer sends a custom offer to a client (creates an Order with `source_type = CUSTOM_OFFER` and `status = AWAITING_ACCEPTANCE`). Triggers a notification to the Client.
-  - `POST /api/v1/orders/custom-request` (Client only) - Client requests a custom offer from a freelancer's profile. Triggers a notification to the Freelancer.
-  - `PATCH /api/v1/orders/:id/accept` (Client only) - Client accepts the custom offer, flipping the order to `AWAITING_ESCROW`.
-
-*(Note: If you don't have an `AWAITING_ACCEPTANCE` enum in your Prisma schema, you can just reuse `AWAITING_ESCROW` and send a notification to the client saying "You have a pending offer to fund".)*
+### Phase 7 -  Real-Time Notifications System 
+- [ ] 14: Notification APIs 
+- [ ] 15: Socket.io Private Rooms & Notification Service
 
 ---
 
@@ -83,7 +77,7 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 5 — AI Search & Hiring Flow
 - [x] 09 AI Search Interface
 - [x] 9.1 AI Backend Connection
-- [ ] 10 Checkout & Escrow Flow
+- [x] 10 Checkout & Escrow Flow
 - [ ] 10.1 Custom Offer & Proposal Flow (Upwork Style)
 
 ### Phase 6 — Messaging & Final Review
@@ -107,4 +101,6 @@ Update this file after every completed feature. Any AI agent reading this should
 - Frontend Phase 4 Step 8 is implemented with role routed package cards and job post table CRUD. Package tier lookup is now available through the authenticated backend endpoint and wired into the form. All shared, backend, and frontend checks pass. The catalog owner query and inactive package listing still need backend support.
 - Dashboard sidebar Find Work and Find talent now use protected `/find-work` and `/find-talent` routes, keeping logged in users inside the app shell while public catalog routes remain unchanged.
 - Dashboard shell now uses a fixed viewport height with an isolated content scroll area, so the desktop sidebar stays in place while dashboard content scrolls.
-- Frontend Phase 5 Steps 9 and 9.1 remain complete, and AI Search now keeps user scoped browser memory through a shared AI SDK Chat Context and persisted Zustand store; its default selector snapshot is stable to prevent React infinite-loop warnings. Frontend Phase 6 Step 11.1 now connects role aware orders, message history, Supabase authenticated Socket.IO rooms, server emitted text messages, status based locks, reconnect and rejoin behavior, and `/messages/[orderId]` selection. Shared build, frontend lint, frontend production build, backend build, and backend tests pass. Step 12 is next.
+- Frontend Phase 5 Steps 9, 9.1, and 10 are complete. Checkout now has protected package hiring, backend payment-method lookup and quote contracts, React Hook Form validation, TanStack Query mutations, multipart proof upload, and redirect to the awaiting-escrow workroom. The package Hire link now has native link semantics, the app modal slot closes through a catch all route, and the AI dialog resets when leaving its route scope. Payment method checkout now uses backend logos and progressive account detail disclosure, with database account metadata preserved by the lookup service. Frontend production build and focused lint pass. Step 10.1 is next.
+- Frontend Phase 6 Step 11.1 now has status specific banners and lock behavior, role aware participant fallback names, deliverable submission and client decision actions, signed URL session handling, a completed order review prompt, and authenticated room scoped real time typing status. Chat attachments remain deferred because the backend supports text messages only. Full verification and test workflow remain next.
+- Workroom identity now uses the explicit backend freelancer participant in the inbox, chat header, incoming message header, and expanded or collapsed sidebar recent messages. The authenticated freelancer name is used only as a same user fallback when the order name is missing.

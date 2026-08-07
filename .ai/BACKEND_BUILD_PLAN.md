@@ -229,3 +229,38 @@ Socket.io is for *real-time* communication. When the user refreshes the page, th
 
 ---
 
+
+
+### Phase 7: Real-Time Notifications System (Backend)
+*Goal: Implement a hybrid REST + Socket.io notification system with strict type safety and transactional emission.*
+
+- [ ] **Step 14: Schema Update & Notification APIs**
+  - **Schema Update (`notifications.prisma`):**
+    - Create a new Enum `notification_category` with values: `SYSTEM_ACCOUNT`, `ORDERS_ESCROW`, `OFFERS_PROPOSALS`.
+    - Update the `Notification` model: replace the `type` String column with `category notification_category`.
+    - Run migration. Then, manually execute raw SQL in Supabase to create a partial index for blazing fast unread badge counts: `CREATE INDEX idx_notifications_unread ON notifications (user_id) WHERE is_read = false;`
+  - **REST Endpoints:**
+    1. `GET /api/v1/notifications`: Fetch user's notifications. Support query params: `?category=ORDERS_ESCROW` and `?unreadOnly=true`. Paginate (default 20 per page).
+    2. `PATCH /api/v1/notifications/:id`: Mark a specific notification as read (`is_read = true`).
+    3. `POST /api/v1/notifications/mark-all-read`: Mark all unread notifications for the logged-in user as read.
+
+- [ ] **Step 15: Socket.io Private Rooms & Notification Service**
+  - **Socket.io Private Rooms (Security):**
+    - In `config/socket.ts`, inside the `io.on('connection')` block, immediately after JWT verification, join the user to a private room: `socket.join('user:' + socket.data.user.id)`. if we have aleady have that kind of user private room you can reuse that skip that 
+  - **The `sendNotification` Helper Service:**
+    - Create a reusable function `sendNotification(userId, category, title, body, metadata)`.
+    - This function MUST execute two operations atomically (or sequentially with error handling):
+      1. Insert a row into the `notifications` table via Prisma.
+      2. Emit a Socket.io event `new_notification` to the private room: `io.to('user:' + userId).emit('new_notification', payload)`.
+    - The `metadata` JSONB column MUST contain a `link` field (e.g., `/messages/123`) so the frontend knows where to route the user.
+  - **Integration Points (Injecting the Helper):**
+    - Update existing backend services to call `sendNotification` when state changes occur:
+      - *Admin Escrow Verification:* Notify Client (`ORDERS_ESCROW`, "Escrow Verified") and Freelancer (`ORDERS_ESCROW`, "Order Active").
+      - *Deliverable Submission:* Notify Client (`ORDERS_ESCROW`, "Work Submitted for Review").
+      - *Deliverable Approval:* Notify Freelancer (`ORDERS_ESCROW`, "Payment Released!").
+      - *Custom Offer Received:* Notify Client (`OFFERS_PROPOSALS`, "Custom Offer Received").
+  - *Done when:* All state changes in the backend trigger a DB insert and a real-time Socket.io emission to the correct private user room.
+
+---
+
+

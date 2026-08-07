@@ -11,6 +11,19 @@ export const createReviewSchema = z
   })
   .strict();
 
+export const reviewResponseSchema = z
+  .object({
+    review_id: z.uuid(),
+    order_id: z.uuid(),
+    reviewer_id: z.uuid(),
+    reviewee_id: z.uuid(),
+    rating: z.number().int().min(1).max(5),
+    comment: z.string().nullable(),
+    success_rate: z.string(),
+    created_at: z.iso.datetime({ offset: true }),
+  })
+  .strict();
+
 export type CreateReviewRequest = z.infer<typeof createReviewSchema>;
 
 export type ReviewResponse = {

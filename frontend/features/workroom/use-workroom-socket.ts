@@ -1,36 +1,66 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { sendMessageSchema, workroomMessageSchema, workroomSocketErrorSchema } from "shared/schemas";
+import {
+  deliverableSubmittedEventSchema,
+  deliverableUnlockedEventSchema,
+  sendMessageSchema,
+  typingStatusEventSchema,
+  typingStatusRequestSchema,
+  workroomMessageSchema,
+  workroomSocketErrorSchema,
+  type DeliverableSubmittedEvent,
+  type DeliverableUnlockedEvent,
+} from "shared/schemas";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { createWorkroomSocket, type WorkroomSocket } from "@/lib/socket";
 
 type WorkroomSocketState = "idle" | "connecting" | "connected" | "disconnected" | "error";
+type TypingState = { orderId: string; userId: string } | null;
 
 interface UseWorkroomSocketOptions {
   selectedOrderId: string | null;
   onMessage: (message: import("shared/schemas").WorkroomMessage) => void;
   onWorkroomEvent: (orderId: string) => void;
+  onDeliverableSubmitted: (event: DeliverableSubmittedEvent) => void;
+  onDeliverableUnlocked: (event: DeliverableUnlockedEvent) => void;
 }
 
 interface UseWorkroomSocketResult {
   connectionState: WorkroomSocketState;
   joinedOrderId: string | null;
   socketError: string | null;
+  typingUserId: string | null;
   sendMessage: (orderId: string, content: string) => boolean;
+  sendTypingStatus: (orderId: string, isTyping: boolean) => boolean;
 }
 
-export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent }: UseWorkroomSocketOptions): UseWorkroomSocketResult {
+export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent, onDeliverableSubmitted, onDeliverableUnlocked }: UseWorkroomSocketOptions): UseWorkroomSocketResult {
   const socketRef = useRef<WorkroomSocket | null>(null);
   const selectedOrderIdRef = useRef<string | null>(selectedOrderId);
   const roomOrderIdRef = useRef<string | null>(null);
   const joinedOrderIdRef = useRef<string | null>(null);
   const onMessageRef = useRef(onMessage);
   const onWorkroomEventRef = useRef(onWorkroomEvent);
+  const onDeliverableSubmittedRef = useRef(onDeliverableSubmitted);
+  const onDeliverableUnlockedRef = useRef(onDeliverableUnlocked);
   const [connectionState, setConnectionState] = useState<WorkroomSocketState>("idle");
   const [joinedOrderId, setJoinedOrderId] = useState<string | null>(null);
   const [socketError, setSocketError] = useState<string | null>(null);
+  const [typingState, setTypingState] = useState<TypingState>(null);
+  const typingClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTypingTimeout = useCallback((): void => {
+    if (typingClearTimeoutRef.current === null) return;
+    clearTimeout(typingClearTimeoutRef.current);
+    typingClearTimeoutRef.current = null;
+  }, []);
+
+  const clearTypingUser = useCallback((): void => {
+    clearTypingTimeout();
+    setTypingState(null);
+  }, [clearTypingTimeout]);
 
   useEffect(() => {
     selectedOrderIdRef.current = selectedOrderId;
@@ -39,7 +69,9 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
   useEffect(() => {
     onMessageRef.current = onMessage;
     onWorkroomEventRef.current = onWorkroomEvent;
-  }, [onMessage, onWorkroomEvent]);
+    onDeliverableSubmittedRef.current = onDeliverableSubmitted;
+    onDeliverableUnlockedRef.current = onDeliverableUnlocked;
+  }, [onDeliverableSubmitted, onDeliverableUnlocked, onMessage, onWorkroomEvent]);
 
   const joinSelectedRoom = useCallback((): void => {
     const socket = socketRef.current;
@@ -80,6 +112,7 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
         roomOrderIdRef.current = null;
         joinedOrderIdRef.current = null;
         setJoinedOrderId(null);
+        clearTypingUser();
         setConnectionState("disconnected");
       });
 
@@ -99,6 +132,7 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
         if (payload.data.order_id !== joinedOrderIdRef.current) return;
         joinedOrderIdRef.current = null;
         setJoinedOrderId(null);
+        clearTypingUser();
       });
 
       socket.on("new_message", (payload) => {
@@ -110,12 +144,45 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
         onMessageRef.current(parsed.data);
       });
 
+      socket.on("typing_status", (payload) => {
+        const parsed = typingStatusEventSchema.safeParse(payload.data);
+        if (!parsed.success) {
+          setSocketError("A live typing status could not be displayed.");
+          return;
+        }
+        if (parsed.data.order_id !== selectedOrderIdRef.current) return;
+        if (!parsed.data.is_typing) {
+          clearTypingUser();
+          return;
+        }
+
+        clearTypingTimeout();
+        setTypingState({ orderId: parsed.data.order_id, userId: parsed.data.user_id });
+        typingClearTimeoutRef.current = setTimeout(clearTypingUser, 2500);
+      });
+
       socket.on("deliverable_submitted", (payload) => {
-        if (payload.data.order_id === selectedOrderIdRef.current) onWorkroomEventRef.current(payload.data.order_id);
+        const parsed = deliverableSubmittedEventSchema.safeParse(payload.data);
+        if (!parsed.success) {
+          setSocketError("A submitted deliverable could not be displayed.");
+          return;
+        }
+        if (parsed.data.order_id === selectedOrderIdRef.current) {
+          onDeliverableSubmittedRef.current(parsed.data);
+          onWorkroomEventRef.current(parsed.data.order_id);
+        }
       });
 
       socket.on("deliverable_unlocked", (payload) => {
-        if (payload.data.order_id === selectedOrderIdRef.current) onWorkroomEventRef.current(payload.data.order_id);
+        const parsed = deliverableUnlockedEventSchema.safeParse(payload.data);
+        if (!parsed.success) {
+          setSocketError("An unlocked deliverable could not be displayed.");
+          return;
+        }
+        if (parsed.data.order_id === selectedOrderIdRef.current) {
+          onDeliverableUnlockedRef.current(parsed.data);
+          onWorkroomEventRef.current(parsed.data.order_id);
+        }
       });
 
       socket.on("chat_error", (payload) => {
@@ -125,8 +192,11 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
           return;
         }
         setSocketError(parsed.data.error.message);
-        if (parsed.data.error.code === "CHAT_LOCKED") joinedOrderIdRef.current = null;
-        if (parsed.data.error.code === "CHAT_LOCKED") setJoinedOrderId(null);
+        if (parsed.data.error.code === "CHAT_LOCKED") {
+          joinedOrderIdRef.current = null;
+          setJoinedOrderId(null);
+          clearTypingUser();
+        }
       });
 
       socket.connect();
@@ -148,8 +218,9 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
       socketRef.current = null;
       roomOrderIdRef.current = null;
       joinedOrderIdRef.current = null;
+      clearTypingUser();
     };
-  }, [joinSelectedRoom]);
+  }, [clearTypingTimeout, clearTypingUser, joinSelectedRoom]);
 
   useEffect(() => {
     const socket = socketRef.current;
@@ -172,5 +243,15 @@ export function useWorkroomSocket({ selectedOrderId, onMessage, onWorkroomEvent 
     return true;
   }, []);
 
-  return { connectionState, joinedOrderId, socketError, sendMessage };
+  const sendTypingStatus = useCallback((orderId: string, isTyping: boolean): boolean => {
+    const socket = socketRef.current;
+    if (!socket?.connected || joinedOrderIdRef.current !== orderId) return false;
+    const parsed = typingStatusRequestSchema.safeParse({ order_id: orderId, is_typing: isTyping });
+    if (!parsed.success) return false;
+    socket.emit("typing_status", parsed.data);
+    return true;
+  }, []);
+
+  const typingUserId = typingState?.orderId === selectedOrderId ? typingState.userId : null;
+  return { connectionState, joinedOrderId, socketError, typingUserId, sendMessage, sendTypingStatus };
 }

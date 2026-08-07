@@ -4,6 +4,16 @@ export type WorkroomConversationFilter = "all" | "active" | "in-review" | "compl
 
 export type WorkroomRole = "CLIENT" | "FREELANCER";
 
+export type WorkroomStatusPresentation = {
+  locked: boolean;
+  bannerTone: "warning" | "success" | "destructive" | "neutral" | null;
+  bannerMessage: string | null;
+  roleNote: string | null;
+  showSubmitFinalWork: boolean;
+  showReviewPanel: boolean;
+  showReviewPrompt: boolean;
+};
+
 export const workroomConversationFilters: Array<{ value: WorkroomConversationFilter; label: string }> = [
   { value: "all", label: "All" },
   { value: "active", label: "Active" },
@@ -31,12 +41,74 @@ export function conversationMatchesFilter(order: OrderListItem, filter: Workroom
   return order.status === "COMPLETED";
 }
 
-export function isConversationLocked(status: OrderStatus): boolean {
-  return status !== "ACTIVE";
+export function getWorkroomStatusPresentation(status: OrderStatus, role: WorkroomRole): WorkroomStatusPresentation {
+  if (status === "AWAITING_ESCROW") {
+    return {
+      locked: true,
+      bannerTone: "warning",
+      bannerMessage: "Chat is locked until escrow is verified.",
+      roleNote: role === "FREELANCER" ? "Waiting for client to fund escrow." : null,
+      showSubmitFinalWork: false,
+      showReviewPanel: false,
+      showReviewPrompt: false,
+    };
+  }
+
+  if (status === "ACTIVE") {
+    return {
+      locked: false,
+      bannerTone: null,
+      bannerMessage: null,
+      roleNote: null,
+      showSubmitFinalWork: role === "FREELANCER",
+      showReviewPanel: false,
+      showReviewPrompt: false,
+    };
+  }
+
+  if (status === "IN_REVIEW") {
+    return {
+      locked: false,
+      bannerTone: null,
+      bannerMessage: null,
+      roleNote: role === "FREELANCER" ? "Waiting for client to review your work." : null,
+      showSubmitFinalWork: false,
+      showReviewPanel: role === "CLIENT",
+      showReviewPrompt: false,
+    };
+  }
+
+  if (status === "COMPLETED") {
+    return {
+      locked: true,
+      bannerTone: "success",
+      bannerMessage: "Project completed. Funds released to freelancer.",
+      roleNote: null,
+      showSubmitFinalWork: false,
+      showReviewPanel: false,
+      showReviewPrompt: role === "CLIENT",
+    };
+  }
+
+  return {
+    locked: true,
+    bannerTone: status === "DISPUTED" ? "destructive" : "neutral",
+    bannerMessage: "This order is under dispute/canceled. Please contact support.",
+    roleNote: null,
+    showSubmitFinalWork: false,
+    showReviewPanel: false,
+    showReviewPrompt: false,
+  };
 }
 
-export function getParticipantName(order: OrderListItem): string {
-  return order.other_party.full_name?.trim() || "Your collaborator";
+export function getFreelancerName(order: OrderListItem, role: WorkroomRole, currentUserId: string | null, currentUserName: string | null): string {
+  const backendName = order.freelancer.full_name?.trim();
+  if (backendName) return backendName;
+  if (role === "FREELANCER" && order.freelancer_id === currentUserId) {
+    const authenticatedName = currentUserName?.trim();
+    if (authenticatedName) return authenticatedName;
+  }
+  return "Freelancer";
 }
 
 export function getProjectTitle(order: OrderListItem): string {

@@ -3,6 +3,7 @@ import { ApiError } from '../../utils/api-error.js';
 import {
   joinRoomSchema,
   sendMessageSchema,
+  typingStatusRequestSchema,
   type WorkroomSocketError,
   type WorkroomSocketSuccess,
 } from 'shared/schemas';
@@ -63,6 +64,14 @@ function emitError(socket: WorkroomSocket, error: unknown, event: string): void 
   socket.emit('chat_error', failure('INTERNAL_SERVER_ERROR', 'The workroom request failed.'));
 }
 
+function broadcastTypingStatus(socket: WorkroomSocket, orderId: string, isTyping: boolean): void {
+  socket.to(workroomRoomName(orderId)).emit('typing_status', success({
+    order_id: orderId,
+    user_id: socket.data.user.id,
+    is_typing: isTyping,
+  }));
+}
+
 function registerWorkroomEvents(io: WorkroomSocketServer, socket: WorkroomSocket): void {
   socket.on('join_room', (payload) => {
     void (async (): Promise<void> => {
@@ -100,8 +109,28 @@ function registerWorkroomEvents(io: WorkroomSocketServer, socket: WorkroomSocket
       order_id: parsed.data.order_id,
       room: workroomRoomName(parsed.data.order_id),
     };
+    if (socket.rooms.has(room.room)) broadcastTypingStatus(socket, room.order_id, false);
     socket.leave(room.room);
     socket.emit('room_left', success(room));
+  });
+
+  socket.on('typing_status', (payload) => {
+    const parsed = typingStatusRequestSchema.safeParse(payload);
+    if (!parsed.success) {
+      socket.emit('chat_error', failure(
+        'VALIDATION_ERROR',
+        validationFailureMessage(parsed.error.issues),
+      ));
+      return;
+    }
+
+    const room = workroomRoomName(parsed.data.order_id);
+    if (!socket.rooms.has(room)) {
+      socket.emit('chat_error', failure('ROOM_NOT_JOINED', 'Join the workroom before sending typing status.'));
+      return;
+    }
+
+    broadcastTypingStatus(socket, parsed.data.order_id, parsed.data.is_typing);
   });
 
   socket.on('send_message', (payload) => {
@@ -157,6 +186,12 @@ export function initializeWorkroomSocket(io: WorkroomSocketServer): void {
 
   io.on('connection', (socket) => {
     registerWorkroomEvents(io, socket);
+    socket.on('disconnecting', () => {
+      for (const room of socket.rooms) {
+        if (!room.startsWith('order:')) continue;
+        broadcastTypingStatus(socket, room.slice('order:'.length), false);
+      }
+    });
   });
 
   subscribeWorkroomEvents((event) => {

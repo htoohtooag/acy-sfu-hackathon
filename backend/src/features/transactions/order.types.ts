@@ -122,6 +122,7 @@ function mapBaseOrder(
     is_escrow_funded: record.is_escrow_funded,
     created_at: record.created_at.toISOString(),
     updated_at: record.updated_at.toISOString(),
+    freelancer: record.freelancer,
     other_party: mapParticipant(role === 'client' ? record.freelancer : record.client),
     source,
   };

@@ -14,11 +14,11 @@ async function getCurrentUser(signal?: AbortSignal): Promise<AppUser> {
   return user;
 }
 
-async function getRecentOrders(role: AppRole, signal?: AbortSignal): Promise<RecentWorkroom[]> {
+async function getRecentOrders(role: AppRole, currentUserId: string | null, currentUserName: string | null, signal?: AbortSignal): Promise<RecentWorkroom[]> {
   try {
     const data: unknown = await authenticatedApiRequest<unknown>(`/api/v1/orders?role=${role.toLowerCase()}&status=active`, { signal });
     if (!Array.isArray(data)) return [];
-    return data.map(normalizeRecentWorkroom).filter((item): item is RecentWorkroom => item !== null).slice(0, 3);
+    return data.map((item) => normalizeRecentWorkroom(item, role, currentUserId, currentUserName)).filter((item): item is RecentWorkroom => item !== null).slice(0, 3);
   } catch (error: unknown) {
     if (error instanceof DOMException && error.name === "AbortError") throw error;
     return [];
@@ -31,9 +31,9 @@ export const currentUserQueryOptions = queryOptions({
   staleTime: 60_000,
 });
 
-export const recentWorkroomsQueryOptions = (role: AppRole) => queryOptions({
-  queryKey: ["recent-workrooms", role],
-  queryFn: ({ signal }) => getRecentOrders(role, signal),
+export const recentWorkroomsQueryOptions = (role: AppRole, currentUserId: string | null, currentUserName: string | null) => queryOptions({
+  queryKey: ["recent-workrooms", role, currentUserId, currentUserName],
+  queryFn: ({ signal }) => getRecentOrders(role, currentUserId, currentUserName, signal),
   staleTime: 30_000,
 });
 
@@ -43,7 +43,8 @@ export function useCurrentUser() {
 
 export function useRecentWorkrooms() {
   const activeRole = useAppStore((state) => state.activeRole);
-  return useQuery(recentWorkroomsQueryOptions(activeRole));
+  const { data: currentUser } = useCurrentUser();
+  return useQuery(recentWorkroomsQueryOptions(activeRole, currentUser?.id ?? null, currentUser?.fullName ?? null));
 }
 
 export type { OrderListItem };

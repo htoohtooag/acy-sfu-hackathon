@@ -41,6 +41,7 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | POST | `/api/v1/users/me/onboarding` | Yes | Any active user | 200 |
 | GET | `/api/v1/lookups/experience-levels` | Yes | Any authenticated user | 200 |
 | GET | `/api/v1/lookups/package-tiers` | Yes | Any authenticated user | 200 |
+| GET | `/api/v1/lookups/payment-methods` | Yes | Any authenticated user | 200 |
 | GET | `/api/v1/packages` | No | None | 200 |
 | GET | `/api/v1/packages/:id` | No | None | 200 |
 | POST | `/api/v1/packages` | Yes | `FREELANCER` | 201 |
@@ -54,6 +55,7 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | DELETE | `/api/v1/jobs/:id` | Yes | `CLIENT` | 200 |
 | POST | `/api/v1/ai/search` | Yes | `CLIENT` | Streaming response |
 | POST | `/api/v1/orders` | Yes | `CLIENT` | 201 |
+| POST | `/api/v1/orders/quote` | Yes | `CLIENT` | 200 |
 | GET | `/api/v1/orders` | Yes | Authenticated role | 200 |
 | GET | `/api/v1/orders/:id` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/payments` | Yes | `CLIENT` | 201 |
@@ -113,6 +115,65 @@ Success: `200` with `data` containing:
 
 Important errors: `VALIDATION_ERROR` for a malformed UUID and `FREELANCER_NOT_FOUND` for a missing, deleted, or unavailable profile.
 
+## Checkout lookups
+
+### List active payment methods
+
+```http
+GET /api/v1/lookups/payment-methods
+Authorization: Bearer <token>
+```
+
+The response contains active payment methods only. The id is the value required by the payment proof route. `logo_url` may be null when no logo is configured. Account metadata comes from backend checkout configuration and may be null when an operator has not configured it.
+
+Success: `200` with:
+
+```json
+[
+  {
+    "id": "uuid",
+    "name": "KBZ_PAY",
+    "display_name": "KBZPay",
+    "logo_url": "https://images.example.com/kbzpay.svg",
+    "account_name": "TalentScout",
+    "account_number": "09 123 456 789",
+    "instructions": "Include your order id in the transfer note."
+  }
+]
+```
+
+Important errors: `UNAUTHORIZED`.
+
+### Quote a package order
+
+```http
+POST /api/v1/orders/quote
+Authorization: Bearer <client-token>
+Content-Type: application/json
+```
+
+Request:
+
+```json
+{ "package_id": "uuid" }
+```
+
+The quote resolves the active package and the freelancer's current commission plan. It is informational and can become stale. `POST /api/v1/orders` remains authoritative and locks the final platform fee in its transaction.
+
+Success: `200` with:
+
+```json
+{
+  "package_id": "uuid",
+  "agreed_price_mmk": "150000",
+  "platform_fee_mmk": "15000"
+}
+```
+
+The checkout displays `platform_fee_mmk` separately. When submitting payment proof, `amount_mmk` must equal `agreed_price_mmk`; the platform fee is not added to that payment field.
+
+Important errors: `FORBIDDEN`, `VALIDATION_ERROR`, `PACKAGE_NOT_AVAILABLE`, `FREELANCER_NOT_FOUND`, and `SUBSCRIPTION_REQUIRED`.
+
 ## Order read routes
 
 ### List the authenticated user's orders
@@ -124,7 +185,18 @@ Authorization: Bearer <token>
 
 `role` is required and must be `client` or `freelancer`. `status` is optional and must be `active`, `completed`, or `in_review`. The backend matches the requested role to the authenticated user's order foreign key. It never returns another user's orders.
 
-Each list item includes order ids, source type and ids, string money values, status, escrow funding state, timestamps, the other participant's name and avatar, and the package or job title. Deleted orders and deleted source records are excluded from the visible source summary.
+Each list item includes order ids, source type and ids, string money values, status, escrow funding state, timestamps, the explicit freelancer name and avatar, the role dependent other participant name and avatar, and the package or job title. Deleted orders and deleted source records are excluded from the visible source summary.
+
+The identity fields use this shape:
+
+```json
+{
+  "freelancer": { "id": "uuid", "full_name": "Aye Aye", "avatar_url": null },
+  "other_party": { "id": "uuid", "full_name": "Client Name", "avatar_url": null }
+}
+```
+
+`freelancer` is always the freelancer on the order. `other_party` remains role dependent for counterpart features.
 
 Important errors: `UNAUTHORIZED` and `VALIDATION_ERROR`.
 

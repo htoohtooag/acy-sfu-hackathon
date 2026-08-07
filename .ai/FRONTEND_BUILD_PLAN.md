@@ -129,6 +129,27 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - **UI:** A clean, email-style list of system alerts (Offer Received, Escrow Verified, etc.).
   - Fetch `GET /api/v1/notifications`. Mark as read when clicked.
 
+### Phase 3.1: Real-Time Notifications System (Frontend)
+*Goal: Display real-time system alerts with a tabbed, mail-style inbox and instant sidebar badge updates.*
+
+- [ ] **Step 6.1: Notifications Page & Real-Time Integration**
+  - **Data Fetching (React Query):**
+    - Create `useNotifications` hook fetching `GET /api/v1/notifications`. Accept filter params for tabs.
+    - Create `useUnreadNotificationCount` hook fetching `GET /api/v1/notifications?unreadOnly=true`. This count feeds the red badge on the Sidebar "Notifications" link.
+  - **The `/notifications` Page Layout:**
+    - *Top Bar:* Title "Notifications" and a ghost button "Mark all as read" (calls `POST /api/v1/notifications/mark-all-read` and invalidates queries).
+    - *Tabs:* `[ All ]` `[ Orders & Escrow ]` `[ Offers ]` `[ System ]`. Changing tabs updates the `?category=` query param in React Query.
+    - *List Items:* Render rows. Unread items must have a bold title and a distinct background highlight (e.g., `bg-muted/50`). Read items have normal weight.
+  - **Click Action & Routing:**
+    - When a list item is clicked: Call `PATCH /api/v1/notifications/:id` to mark as read, then use Next.js `useRouter().push(metadata.link)` to route the user to the relevant page (e.g., the Workroom).
+  - **Real-Time Socket Integration (Crucial):**
+    - In the global `(app)/layout.tsx` (or a dedicated `SocketProvider`), establish the Socket.io connection.
+    - Listen for the `new_notification` event.
+    - When received: 
+      1. Call `queryClient.invalidateQueries({ queryKey: ['notifications'] })` and `queryClient.invalidateQueries({ queryKey: ['unreadCount'] })` to silently refetch the list and update the sidebar badge.
+      2. Show a transient UI popup (toast via `sonner`) with the notification title. Clicking the toast routes the user to the `metadata.link`.
+  - *Done when:* User sees the red badge update instantly when the backend triggers an event, can browse alerts by category, and clicking an alert routes them to the correct context.
+
 
 
 ## Phase 4: Marketplace Management
@@ -178,12 +199,26 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - *Note:* AI streaming is handled natively by the Vercel AI SDK over HTTP. Do NOT use Socket.io for the AI search.
 
 
-- [ ] **Step 10: Checkout & Escrow Flow**
-  - In the Detail Modal, if a Client clicks "Hire", route them to the Checkout page `/(app)/orders/checkout`.
-  - UI: Show Order Summary (Price + Platform Fee). Provide a file upload component for the KBz/Wave screenshot.
-  - Call `POST /api/v1/orders` and `POST /api/v1/orders/:id/payments`.
-  - Show a "Waiting for Admin Verification" state.
-  - *Done when:* Client uses AI to find a package, clicks hire, uploads payment proof, and sees the `AWAITING_ESCROW` status.
+- [x] **Step 10: Checkout & Escrow Flow (Dedicated Page & Validation)**
+  - **Routing:** When a Client clicks "Hire" (from AI Search or Package Detail Modal), route them to a dedicated checkout page `/(app)/orders/checkout?packageId=123`.
+  - **UI Layout (Distraction-Free):**
+    - Left/Top: Order Summary (Package Title, Freelancer Name, Price, calculated Platform Fee, Total).
+    - Right/Bottom: Payment Instructions (Show the KBz/Wave account numbers clearly).
+  - **File Upload & Pre-Validation (Crucial):**
+    - Use `multer`/`dropzone` on the frontend. 
+    - *Rule 1:* Strictly accept only `image/png`, `image/jpeg`, or `application/pdf`.
+    - *Rule 2:* Max file size 5MB. Reject immediately if exceeded.
+    - *Rule 3:* Instantly preview the uploaded image on the screen using `URL.createObjectURL`.
+    - *Rule 4:* Force the user to input a `transaction_ref` (Transaction ID text field).
+    - *Rule 5:* Disable the "Submit Proof" button until the file is uploaded, the Transaction ID is filled, and a Checkbox ("I confirm I have transferred the exact amount") is checked. 
+    - *Rule 6:*: comfim modal final approve
+  - **API Connection:**
+    - Call `POST /api/v1/orders` to create the contract.
+    - Call `POST /api/v1/orders/:id/payments` to upload the file (via `FormData`) and the transaction ID.
+  - **Post-Submission State:**
+    - On success, update the UI to a "Waiting for Admin Verification" state. Show a yellow banner.
+    - Route the user to the Workroom (`/messages/[orderId]`), where the chat input is locked (Escrow Lock UI).
+  - *Done when:* Client navigates to the dedicated checkout page, sees a summary, uploads a receipt (with preview and validation), submits it, and sees the `AWAITING_ESCROW` status.
 
 - [ ] **Step 10.1: Custom Offer & Proposal Flow (Upwork Style)**
   - **Client UI:** On Freelancer Profile, "Request Project Offer" modal -> Calls `POST /api/v1/orders/custom-request`.
@@ -216,14 +251,17 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - **Real-time Messaging:** Listen for the implemented `new_message` event and append validated server messages to the `MessageScroller`. Use `send_message` to emit text messages.
   - **Escrow Lock Logic:** Fetch the actual Order status. If `status !== 'ACTIVE'`, enforce the UI lock and keep the composer hidden. Refresh status on the workroom query interval and invalidate it on deliverable socket events.
   - **File Sharing:** Deferred because the backend currently has no chat attachment endpoint. Deliverable upload remains Step 12.
+  - **Status UI Extension:** Render the full status policy, role aware participant names, deliverable submission and decision actions, signed URL previews, clean file download, and the completed client review prompt. Keep chat attachments deferred until a backend file message endpoint exists.
 
 - [ ] **Step 12: Watermark Delivery & Approval**
   - In the Workroom Right Pane (or a dedicated Deliverables tab):
   - *Freelancer UI:* "Submit Final Work" file uploader.
   - *Client UI:* If Order status is `IN_REVIEW`, display the `file_url_watermarked` image. Show a giant "Approve & Release Payment" button.
-  - On Approve, call `PATCH /api/v1/orders/:id/deliverables/:deliverableId`. Swap the image `src` to `file_url_clean` so the client can download it.
+  - On Approve, call `PATCH /api/v1/orders/:id/deliverables/:deliverableId`. Swap the image `src` to `file_url_clean` so the client can download it. 
+
 - [ ] **Step 13: Reviews**
   - Once Order status is `COMPLETED`, show a "Leave a Review" prompt.
   - Modal with Star Rating (1-5) and Comment text area.
   - Call `POST /api/v1/orders/:id/reviews`.
   - *Done when:* Two users can chat in real-time, share files, the freelancer submits work, the client approves it, downloads the clean file, and leaves a 5-star review.
+

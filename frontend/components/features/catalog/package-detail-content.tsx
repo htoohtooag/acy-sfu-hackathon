@@ -36,7 +36,7 @@ export function PackageDetailContent({ item, mode }: PackageDetailContentProps) 
         {context}
         <PackageTierContext presentation={presentation} />
         <PackageReportIssue packageTitle={item.title} />
-        {mode === "page" ? <><Button type="button" size="lg" className="mt-2 w-fit">Start a conversation</Button><Link href="/freelancers" className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Back to all services</Link></> : null}
+        <div className="mt-2 flex flex-wrap items-center gap-3"><Button nativeButton={false} size="lg" render={<Link href={`/orders/checkout?packageId=${encodeURIComponent(item.id)}`} />}>Hire this package</Button>{mode === "page" ? <><Button type="button" size="lg" variant="outline">Start a conversation</Button><Link href="/freelancers" className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Back to all services</Link></> : null}</div>
       </section>
       <section className="min-w-0 border-t border-border p-4 sm:p-6 lg:border-s lg:border-t-0" aria-label="Package sample work and related work"><PackageDetailInteractive item={item} presentation={presentation} relatedPackages={related} freelancerName={freelancerName} /></section>
     </div>

@@ -3,6 +3,7 @@ import type {
   OrderDetail,
   OrderListItem,
   OrderListQuery,
+  OrderQuoteResponse,
   OrderResponse,
 } from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
@@ -177,6 +178,20 @@ export async function createMarketplaceOrder(
 
     throw error;
   }
+}
+
+export async function quoteMarketplaceOrder(packageId: string): Promise<OrderQuoteResponse> {
+  const packageSource = await findAvailablePackage(packageId);
+  if (packageSource === null) {
+    throw new ApiError(404, 'PACKAGE_NOT_AVAILABLE', 'The package is not available.');
+  }
+
+  const freelancerPlan = await resolveFreelancerPlan(packageSource.freelancer.user_id, prisma);
+  return {
+    package_id: packageSource.id,
+    agreed_price_mmk: packageSource.price_mmk.toString(),
+    platform_fee_mmk: calculatePlatformFee(packageSource.price_mmk, freelancerPlan.commission_rate).toString(),
+  };
 }
 
 export async function listMarketplaceOrders(

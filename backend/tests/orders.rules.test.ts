@@ -52,6 +52,7 @@ test('order list mapping selects the other party and source title safely', () =>
   } satisfies Parameters<typeof mapOrderListItem>[0];
 
   const result = mapOrderListItem(record, 'client');
+  assert.equal(result.freelancer.id, 'freelancer-id');
   assert.equal(result.other_party.id, 'freelancer-id');
   assert.deepEqual(result.source, { id: 'package-id', title: 'Design' });
   assert.equal(result.agreed_price_mmk, '150000');

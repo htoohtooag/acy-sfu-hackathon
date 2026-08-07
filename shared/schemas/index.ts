@@ -51,10 +51,13 @@ export type {
 } from './ai-search.js';
 export {
   createOrderSchema,
+  orderQuoteRequestSchema,
+  orderQuoteResponseSchema,
   orderIdSchema,
   orderListQuerySchema,
   orderListItemSchema,
   orderListResponseSchema,
+  orderDetailSchema,
   orderParticipantSchema,
   orderSourceSummarySchema,
   orderStatusSchema,
@@ -62,6 +65,8 @@ export {
 } from './orders.js';
 export type {
   CreateOrderRequest,
+  OrderQuoteRequest,
+  OrderQuoteResponse,
   OrderResponse,
   PaymentProofFields,
   PaymentResponse,
@@ -91,6 +96,8 @@ export type {
 export {
   joinRoomSchema,
   sendMessageSchema,
+  typingStatusEventSchema,
+  typingStatusRequestSchema,
   workroomMessageHistorySchema,
   workroomMessageSchema,
   workroomSocketErrorSchema,
@@ -100,6 +107,8 @@ export {
 export type {
   JoinRoomRequest,
   SendMessageRequest,
+  TypingStatusEvent,
+  TypingStatusRequest,
   WorkroomHistoryQuery,
   WorkroomMessage,
   WorkroomMessageHistory,
@@ -115,6 +124,12 @@ export {
   deliverableDecisionParamsSchema,
   deliverableDecisionSchema,
   deliverableOrderParamsSchema,
+  deliverableSubmissionResponseSchema,
+  deliverableApprovalResponseSchema,
+  deliverableRejectionResponseSchema,
+  deliverableDecisionResponseSchema,
+  deliverableSubmittedEventSchema,
+  deliverableUnlockedEventSchema,
 } from './deliverables.js';
 export type {
   DeliverableApprovalResponse,
@@ -125,7 +140,12 @@ export type {
   DeliverableSubmissionResponse,
   DeliverableUnlockedEvent,
 } from './deliverables.js';
-export { createReviewSchema, reviewOrderParamsSchema } from './reviews.js';
+export { createReviewSchema, reviewOrderParamsSchema, reviewResponseSchema } from './reviews.js';
 export type { CreateReviewRequest, ReviewResponse } from './reviews.js';
-export { packageTierLookupListSchema, packageTierLookupSchema } from './lookups.js';
-export type { PackageTierLookup } from './lookups.js';
+export {
+  packageTierLookupListSchema,
+  packageTierLookupSchema,
+  paymentMethodLookupListSchema,
+  paymentMethodLookupSchema,
+} from './lookups.js';
+export type { PackageTierLookup, PaymentMethodLookup } from './lookups.js';

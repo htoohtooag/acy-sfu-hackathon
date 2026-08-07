@@ -26,9 +26,15 @@ export async function authenticatedApiRequest<T>(path: string, init: RequestInit
   const token = data.session?.access_token;
   if (!token) throw new ApiRequestError("Your session has expired. Please sign in again.", "UNAUTHORIZED");
 
+  const isMultipart = typeof FormData !== "undefined" && init.body instanceof FormData;
+  const headers = new Headers(init.headers);
+  headers.set("Accept", "application/json");
+  headers.set("Authorization", `Bearer ${token}`);
+  if (!isMultipart && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
   const response = await fetch(apiUrl(path), {
     ...init,
-    headers: { Accept: "application/json", "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...init.headers },
+    headers,
   });
   const payload: unknown = await response.json().catch(() => null);
   if (!isEnvelope<T>(payload)) throw new ApiRequestError("The server returned an invalid response.");

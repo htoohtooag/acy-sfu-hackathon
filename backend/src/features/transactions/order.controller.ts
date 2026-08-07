@@ -1,11 +1,12 @@
 import type { RequestHandler } from 'express';
-import { createOrderSchema, orderIdSchema, orderListQuerySchema } from 'shared/schemas';
+import { createOrderSchema, orderIdSchema, orderListQuerySchema, orderQuoteRequestSchema } from 'shared/schemas';
 import { ApiError } from '../../utils/api-error.js';
 import { successResponse } from '../../utils/api-response.js';
 import {
   createMarketplaceOrder,
   getMarketplaceOrder,
   listMarketplaceOrders,
+  quoteMarketplaceOrder,
 } from './order.service.js';
 
 function userIdOrThrow(request: Parameters<RequestHandler>[0]): string {
@@ -23,6 +24,15 @@ export const createOrder: RequestHandler = async (request, response, next): Prom
       createOrderSchema.parse(request.body),
     );
     response.status(201).json(successResponse(result));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const quoteOrder: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const input = orderQuoteRequestSchema.parse(request.body);
+    response.status(200).json(successResponse(await quoteMarketplaceOrder(input.package_id)));
   } catch (error: unknown) {
     next(error);
   }

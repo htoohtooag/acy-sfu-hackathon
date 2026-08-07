@@ -7,7 +7,7 @@ import { Marker, MarkerContent } from "@/components/ui/marker";
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageHeader } from "@/components/ui/message";
 import { MessageScroller, MessageScrollerButton, MessageScrollerContent, MessageScrollerItem, MessageScrollerProvider, MessageScrollerViewport } from "@/components/ui/message-scroller";
 import { MessageCircle } from "lucide-react";
-import { formatTimestamp, getInitials } from "@/features/workroom/workroom-types";
+import { formatTimestamp, getFreelancerName, getInitials, type WorkroomRole } from "@/features/workroom/workroom-types";
 import type { OrderListItem, WorkroomMessage } from "shared/schemas";
 
 interface WorkroomChatTranscriptProps {
@@ -16,9 +16,11 @@ interface WorkroomChatTranscriptProps {
   messagesPending: boolean;
   messagesError: Error | null;
   currentUserId: string | null;
+  role: WorkroomRole;
+  currentUserName: string | null;
 }
 
-export function WorkroomChatTranscript({ order, messages, messagesPending, messagesError, currentUserId }: WorkroomChatTranscriptProps): React.ReactNode {
+export function WorkroomChatTranscript({ order, messages, messagesPending, messagesError, currentUserId, role, currentUserName }: WorkroomChatTranscriptProps): React.ReactNode {
   if (messagesPending) return <div className="flex flex-1 items-center justify-center px-6 text-sm text-muted-foreground" role="status">Loading messages…</div>;
   if (messagesError) return <div className="flex flex-1 items-center justify-center px-6 text-center text-sm text-destructive" role="alert">{messagesError.message}</div>;
   if (messages.length === 0) {
@@ -35,7 +37,7 @@ export function WorkroomChatTranscript({ order, messages, messagesPending, messa
     );
   }
 
-  const participantName = order.other_party.full_name?.trim() || "Your collaborator";
+  const participantName = getFreelancerName(order, role, currentUserId, currentUserName);
 
   return (
     <MessageScrollerProvider autoScroll>
@@ -57,7 +59,7 @@ export function WorkroomChatTranscript({ order, messages, messagesPending, messa
                   <Message align={isSelf ? "end" : "start"}>
                     <MessageAvatar>
                       <Avatar size="sm" aria-label={isSelf ? "Your avatar" : `${participantName} avatar`}>
-                        {!isSelf && <AvatarImage src={order.other_party.avatar_url ?? undefined} alt={`${participantName} avatar`} />}
+                        {!isSelf && <AvatarImage src={order.freelancer.avatar_url ?? undefined} alt={`${participantName} avatar`} />}
                         <AvatarFallback>{isSelf ? "You" : getInitials(participantName)}</AvatarFallback>
                       </Avatar>
                     </MessageAvatar>

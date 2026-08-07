@@ -1,6 +1,8 @@
 import type {
   JoinRoomRequest,
   SendMessageRequest,
+  TypingStatusEvent,
+  TypingStatusRequest,
   WorkroomMessage,
   WorkroomRoom,
 } from 'shared/schemas';
@@ -64,12 +66,14 @@ export type WorkroomClientToServerEvents = {
   join_room: (payload: JoinRoomRequest) => void;
   leave_room: (payload: JoinRoomRequest) => void;
   send_message: (payload: SendMessageRequest) => void;
+  typing_status: (payload: TypingStatusRequest) => void;
 };
 
 export type WorkroomServerToClientEvents = {
   room_joined: (payload: { success: true; data: WorkroomRoom }) => void;
   room_left: (payload: { success: true; data: WorkroomRoom }) => void;
   new_message: (payload: { success: true; data: WorkroomMessage }) => void;
+  typing_status: (payload: { success: true; data: TypingStatusEvent }) => void;
   deliverable_submitted: (payload: {
     success: true;
     data: import('shared/schemas').DeliverableSubmittedEvent;
