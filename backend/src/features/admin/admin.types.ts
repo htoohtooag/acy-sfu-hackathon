@@ -12,6 +12,7 @@ export const paymentVerificationSelect = {
     select: {
       id: true,
       client_id: true,
+      freelancer_id: true,
       status: true,
       is_escrow_funded: true,
       deleted_at: true,

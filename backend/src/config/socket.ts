@@ -1,5 +1,6 @@
 import type { Server as HttpServer } from 'node:http';
 import { Server } from 'socket.io';
+import { configureNotificationEmitter, userRoomName } from '../features/notifications/notification.socket.js';
 import { env } from './env.js';
 import { initializeWorkroomSocket } from '../features/workroom/workroom.socket.js';
 import type { WorkroomSocketServer } from '../features/workroom/workroom.socket.js';
@@ -16,5 +17,12 @@ export function createSocketServer(httpServer: HttpServer): WorkroomSocketServer
   });
 
   initializeWorkroomSocket(io);
+  configureNotificationEmitter((userId, payload) => {
+    io.to(userRoomName(userId)).emit('new_notification', { success: true, data: payload });
+  });
+  io.on('connection', (socket) => {
+    socket.join(userRoomName(socket.data.user.id));
+  });
+
   return io;
 }

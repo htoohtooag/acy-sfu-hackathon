@@ -124,6 +124,7 @@ This document defines the implementation logic for the frontend. AI agents MUST 
     - Row 1: 3 Stat Cards (Active Orders, Earnings/Spent, Success Rate/Reviews).
     - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
   - *Note:* NO AI Chat on this page. Use React Query to fetch `GET /api/v1/orders`.
+  
 - [ ] **Step 7.1: Notifications Page (Mail-Style)**
   - Build the `/(app)/notifications` page.
   - **UI:** A clean, email-style list of system alerts (Offer Received, Escrow Verified, etc.).
@@ -253,15 +254,26 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - **File Sharing:** Deferred because the backend currently has no chat attachment endpoint. Deliverable upload remains Step 12.
   - **Status UI Extension:** Render the full status policy, role aware participant names, deliverable submission and decision actions, signed URL previews, clean file download, and the completed client review prompt. Keep chat attachments deferred until a backend file message endpoint exists.
 
-- [ ] **Step 12: Watermark Delivery & Approval**
-  - In the Workroom Right Pane (or a dedicated Deliverables tab):
-  - *Freelancer UI:* "Submit Final Work" file uploader.
-  - *Client UI:* If Order status is `IN_REVIEW`, display the `file_url_watermarked` image. Show a giant "Approve & Release Payment" button.
-  - On Approve, call `PATCH /api/v1/orders/:id/deliverables/:deliverableId`. Swap the image `src` to `file_url_clean` so the client can download it. 
+- [ ] **Step 12: Two-Tier File Delivery & Approval System (Frontend)**
+  - **Tier 1: Work-in-Progress (WIP) Chat Files (Telegram Style):**
+    - *UI:* Add a paperclip icon in the Workroom chat input to trigger file selection. Call `POST /api/v1/orders/:id/messages/upload`.
+    - *Rendering:* If `attachment_type === 'IMAGE'`, render an inline `next/image` component inside the chat bubble (max-w-xs, rounded). Clicking it opens a full-screen Lightbox modal. If `attachment_type` is a document (PDF/ZIP), render a File Download Card (icon, file name, size, download button) that opens in a new browser tab.
+  - **Tier 2: Official Deliverable Submission (Freelancer UI):**
+    - *UI:* If Order status is `ACTIVE` and the logged-in user is the Freelancer, render a prominent "Submit Final Work" button near the chat input.
+    - *Action:* Clicking it opens a file picker, calls the existing `POST /api/v1/orders/:id/deliverables` endpoint, and shows a system message: "🚀 Final deliverable submitted."
+  - **The Sticky Action Bar (Client UI):**
+    - *UI:* If Order status is `IN_REVIEW`, render a sticky bar at the bottom of the Right Pane (above the chat input).
+    - *Content:* Display the `file_url_watermarked` image thumbnail in the bar.
+    - *Actions:* Show two giant buttons: **[ Approve & Release Payment ]** and **[ Request Revision ]**.
+    - *Approve Flow:* Calls `PATCH /api/v1/orders/:id/deliverables/:deliverableId` with `{ action: "APPROVE" }`. On success, swap the image `src` to `file_url_clean` and change the sticky bar to a Green "Completed" state with a **[ Download Final Files ]** button.
+    - *Revision Flow:* Calls `PATCH` with `{ action: "REJECT" }`. Reverts Order status to `ACTIVE` so the freelancer can send WIP chat files again.
+  - *Done when:* Freelancer can send lightly watermarked drafts in chat, formally submit a heavily watermarked final deliverable, and the client can approve it via a sticky action bar to download the clean file.
 
 - [ ] **Step 13: Reviews**
   - Once Order status is `COMPLETED`, show a "Leave a Review" prompt.
   - Modal with Star Rating (1-5) and Comment text area.
   - Call `POST /api/v1/orders/:id/reviews`.
   - *Done when:* Two users can chat in real-time, share files, the freelancer submits work, the client approves it, downloads the clean file, and leaves a 5-star review.
+
+
 

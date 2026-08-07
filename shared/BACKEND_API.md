@@ -60,9 +60,13 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | GET | `/api/v1/orders/:id` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/payments` | Yes | `CLIENT` | 201 |
 | GET | `/api/v1/orders/:id/messages` | Yes | Order participant | 200 |
+| POST | `/api/v1/orders/:id/messages/upload` | Yes | Order participant | 201 |
 | POST | `/api/v1/orders/:id/deliverables` | Yes | Order freelancer | 201 |
 | PATCH | `/api/v1/orders/:id/deliverables/:deliverableId` | Yes | Order client | 200 |
 | POST | `/api/v1/orders/:id/reviews` | Yes | Completed order client | 201 |
+| GET | `/api/v1/notifications` | Yes | Any authenticated user | 200 |
+| PATCH | `/api/v1/notifications/:id` | Yes | Notification owner | 200 |
+| POST | `/api/v1/notifications/mark-all-read` | Yes | Any authenticated user | 200 |
 | PATCH | `/api/v1/admin/payments/:id` | Yes | `SUPER_ADMIN` or `FINANCE_ADMIN` | 200 |
 | POST | `/api/v1/admin/users/:id/moderations` | Yes | `SUPER_ADMIN` or `MODERATION_ADMIN` | 200 |
 
@@ -210,6 +214,78 @@ Authorization: Bearer <token>
 The authenticated user must be either the order client or freelancer. A participant receives both participant identities, package or job details, escrow state, payment statuses, and deliverable metadata and statuses. Monetary values and file sizes are strings, dates are ISO date time strings, and clean, watermarked, and payment screenshot storage paths are never returned.
 
 Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, and `ORDER_NOT_FOUND`.
+
+## Notifications
+
+### List the authenticated user's notifications
+
+```http
+GET /api/v1/notifications?category=ORDERS_ESCROW&unreadOnly=true&page=1&page_size=20
+Authorization: Bearer <token>
+```
+
+The endpoint requires authentication and returns only notifications owned by the authenticated user. `category` is optional and must be `SYSTEM_ACCOUNT`, `ORDERS_ESCROW`, or `OFFERS_PROPOSALS`. `unreadOnly` is optional and defaults to `false`. `page` defaults to `1`, and `page_size` defaults to `20` with a maximum of `50`.
+
+Results are ordered by `created_at` descending, then `id` descending. Notification metadata is JSON object data and dates are ISO date time strings.
+
+Success: `200` with:
+
+```json
+{
+  "items": [
+    {
+      "id": "uuid",
+      "category": "ORDERS_ESCROW",
+      "title": "Escrow verified",
+      "body": "Your order is now active.",
+      "is_read": false,
+      "metadata": { "link": "/messages/order-id" },
+      "created_at": "2026-08-08T00:00:00.000Z"
+    }
+  ],
+  "page": 1,
+  "page_size": 20,
+  "total_items": 1,
+  "total_pages": 1
+}
+```
+
+Important errors: `UNAUTHORIZED` and `VALIDATION_ERROR`.
+
+### Mark one notification as read
+
+```http
+PATCH /api/v1/notifications/<notification-id>
+Authorization: Bearer <token>
+```
+
+The authenticated user must own the notification. A missing or nonowned notification returns `NOTIFICATION_NOT_FOUND` so the endpoint does not reveal another user's notification.
+
+Success: `200` with the safe notification object shown in the list response, with `is_read` set to `true`.
+
+Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, and `NOTIFICATION_NOT_FOUND`.
+
+### Mark all notifications as read
+
+```http
+POST /api/v1/notifications/mark-all-read
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{}
+```
+
+The endpoint marks only the authenticated user's unread notifications. Repeating the request is safe.
+
+Success: `200` with:
+
+```json
+{
+  "updated_count": 3
+}
+```
+
+Important errors: `UNAUTHORIZED` and `VALIDATION_ERROR`.
 
 ## Health
 
@@ -861,6 +937,43 @@ Success: `200` with:
 
 Message `type` can be `TEXT`, `FILE`, `SYSTEM`, or `CUSTOM_OFFER`. Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, and `ORDER_NOT_FOUND`.
 
+### Upload a Workroom image
+
+```http
+POST /api/v1/orders/:id/messages/upload
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+```
+
+The authenticated user must be a participant in the order, and the order must be `ACTIVE`. Submit exactly one JPEG, PNG, or WebP image in the field `file`. PDF uploads are not supported in Tier 1.
+
+The backend converts the image to a WebP with a light tiled `TalentScout DRAFT` watermark. The source file is not stored. The private storage path is kept inside the backend, and `attachment_url` contains a temporary signed URL in the response.
+
+Example with `FormData`:
+
+```ts
+const form = new FormData();
+form.append('file', imageFile);
+```
+
+Success: `201` with a `WorkroomMessage` in `data`:
+
+```json
+{
+  "id": "uuid",
+  "order_id": "uuid",
+  "sender_id": "uuid",
+  "type": "FILE",
+  "content": null,
+  "attachment_url": "https://signed-url.example.com/chat-image.webp",
+  "attachment_type": "IMAGE",
+  "audio_duration_seconds": null,
+  "created_at": "2026-08-08T00:00:00.000Z"
+}
+```
+
+Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, `CHAT_LOCKED`, `CHAT_RETRY_REQUIRED`, `CHAT_ATTACHMENT_REQUIRED`, `CHAT_ATTACHMENT_TYPE_NOT_ALLOWED`, `CHAT_ATTACHMENT_TOO_LARGE`, `CHAT_ATTACHMENT_INVALID_IMAGE`, and `CHAT_ATTACHMENT_STORAGE_FAILED`.
+
 ### Submit a deliverable
 
 ```http
@@ -1108,6 +1221,8 @@ order:<orderId>
 
 The connected user must be an order participant to join that order's room.
 
+After the authenticated connection is established, the server also joins the socket to the private user room `user:<authenticated-user-id>`. The user id comes from the verified Supabase token and is never supplied by the client. All notification events are emitted only to this private room.
+
 ### Client to server events
 
 #### `join_room`
@@ -1211,6 +1326,27 @@ Emitted to the order room after the client approves a deliverable.
 ```
 
 The URL is a temporary signed URL for the clean file.
+
+#### `new_notification`
+
+Emitted to the authenticated user's private room after a notification is persisted. The event uses the same success envelope as the other server events.
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "category": "ORDERS_ESCROW",
+    "title": "Work Submitted for Review",
+    "body": "The freelancer submitted work for your review.",
+    "is_read": false,
+    "metadata": { "link": "/messages/order-id" },
+    "created_at": "2026-08-08T00:00:00.000Z"
+  }
+}
+```
+
+The payload does not include `user_id`. If a socket is offline, use the authenticated notification list endpoint to recover persisted notifications.
 
 #### `chat_error`
 

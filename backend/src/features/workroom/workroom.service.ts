@@ -1,6 +1,7 @@
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
 import { ApiError } from '../../utils/api-error.js';
+import { mapWorkroomMessagesWithSignedUrls } from './chat-attachment.service.js';
 import {
   countOrderMessages,
   createTextMessage,
@@ -11,7 +12,10 @@ import {
   mapWorkroomMessage,
   workroomRoomName,
 } from './workroom.types.js';
+import { assertWorkroomChatIsActive } from './workroom.rules.js';
 import type { WorkroomMessage, WorkroomRoom } from 'shared/schemas';
+
+export { assertWorkroomChatIsActive } from './workroom.rules.js';
 
 const maxHistoryPageSize = 50;
 
@@ -22,12 +26,6 @@ function isPrismaError(error: unknown, code: string): boolean {
 function assertHistoryPage(page: number, pageSize: number): void {
   if (!Number.isInteger(page) || page < 1 || !Number.isInteger(pageSize) || pageSize < 1 || pageSize > maxHistoryPageSize) {
     throw new ApiError(422, 'VALIDATION_ERROR', 'Message history pagination is invalid.');
-  }
-}
-
-export function assertWorkroomChatIsActive(status: string): void {
-  if (status !== 'ACTIVE') {
-    throw new ApiError(409, 'CHAT_LOCKED', 'Chat is locked until escrow is verified.');
   }
 }
 
@@ -45,7 +43,7 @@ export async function getOrderMessages(
 }> {
   assertHistoryPage(page, pageSize);
 
-  return prisma.$transaction(async (transaction) => {
+  const result = await prisma.$transaction(async (transaction) => {
     const order = await findParticipantOrder(orderId, userId, transaction);
     if (order === null) {
       throw new ApiError(404, 'ORDER_NOT_FOUND', 'The order was not found.');
@@ -56,14 +54,16 @@ export async function getOrderMessages(
       findOrderMessages(order.id, page, pageSize, transaction),
     ]);
 
-    return {
-      items: records.map(mapWorkroomMessage),
-      page,
-      page_size: pageSize,
-      total_items: totalItems,
-      total_pages: Math.ceil(totalItems / pageSize),
-    };
+    return { records, page, pageSize, totalItems };
   });
+
+  return {
+    items: await mapWorkroomMessagesWithSignedUrls(result.records),
+    page: result.page,
+    page_size: result.pageSize,
+    total_items: result.totalItems,
+    total_pages: Math.ceil(result.totalItems / result.pageSize),
+  };
 }
 
 export async function joinWorkroom(userId: string, orderId: string): Promise<WorkroomRoom> {

@@ -19,6 +19,9 @@ The backend protects marketplace transactions, workroom communication, and deliv
 | 8 | Dispute resolution | Phase 5 | planned |
 | 9 | Public freelancer profile API | Phase 6 | in-progress |
 | 10 | Protected order list and details APIs | Phase 6 | in-progress |
+| 11 | Notification APIs | Phase 7 | in-progress |
+| 12 | Socket.io private rooms and notification service | Phase 7 | in-progress |
+| 13 | Workroom chat image upload | Phase 5 | in-progress |
 
 ## Phase 1: Backend foundation
 
@@ -82,6 +85,20 @@ Let either party raise a dispute during the permitted order states and let an ad
 **Done when:** dispute creation locks the workroom, administrator resolution follows the documented state machine, and every resolution is recorded in `admin_audit_logs`.
 - [ ] Design it (spec): `/architect dispute resolution`
 
+### 13. Workroom chat image upload · in-progress
+
+Let an authenticated order participant send a watermarked image in the active Workroom chat. Store the processed image privately, persist a file message, return a signed URL, and broadcast the message through the existing order room.
+**Done when:** one supported image can be uploaded by an order participant while the order is `ACTIVE`, the source is converted to a watermarked WebP in private Supabase Storage, the file message is persisted and visible in history, the room receives `new_message`, and invalid, unauthorized, locked, oversized, and PDF uploads are blocked.
+- [x] Design it (spec): `/architect workroom chat image upload`
+- [x] Build it: `/develop workroom chat image upload`
+   - [x] Add the bounded image upload contract, environment values, and Sharp watermark pipeline, satisfying AC-1 and AC-3
+   - [x] Add private Supabase Storage upload, cleanup, file message persistence, and signed URL mapping, satisfying AC-4, AC-5, AC-6, and AC-7
+   - [x] Add the participant and ACTIVE order route flow plus the committed `new_message` broadcast, satisfying AC-2 and AC-5
+   - [x] Add focused HTTP, storage, history, and Socket.io tests, satisfying AC-1 through AC-9
+- [ ] Verify it: `/check verify workroom chat image upload`
+- [ ] Test it: `/test workroom chat image upload`
+Spec [0010](../specs/0010-workroom-chat-image-upload.md) · code in `backend/src/features/workroom/` and `backend/src/middlewares/upload.ts`
+
 ## Phase 6: API gaps and dashboard support
 
 ### 9. Public freelancer profile API · in-progress
@@ -110,3 +127,33 @@ Give authenticated clients and freelancers the order summaries and participant-o
 - [ ] Verify it: `/check verify Phase 6 API gaps and dashboard support`
 - [ ] Test it: `/test Phase 6 API gaps and dashboard support`
 Spec [0007](../specs/0007-phase-6-api-gaps-and-dashboard-support.md) · code in `backend/src/features/transactions/order.*`
+
+## Phase 7: Real time notifications system
+
+### 11. Notification APIs · in-progress
+
+Give authenticated users a paginated notification list and safe read state controls. Keep notification creation, private Socket.io rooms, and real time emission for the following Phase 7 step.
+**Done when:** the schema stores a typed notification category, authenticated users can list only their own notifications with category and unread filters, users can mark one or all of their notifications as read, and the unread query has its partial database index.
+- [x] Design it (spec): `/architect notification APIs`
+- [x] Build it: `/develop notification APIs`
+   - [x] Add the typed notification contract and safe data preserving schema migration
+   - [x] Add the authenticated list endpoint with pagination and filters
+   - [x] Add owned single read and mark all read mutations
+   - [x] Register the routes, update the shared API contract, and add focused tests
+- [ ] Verify it: `/check verify notification APIs`
+- [ ] Test it: `/test notification APIs`
+Spec [0008](../specs/0008-notification-apis.md) · code in `backend/src/features/notifications/`
+
+### 12. Socket.io private rooms and notification service · in-progress
+
+Give every authenticated socket a private user room and make escrow and deliverable state changes create durable notifications before sending a typed real time event. Keep the future custom offer receive event deferred because the current backend has no such state transition.
+**Done when:** authenticated sockets join only their verified private user room, notification rows are persisted before `new_notification` is emitted, escrow verification and deliverable submission and approval notify the correct participants, and the unsupported custom offer receive event is explicitly documented for the later proposal flow.
+- [x] Design it (spec): `/architect Socket.io private rooms and notification service`
+- [x] Build it: `/develop Socket.io private rooms and notification service`
+   - [x] Add the private user room and typed `new_notification` contract (AC-1, AC-2)
+   - [x] Add the Prisma backed sender with persistence first and emission failure handling (AC-3)
+   - [x] Integrate escrow and deliverable state change notifications (AC-4, AC-5)
+   - [x] Add focused tests and update the Socket.io API contract, including the custom offer boundary (AC-6, AC-7)
+- [ ] Verify it: `/check verify Socket.io private rooms and notification service`
+- [ ] Test it: `/test Socket.io private rooms and notification service`
+Spec [0009](../specs/0009-socket-private-rooms-notification-service.md) · code in `backend/src/config/socket.ts` and `backend/src/features/notifications/`

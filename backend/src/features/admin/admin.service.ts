@@ -4,6 +4,7 @@ import type {
   AdminPaymentVerificationResponse,
   ModerationRequest,
 } from 'shared/schemas';
+import { sendNotification } from '../notifications/notification.service.js';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
 import { ApiError } from '../../utils/api-error.js';
@@ -85,12 +86,32 @@ function mapModeration(moderation: ModerationRecord): AdminModerationResponse {
   };
 }
 
+async function sendEscrowNotification(
+  userId: string,
+  orderId: string,
+  title: string,
+  body: string,
+): Promise<void> {
+  try {
+    await sendNotification(userId, 'ORDERS_ESCROW', title, body, {
+      link: `/messages/${orderId}`,
+    });
+  } catch (error: unknown) {
+    console.error('Escrow notification persistence failed.', {
+      order_id: orderId,
+      user_id: userId,
+      title,
+      error: error instanceof Error ? error.message : 'UNKNOWN_ERROR',
+    });
+  }
+}
+
 export async function verifyEscrowPayment(
   adminUserId: string,
   paymentId: string,
 ): Promise<AdminPaymentVerificationResponse> {
   try {
-    return await prisma.$transaction(async (transaction) => {
+    const verified = await prisma.$transaction(async (transaction) => {
       const payment = await findPaymentById(paymentId, transaction);
 
       if (payment === null) {
@@ -144,8 +165,30 @@ export async function verifyEscrowPayment(
         transaction,
       );
 
-      return mapPaymentVerification(refreshedPayment);
+      return {
+        response: mapPaymentVerification(refreshedPayment),
+        clientId: refreshedPayment.order.client_id,
+        freelancerId: refreshedPayment.order.freelancer_id,
+        orderId: refreshedPayment.order_id,
+      };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+
+    await Promise.all([
+      sendEscrowNotification(
+        verified.clientId,
+        verified.orderId,
+        'Escrow Verified',
+        'Your escrow payment was verified and the order is active.',
+      ),
+      sendEscrowNotification(
+        verified.freelancerId,
+        verified.orderId,
+        'Order Active',
+        'The order is active and ready for work.',
+      ),
+    ]);
+
+    return verified.response;
   } catch (error: unknown) {
     if (error instanceof ApiError) {
       throw error;

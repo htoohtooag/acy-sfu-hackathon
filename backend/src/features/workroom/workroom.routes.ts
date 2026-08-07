@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { requireAuth } from '../../middlewares/auth.js';
-import { deliverableUpload } from '../../middlewares/upload.js';
+import { chatAttachmentUpload, deliverableUpload } from '../../middlewares/upload.js';
 import { decide, submit } from './deliverable.controller.js';
-import { getMessages } from './workroom.controller.js';
+import { getMessages, uploadMessageImage } from './workroom.controller.js';
 import {
   validateDeliverableDecision,
   validateDeliverableDecisionParams,
@@ -19,6 +19,14 @@ workroomRouter.get(
   validateWorkroomOrderParams,
   validateWorkroomHistoryQuery,
   getMessages,
+);
+
+workroomRouter.post(
+  '/:id/messages/upload',
+  requireAuth,
+  validateWorkroomOrderParams,
+  chatAttachmentUpload,
+  uploadMessageImage,
 );
 
 workroomRouter.post(

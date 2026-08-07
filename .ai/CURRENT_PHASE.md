@@ -7,10 +7,10 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ## Current Status
 
-**Active Stack:** Frontend
-**Active Plan File:** `FRONTEND_BUILD_PLAN.md`
-**Last completed:** Frontend Phase 6 Step 11.1 Workroom status UI, participant names, and real time typing indicator
-**Next:** Frontend Phase 6 Step 12 Watermark Delivery and Approval verification
+**Active Stack:** Backend
+**Active Plan File:** `BACKEND_BUILD_PLAN.md`
+**Last completed:** Backend Phase 7 Step 15 Socket.io private rooms and notification service
+**Next:** Verify Backend Phase 5 Step 10.1 WIP chat image upload
 
 ---
 
@@ -38,6 +38,7 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 5 — Workspace & Resolution
 - [x] 09 Workroom Socket.io (Participant chat, history, escrow lock; file upload deferred)
 - [x] 10 Watermark Delivery Lock & Completion (Sharp, private Supabase Storage, signed URL release)
+- [x] 10.1 WIP Chat File Upload (Tier 1) (implementation complete; private Supabase bucket provisioning and Beta verification remain)
 - [x] 11 Client Reviews (client-only review endpoint, transactional success rate update, unique review constraint)
 
 ### Phase 6 - API Gaps
@@ -45,8 +46,8 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 13 Orders List & Details APIs (Protected) 
 
 ### Phase 7 -  Real-Time Notifications System 
-- [ ] 14: Notification APIs 
-- [ ] 15: Socket.io Private Rooms & Notification Service
+- [x] 14: Notification APIs
+- [x] 15: Socket.io Private Rooms & Notification Service
 
 ---
 
@@ -104,3 +105,5 @@ Update this file after every completed feature. Any AI agent reading this should
 - Frontend Phase 5 Steps 9, 9.1, and 10 are complete. Checkout now has protected package hiring, backend payment-method lookup and quote contracts, React Hook Form validation, TanStack Query mutations, multipart proof upload, and redirect to the awaiting-escrow workroom. The package Hire link now has native link semantics, the app modal slot closes through a catch all route, and the AI dialog resets when leaving its route scope. Payment method checkout now uses backend logos and progressive account detail disclosure, with database account metadata preserved by the lookup service. Frontend production build and focused lint pass. Step 10.1 is next.
 - Frontend Phase 6 Step 11.1 now has status specific banners and lock behavior, role aware participant fallback names, deliverable submission and client decision actions, signed URL session handling, a completed order review prompt, and authenticated room scoped real time typing status. Chat attachments remain deferred because the backend supports text messages only. Full verification and test workflow remain next.
 - Workroom identity now uses the explicit backend freelancer participant in the inbox, chat header, incoming message header, and expanded or collapsed sidebar recent messages. The authenticated freelancer name is used only as a same user fallback when the order name is missing.
+- Backend Phase 7 Step 14 and the Step 15 implementation are complete. Step 15 is implemented in `backend/src/config/socket.ts`, `backend/src/features/notifications/`, `backend/src/features/admin/`, and `backend/src/features/workroom/`; root build, backend build, all 24 backend tests, and Prisma validation pass. Beta verify and test workflow boxes remain open in `docs/scope/scope.md`. The custom offer receive notification remains deferred because that backend state transition does not exist yet.
+- Backend Phase 5 Step 10.1 is implemented in `backend/src/features/workroom/` and `backend/src/middlewares/upload.ts`; shared API docs, 25 backend tests, root build, and Prisma validation pass. The configured Supabase project does not yet contain the private `chat-attachments` bucket, so provisioning and Beta verification remain next.

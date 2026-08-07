@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { DeliverableSubmittedEvent, DeliverableUnlockedEvent } from './deliverables.js';
+import type { NotificationResponse } from './notifications.js';
 
 const pageQuerySchema = z
   .object({
@@ -13,6 +14,8 @@ export const workroomOrderIdSchema = z
   .strict();
 
 export const workroomHistoryQuerySchema = pageQuerySchema;
+
+export const workroomAttachmentTypeSchema = z.enum(['IMAGE', 'PDF']);
 
 export const joinRoomSchema = z
   .object({ order_id: z.uuid() })
@@ -67,6 +70,7 @@ export const workroomSocketErrorSchema = z.object({
 
 export type WorkroomOrderIdParams = z.infer<typeof workroomOrderIdSchema>;
 export type WorkroomHistoryQuery = z.infer<typeof workroomHistoryQuerySchema>;
+export type WorkroomAttachmentType = z.infer<typeof workroomAttachmentTypeSchema>;
 export type JoinRoomRequest = z.infer<typeof joinRoomSchema>;
 export type SendMessageRequest = z.infer<typeof sendMessageSchema>;
 export type TypingStatusRequest = z.infer<typeof typingStatusRequestSchema>;
@@ -126,5 +130,6 @@ export type WorkroomServerToClientEvents = {
   typing_status: (payload: WorkroomSocketSuccess<TypingStatusEvent>) => void;
   deliverable_submitted: (payload: WorkroomSocketSuccess<DeliverableSubmittedEvent>) => void;
   deliverable_unlocked: (payload: WorkroomSocketSuccess<DeliverableUnlockedEvent>) => void;
+  new_notification: (payload: WorkroomSocketSuccess<NotificationResponse>) => void;
   chat_error: (payload: WorkroomSocketError) => void;
 };

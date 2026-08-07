@@ -18,6 +18,7 @@ test('verified payment response is safe for JSON and excludes the screenshot pat
     order: {
       id: 'order-id',
       client_id: 'client-id',
+      freelancer_id: 'freelancer-id',
       status: 'ACTIVE',
       is_escrow_funded: true,
       deleted_at: null,
@@ -42,6 +43,7 @@ test('rejected payment response preserves the locked order and reason', () => {
     order: {
       id: 'order-id',
       client_id: 'client-id',
+      freelancer_id: 'freelancer-id',
       status: 'AWAITING_ESCROW',
       is_escrow_funded: false,
       deleted_at: null,

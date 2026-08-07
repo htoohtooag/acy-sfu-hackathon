@@ -74,6 +74,27 @@ export async function createTextMessage(
   });
 }
 
+export async function createFileMessage(
+  id: string,
+  orderId: string,
+  senderId: string,
+  attachmentPath: string,
+  client: WorkroomTransactionClient,
+): Promise<WorkroomMessageRecord> {
+  return client.message.create({
+    data: {
+      id,
+      order_id: orderId,
+      sender_id: senderId,
+      type: 'FILE',
+      content: null,
+      attachment_url: attachmentPath,
+      attachment_type: 'IMAGE',
+    },
+    select: workroomMessageSelect,
+  });
+}
+
 export async function createSystemMessage(
   orderId: string,
   senderId: string,

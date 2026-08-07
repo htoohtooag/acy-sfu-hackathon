@@ -100,6 +100,7 @@ export {
   typingStatusRequestSchema,
   workroomMessageHistorySchema,
   workroomMessageSchema,
+  workroomAttachmentTypeSchema,
   workroomSocketErrorSchema,
   workroomHistoryQuerySchema,
   workroomOrderIdSchema,
@@ -110,6 +111,7 @@ export type {
   TypingStatusEvent,
   TypingStatusRequest,
   WorkroomHistoryQuery,
+  WorkroomAttachmentType,
   WorkroomMessage,
   WorkroomMessageHistory,
   WorkroomMessageType,
@@ -142,6 +144,26 @@ export type {
 } from './deliverables.js';
 export { createReviewSchema, reviewOrderParamsSchema, reviewResponseSchema } from './reviews.js';
 export type { CreateReviewRequest, ReviewResponse } from './reviews.js';
+export {
+  notificationCategorySchema,
+  notificationIdSchema,
+  notificationListQuerySchema,
+  notificationMarkAllReadSchema,
+  notificationMetadataSchema,
+  notificationMetadataWithLinkSchema,
+  notificationResponseSchema,
+  notificationListResponseSchema,
+  notificationMarkAllReadResponseSchema,
+} from './notifications.js';
+export type {
+  NotificationCategory,
+  NotificationListQuery,
+  NotificationMetadata,
+  NotificationMetadataWithLink,
+  NotificationResponse,
+  NotificationListResponse,
+  NotificationMarkAllReadResponse,
+} from './notifications.js';
 export {
   packageTierLookupListSchema,
   packageTierLookupSchema,

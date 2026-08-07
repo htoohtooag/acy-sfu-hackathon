@@ -10,6 +10,7 @@ import { env } from '../../config/env.js';
 import { prisma } from '../../config/prisma.js';
 import { supabaseAdmin } from '../../config/supabase.js';
 import { ApiError } from '../../utils/api-error.js';
+import { sendNotification } from '../notifications/notification.service.js';
 import {
   createDeliverable,
   createSystemMessage,
@@ -45,10 +46,31 @@ type ProcessedAssets = {
 type StoredDeliverableResult = {
   deliverable: DeliverableRecord;
   message: ReturnType<typeof mapWorkroomMessage>;
+  recipientUserId: string;
 };
 
 function isPrismaError(error: unknown, code: string): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === code;
+}
+
+async function sendDeliverableNotification(
+  recipientUserId: string,
+  orderId: string,
+  title: string,
+  body: string,
+): Promise<void> {
+  try {
+    await sendNotification(recipientUserId, 'ORDERS_ESCROW', title, body, {
+      link: `/messages/${orderId}`,
+    });
+  } catch (error: unknown) {
+    console.error('Deliverable notification persistence failed.', {
+      order_id: orderId,
+      user_id: recipientUserId,
+      title,
+      error: error instanceof Error ? error.message : 'UNKNOWN_ERROR',
+    });
+  }
 }
 
 function assertFreelancer(order: DeliveryOrderRecord, userId: string): void {
@@ -272,7 +294,11 @@ export async function submitDeliverable(
       }
 
       const message = await createSystemMessage(orderId, freelancerUserId, submissionMessage, transaction);
-      return { deliverable, message: mapWorkroomMessage(message) };
+      return {
+        deliverable,
+        message: mapWorkroomMessage(message),
+        recipientUserId: currentOrder.client_id,
+      };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
     publishWorkroomEvent({ type: 'message', order_id: orderId, message: stored.message });
@@ -285,6 +311,12 @@ export async function submitDeliverable(
         watermarked_url: watermarkedUrl,
       },
     });
+    await sendDeliverableNotification(
+      stored.recipientUserId,
+      orderId,
+      'Work Submitted for Review',
+      'The freelancer submitted work for your review.',
+    );
 
     return submissionResponse(stored.deliverable, watermarkedUrl);
   } catch (error: unknown) {
@@ -364,7 +396,11 @@ export async function approveOrRejectDeliverable(
         }
 
         const message = await createSystemMessage(orderId, clientUserId, approvalMessage, transaction);
-        return { deliverable: updatedDeliverable, message: mapWorkroomMessage(message) };
+        return {
+          deliverable: updatedDeliverable,
+          message: mapWorkroomMessage(message),
+          recipientUserId: currentOrder.freelancer_id,
+        };
       }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
       publishWorkroomEvent({ type: 'message', order_id: orderId, message: result.message });
@@ -377,6 +413,12 @@ export async function approveOrRejectDeliverable(
           clean_url: cleanUrl,
         },
       });
+      await sendDeliverableNotification(
+        result.recipientUserId,
+        orderId,
+        'Payment Released!',
+        'The client approved the work and payment was released.',
+      );
 
       return approvalResponse(result.deliverable, cleanUrl);
     } catch (error: unknown) {

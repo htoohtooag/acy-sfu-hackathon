@@ -174,6 +174,12 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
       2. Revert Order `status = ACTIVE` (so the freelancer can submit a new version later).
   - *Done when:* Freelancer uploads a file -> Client sees watermarked version -> Client clicks Approve -> Order becomes COMPLETED -> Client can access the clean file.
 
+- [ ] **Step 10.1: Backend - WIP Chat File Upload (Tier 1)**
+  - **Endpoint:** `POST /api/v1/orders/:id/messages/upload`
+  - **Authorization:** Verify `req.user.id` is a participant of the Order.
+  - **Logic:** Use `multer` (memory storage) to receive exactly one JPEG, PNG, or WebP image. Require the order to be `ACTIVE`. Use `sharp` to apply a *light, semi-transparent "TalentScout DRAFT" watermark* tiled across the image and convert it to `.webp`. Upload the private object to Supabase Storage (`chat-attachments` bucket). Save a row to the `messages` table (`type: FILE`, internal object path in `attachment_url`, `attachment_type: IMAGE`), return a short lived signed URL, and emit a Socket.io `new_message` event to the order room with the file metadata. PDF upload is deferred until a separate watermarking pipeline is designed.
+
+
 - [x] **Step 11: Reputation & Reviews**
   - **Schema Constraint (The Rulebook):** 
     - Add `@@unique([order_id, reviewer_id])` to the `reviews` table in Prisma. This physically prevents duplicate reviews at the database level.
@@ -262,5 +268,3 @@ Socket.io is for *real-time* communication. When the user refreshes the page, th
   - *Done when:* All state changes in the backend trigger a DB insert and a real-time Socket.io emission to the correct private user room.
 
 ---
-
-

@@ -82,6 +82,10 @@ export type WorkroomServerToClientEvents = {
     success: true;
     data: import('shared/schemas').DeliverableUnlockedEvent;
   }) => void;
+  new_notification: (payload: {
+    success: true;
+    data: import('shared/schemas').NotificationResponse;
+  }) => void;
   chat_error: (payload: {
     success: false;
     error: { code: string; message: string };
@@ -92,14 +96,17 @@ export function workroomRoomName(orderId: string): string {
   return `order:${orderId}`;
 }
 
-export function mapWorkroomMessage(record: WorkroomMessageRecord): WorkroomMessage {
+export function mapWorkroomMessage(
+  record: WorkroomMessageRecord,
+  attachmentUrl: string | null = record.attachment_url,
+): WorkroomMessage {
   return {
     id: record.id,
     order_id: record.order_id,
     sender_id: record.sender_id,
     type: record.type,
     content: record.content,
-    attachment_url: record.attachment_url,
+    attachment_url: attachmentUrl,
     attachment_type: record.attachment_type,
     audio_duration_seconds: record.audio_duration_seconds,
     created_at: record.created_at.toISOString(),

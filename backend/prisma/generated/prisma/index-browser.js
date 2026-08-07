@@ -347,7 +347,7 @@ exports.Prisma.JobPostScalarFieldEnum = {
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  type: 'type',
+  category: 'category',
   title: 'title',
   body: 'body',
   is_read: 'is_read',
@@ -529,6 +529,12 @@ exports.job_status = exports.$Enums.job_status = {
   HIRING: 'HIRING',
   CLOSED: 'CLOSED',
   DELETED: 'DELETED'
+};
+
+exports.notification_category = exports.$Enums.notification_category = {
+  SYSTEM_ACCOUNT: 'SYSTEM_ACCOUNT',
+  ORDERS_ESCROW: 'ORDERS_ESCROW',
+  OFFERS_PROPOSALS: 'OFFERS_PROPOSALS'
 };
 
 exports.dispute_reason = exports.$Enums.dispute_reason = {

@@ -11,6 +11,7 @@ import { reviewRouter } from './features/reputation/review.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
 import { workroomRouter } from './features/workroom/workroom.routes.js';
 import { lookupRouter } from './features/lookups/lookup.routes.js';
+import { notificationRouter } from './features/notifications/notification.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { successResponse } from './utils/api-response.js';
 
@@ -43,6 +44,6 @@ app.use('/api/v1/orders', workroomRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/orders', reviewRouter);
 app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/notifications', notificationRouter);
 
 app.use(errorHandler);
-
