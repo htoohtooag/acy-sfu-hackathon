@@ -613,6 +613,37 @@ The `parts` array accepts the UI message part values used by the AI SDK. It must
 
 Success: this is a streaming response, not the ordinary JSON success envelope. Use the matching AI SDK UI message stream client and process the response as a stream.
 
+The server executed `searchPackages` tool can return an array with at most five package cards. The frontend must validate the tool output with the shared `aiSearchPackageCardSchema` before rendering it.
+
+```json
+[
+  {
+    "id": "uuid",
+    "title": "Logo design package",
+    "description": "A complete logo package",
+    "price_mmk": "150000",
+    "delivery_days": 7,
+    "features": ["Three concepts"],
+    "tier": {
+      "id": "uuid",
+      "name": "STANDARD",
+      "display_name": "Standard"
+    },
+    "freelancer": {
+      "id": "uuid",
+      "name": "Aye Aye",
+      "avatar_url": null,
+      "headline": "Product designer",
+      "city": "Yangon",
+      "is_verified": true,
+      "completed_projects_count": 12
+    }
+  }
+]
+```
+
+Errors before streaming begins use the normal `{ success: false, error: { code, message } }` envelope. Errors after streaming begins use the AI SDK safe stream error part.
+
 Important errors before streaming begins: `UNAUTHORIZED`, `FORBIDDEN`, `VALIDATION_ERROR`, `AI_SEARCH_RATE_LIMITED`, and AI provider or timeout errors. The rate limit is configured by the backend and defaults to 10 requests per user and IP address in a 60 second window.
 
 ## Orders and escrow
@@ -1136,4 +1167,4 @@ Common socket error codes include `VALIDATION_ERROR`, `ROOM_ACCESS_DENIED`, `ROO
 * Pagination defaults to page `1`. Package and job lists default to 20 items and allow at most 50. Workroom history defaults to 50 items and allows at most 50.
 * Do not send a JSON `Content-Type` header for browser `FormData` requests. The browser must create the multipart boundary.
 * Order creation, payment proof submission, admin payment decisions, deliverable decisions, and reviews are stateful operations. The frontend should use the returned status and error code instead of assuming that a repeated request is safe.
-* The backend does not currently expose order list or order detail HTTP routes.
+* Order list and order detail HTTP routes are available to authenticated order participants as documented above.

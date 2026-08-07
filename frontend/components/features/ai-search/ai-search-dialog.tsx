@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 
 import { AiSearchInput } from "@/components/features/ai-search/ai-search-input";
 import { AiSearchTranscript } from "@/components/features/ai-search/ai-search-transcript";
+import { useAiSearchChat } from "@/components/features/ai-search/ai-search-chat-provider";
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
@@ -15,6 +16,8 @@ import {
 import { aiAssistantIdentity } from "@/features/ai-search/mock-data";
 
 export function AiSearchDialog() {
+  const { messages, sendMessage, stop, status, error } = useAiSearchChat();
+
   return (
     <DialogContent
       aria-describedby="ai-search-dialog-description"
@@ -36,8 +39,8 @@ export function AiSearchDialog() {
         </DialogClose>
       </DialogHeader>
       <div className="flex min-h-0 flex-1 flex-col">
-        <AiSearchTranscript />
-        <AiSearchInput />
+        <AiSearchTranscript messages={messages} status={status} error={error} />
+        <AiSearchInput status={status} onSend={(text) => sendMessage({ text })} onStop={() => stop()} />
       </div>
     </DialogContent>
   );

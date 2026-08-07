@@ -35,11 +35,15 @@ export type {
   UpdatePackageRequest,
 } from './catalog.js';
 export {
+  aiSearchPackageCardSchema,
+  aiSearchPackageResultsSchema,
   aiSearchRequestSchema,
   searchPackagesToolSchema,
   searchPlatformDocsToolSchema,
 } from './ai-search.js';
 export type {
+  AiSearchPackageCard,
+  AiSearchPackageResults,
   AiSearchRequest,
   AiSearchMessage,
   SearchPackagesToolInput,
@@ -49,6 +53,11 @@ export {
   createOrderSchema,
   orderIdSchema,
   orderListQuerySchema,
+  orderListItemSchema,
+  orderListResponseSchema,
+  orderParticipantSchema,
+  orderSourceSummarySchema,
+  orderStatusSchema,
   paymentProofFieldsSchema,
 } from './orders.js';
 export type {
@@ -63,6 +72,7 @@ export type {
   OrderParticipant,
   OrderPaymentSummary,
   OrderSourceSummary,
+  OrderStatus,
 } from './orders.js';
 export {
   adminEmptyBodySchema,
@@ -81,6 +91,9 @@ export type {
 export {
   joinRoomSchema,
   sendMessageSchema,
+  workroomMessageHistorySchema,
+  workroomMessageSchema,
+  workroomSocketErrorSchema,
   workroomHistoryQuerySchema,
   workroomOrderIdSchema,
 } from './workroom.js';
@@ -95,6 +108,8 @@ export type {
   WorkroomRoom,
   WorkroomSocketError,
   WorkroomSocketSuccess,
+  WorkroomClientToServerEvents,
+  WorkroomServerToClientEvents,
 } from './workroom.js';
 export {
   deliverableDecisionParamsSchema,

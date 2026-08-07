@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 
 import { PackageDetailContent } from "@/components/features/catalog/package-detail-content";
-import { findMockCatalogPackage } from "@/features/catalog/mock-data";
+import { getCatalogPackage } from "@/features/catalog/catalog-api";
 
 type PackagePageProps = { params: Promise<{ id: string }> };
 
 export default async function PackagePage({ params }: PackagePageProps) {
   const { id } = await params;
-  const item = findMockCatalogPackage(id);
+  const item = await getCatalogPackage(id).catch(() => null);
   if (!item) notFound();
 
   return (

@@ -1,7 +1,7 @@
 # 0002. Workroom inbox and chat shell
 
 **Date**: 2026-08-06
-**Status**: Proposed
+**Status**: In Progress
 
 ## Summary
 
@@ -135,11 +135,11 @@ None.
 
 ## Build plan
 
-1. Inspect the current shadcn registry context and add only missing Base UI compatible primitives for Tabs, Avatar, Empty, MessageScroller, Message, Bubble, Marker, and InputGroup, satisfies **AC-2**, **AC-3**, **AC-4**, **AC-5**, **AC-6**, and **AC-10**.
-2. Add typed mock conversations and messages with one `AWAITING_ESCROW` record, keeping all mock values outside route files, satisfies **AC-3**, **AC-5**, and **AC-7**.
-3. Add the `/messages` Server Component route and a focused Client Component inbox shell with the responsive two pane layout, local search, tabs, selection, and keyboard accessible list items, satisfies **AC-1**, **AC-2**, **AC-3**, and **AC-8**.
-4. Compose the empty state and active chat from the shadcn chat primitives, then add the local composer and escrow lock banner, satisfies **AC-4**, **AC-5**, **AC-6**, and **AC-7**.
-5. Run lint and production build checks, then manually review responsive layout, keyboard focus, reduced motion, overflow, empty state, active chat, and lock behavior, satisfies **AC-9** and **AC-10**.
+1. [x] Inspect the current shadcn registry context and add only missing Base UI compatible primitives for Tabs, Avatar, Empty, MessageScroller, Message, Bubble, Marker, and InputGroup, satisfies **AC-2**, **AC-3**, **AC-4**, **AC-5**, **AC-6**, and **AC-10**.
+2. [x] Add typed mock conversations and messages with one `AWAITING_ESCROW` record, keeping all mock values outside route files, satisfies **AC-3**, **AC-5**, and **AC-7**.
+3. [x] Add the `/messages` Server Component route and a focused Client Component inbox shell with the responsive two pane layout, local search, tabs, selection, and keyboard accessible list items, satisfies **AC-1**, **AC-2**, **AC-3**, and **AC-8**.
+4. [x] Compose the empty state and active chat from the shadcn chat primitives, then add the local composer and escrow lock banner, satisfies **AC-4**, **AC-5**, **AC-6**, and **AC-7**.
+5. [ ] Run lint and production build checks, then manually review responsive layout, keyboard focus, reduced motion, overflow, empty state, active chat, and lock behavior, satisfies **AC-9** and **AC-10**. Lint and build passed, but live browser review was blocked because the sandbox does not permit binding a local server port.
 
 ## Consequences
 

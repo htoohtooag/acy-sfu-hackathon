@@ -73,3 +73,33 @@ export const searchPlatformDocsToolSchema = z.object({
 export type AiSearchRequest = z.infer<typeof aiSearchRequestSchema>;
 export type SearchPackagesToolInput = z.infer<typeof searchPackagesToolSchema>;
 export type SearchPlatformDocsToolInput = z.infer<typeof searchPlatformDocsToolSchema>;
+
+export const aiSearchPackageCardSchema = z.object({
+  id: z.uuid(),
+  title: z.string(),
+  description: z.string().nullable(),
+  price_mmk: z.string().regex(/^[0-9]+$/, 'Price must be a nonnegative integer string.'),
+  delivery_days: z.number().int().positive(),
+  features: z.array(z.string()),
+  tier: z
+    .object({
+      id: z.uuid(),
+      name: z.string(),
+      display_name: z.string().nullable(),
+    })
+    .nullable(),
+  freelancer: z.object({
+    id: z.uuid(),
+    name: z.string().nullable(),
+    avatar_url: z.string().url().nullable(),
+    headline: z.string().nullable(),
+    city: z.string().nullable(),
+    is_verified: z.boolean(),
+    completed_projects_count: z.number().int().nonnegative(),
+  }),
+});
+
+export const aiSearchPackageResultsSchema = z.array(aiSearchPackageCardSchema).max(5);
+
+export type AiSearchPackageCard = z.infer<typeof aiSearchPackageCardSchema>;
+export type AiSearchPackageResults = z.infer<typeof aiSearchPackageResultsSchema>;

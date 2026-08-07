@@ -1,0 +1,14 @@
+=> Ai search memo handling 
+How Enterprise Companies Handle This (Without a DB)
+When companies like Vercel, Stripe, or Intercom build a floating AI assistant that doesn't save to a database, they do not use localStorage. They use In-Memory State.
+
+Here is the breakdown of the approaches:
+
+In-Memory State (React Context / Zustand without Persist): The state lives in JavaScript memory (RAM).
+Pros: 100% secure from DevTools tampering. No JSON parsing overhead. Blazing fast.
+UX Trade-off: The memory is wiped if the user refreshes the page (F5) or closes the tab.
+Enterprise Reality: For a floating "quick search" widget, losing the chat on refresh is completely acceptable and standard.
+SessionStorage (If you MUST survive refreshes): If you really want the chat to survive an F5 refresh, you use sessionStorage (not localStorage). But you must validate the data with Zod when reading it back to prevent injection. sessionStorage is automatically wiped when the tab closes, which is safer than localStorage.
+
+
+-----------------------------------------------------------

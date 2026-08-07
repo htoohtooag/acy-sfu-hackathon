@@ -30,6 +30,26 @@ export const orderListQuerySchema = z.object({
   status: z.enum(['active', 'completed', 'in_review']).optional(),
 }).strict();
 
+export const orderStatusSchema = z.enum([
+  'AWAITING_ESCROW',
+  'ACTIVE',
+  'IN_REVIEW',
+  'COMPLETED',
+  'DISPUTED',
+  'CANCELED',
+]);
+
+export const orderParticipantSchema = z.object({
+  id: z.uuid(),
+  full_name: z.string().nullable(),
+  avatar_url: z.string().nullable(),
+}).strict();
+
+export const orderSourceSummarySchema = z.object({
+  id: z.uuid(),
+  title: z.string(),
+}).strict();
+
 export const paymentProofFieldsSchema = z
   .object({
     amount_mmk: positiveMoneyString,
@@ -95,6 +115,27 @@ export type OrderListItem = {
   other_party: OrderParticipant;
   source: OrderSourceSummary | null;
 };
+
+export const orderListItemSchema = z.object({
+  id: z.uuid(),
+  client_id: z.uuid(),
+  freelancer_id: z.uuid(),
+  source_type: z.enum(['PACKAGE', 'CUSTOM_OFFER']),
+  package_id: z.uuid().nullable(),
+  job_post_id: z.uuid().nullable(),
+  agreed_price_mmk: z.string(),
+  platform_fee_mmk: z.string(),
+  status: orderStatusSchema,
+  is_escrow_funded: z.boolean(),
+  created_at: z.iso.datetime({ offset: true }),
+  updated_at: z.iso.datetime({ offset: true }),
+  other_party: orderParticipantSchema,
+  source: orderSourceSummarySchema.nullable(),
+}).strict();
+
+export const orderListResponseSchema = z.array(orderListItemSchema);
+
+export type OrderStatus = z.infer<typeof orderStatusSchema>;
 
 export type OrderPaymentSummary = {
   id: string;

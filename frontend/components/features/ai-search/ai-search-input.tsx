@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowUp, Plus } from "lucide-react";
+import type { ChatStatus } from "ai";
+import { ArrowUp, Plus, Square } from "lucide-react";
 
 import {
   InputGroup,
@@ -10,11 +11,22 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 
-export function AiSearchInput() {
-  const [draft, setDraft] = useState("");
+interface AiSearchInputProps {
+  status: ChatStatus;
+  onSend: (text: string) => Promise<void>;
+  onStop: () => Promise<void>;
+}
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+export function AiSearchInput({ status, onSend, onStop }: AiSearchInputProps) {
+  const [draft, setDraft] = useState("");
+  const isStreaming = status === "submitted" || status === "streaming";
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
+    const text = draft.trim();
+    if (!text || isStreaming) return;
+
+    await onSend(text);
     setDraft("");
   }
 
@@ -29,17 +41,25 @@ export function AiSearchInput() {
           rows={2}
         />
         <InputGroupAddon align="inline-start" className="self-end pb-1">
-          <InputGroupButton type="button" size="icon-sm" aria-label="Add an attachment">
+          <InputGroupButton type="button" size="icon-sm" aria-label="Add an attachment" disabled>
             <Plus aria-hidden="true" data-icon="inline-start" />
           </InputGroupButton>
         </InputGroupAddon>
         <InputGroupAddon align="inline-end" className="self-end pb-1">
-          <InputGroupButton type="submit" size="icon-sm" disabled={!draft.trim()} aria-label="Send message">
-            <ArrowUp aria-hidden="true" data-icon="inline-start" />
-          </InputGroupButton>
+          {isStreaming ? (
+            <InputGroupButton type="button" size="icon-sm" aria-label="Stop AI search" onClick={() => void onStop()}>
+              <Square aria-hidden="true" data-icon="inline-start" />
+            </InputGroupButton>
+          ) : (
+            <InputGroupButton type="submit" size="icon-sm" disabled={!draft.trim()} aria-label="Send message">
+              <ArrowUp aria-hidden="true" data-icon="inline-start" />
+            </InputGroupButton>
+          )}
         </InputGroupAddon>
       </InputGroup>
-      <p className="mt-2 text-center text-xs text-muted-foreground">Mock interface · AI search connects in the next phase</p>
+      <p className="mt-2 text-center text-xs text-muted-foreground">
+        {isStreaming ? "Indy AI is searching the marketplace…" : "Ask about a service, skill, budget, or delivery timeline."}
+      </p>
     </form>
   );
 }
