@@ -1,4 +1,4 @@
-import type { CreateReviewRequest, ReviewResponse } from 'shared/schemas';
+import type { CreateReviewRequest, ReviewResponse, ReviewStatusResponse } from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
 import { ApiError } from '../../utils/api-error.js';
@@ -19,6 +19,28 @@ export function calculateSuccessRate(ratingSum: number, ratingCount: number): st
   }
 
   return ((ratingSum / (ratingCount * 5)) * 100).toFixed(2);
+}
+
+export async function getClientReviewStatus(
+  reviewerId: string,
+  orderId: string,
+): Promise<ReviewStatusResponse> {
+  const order = await findReviewOrder(orderId);
+
+  if (order === null) {
+    throw new ApiError(404, 'ORDER_NOT_FOUND', 'The order was not found.');
+  }
+
+  if (order.client_id !== reviewerId) {
+    throw new ApiError(403, 'REVIEW_ACCESS_DENIED', 'Only the order client can view this review status.');
+  }
+
+  if (order.status !== 'COMPLETED') {
+    return { reviewed: false };
+  }
+
+  const existingReview = await findExistingReview(order.id, reviewerId);
+  return { reviewed: existingReview !== null };
 }
 
 export async function createClientReview(

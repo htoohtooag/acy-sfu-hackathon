@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../../middlewares/auth.js';
 import { chatAttachmentUpload, deliverableUpload } from '../../middlewares/upload.js';
-import { decide, submit } from './deliverable.controller.js';
+import { decide, download, preview, submit } from './deliverable.controller.js';
 import { getMessages, uploadMessageImage } from './workroom.controller.js';
 import {
   validateDeliverableDecision,
@@ -43,4 +43,18 @@ workroomRouter.patch(
   validateDeliverableDecisionParams,
   validateDeliverableDecision,
   decide,
+);
+
+workroomRouter.get(
+  '/:id/deliverables/:deliverableId/preview',
+  requireAuth,
+  validateDeliverableDecisionParams,
+  preview,
+);
+
+workroomRouter.get(
+  '/:id/deliverables/:deliverableId/download',
+  requireAuth,
+  validateDeliverableDecisionParams,
+  download,
 );

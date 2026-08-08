@@ -127,6 +127,8 @@ export {
   deliverableDecisionSchema,
   deliverableOrderParamsSchema,
   deliverableSubmissionResponseSchema,
+  deliverablePreviewResponseSchema,
+  deliverableDownloadResponseSchema,
   deliverableApprovalResponseSchema,
   deliverableRejectionResponseSchema,
   deliverableDecisionResponseSchema,
@@ -137,13 +139,15 @@ export type {
   DeliverableApprovalResponse,
   DeliverableDecisionRequest,
   DeliverableDecisionResponse,
+  DeliverablePreviewResponse,
+  DeliverableDownloadResponse,
   DeliverableRejectionResponse,
   DeliverableSubmittedEvent,
   DeliverableSubmissionResponse,
   DeliverableUnlockedEvent,
 } from './deliverables.js';
-export { createReviewSchema, reviewOrderParamsSchema, reviewResponseSchema } from './reviews.js';
-export type { CreateReviewRequest, ReviewResponse } from './reviews.js';
+export { createReviewSchema, reviewOrderParamsSchema, reviewResponseSchema, reviewStatusResponseSchema } from './reviews.js';
+export type { CreateReviewRequest, ReviewResponse, ReviewStatusResponse } from './reviews.js';
 export {
   notificationCategorySchema,
   notificationIdSchema,

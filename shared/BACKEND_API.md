@@ -62,8 +62,11 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | GET | `/api/v1/orders/:id/messages` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/messages/upload` | Yes | Order participant | 201 |
 | POST | `/api/v1/orders/:id/deliverables` | Yes | Order freelancer | 201 |
+| GET | `/api/v1/orders/:id/deliverables/:deliverableId/preview` | Yes | Order client | 200 |
+| GET | `/api/v1/orders/:id/deliverables/:deliverableId/download` | Yes | Order client | 200 |
 | PATCH | `/api/v1/orders/:id/deliverables/:deliverableId` | Yes | Order client | 200 |
 | POST | `/api/v1/orders/:id/reviews` | Yes | Completed order client | 201 |
+| GET | `/api/v1/orders/:id/reviews` | Yes | Order client | 200 |
 | GET | `/api/v1/notifications` | Yes | Any authenticated user | 200 |
 | PATCH | `/api/v1/notifications/:id` | Yes | Notification owner | 200 |
 | POST | `/api/v1/notifications/mark-all-read` | Yes | Any authenticated user | 200 |
@@ -1010,6 +1013,26 @@ Success: `201` with:
 
 `watermarked_url` is a temporary signed URL. Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, `DELIVERABLE_ACCESS_DENIED`, `ORDER_NOT_ACTIVE`, `DELIVERABLE_REQUIRED`, `DELIVERABLE_TYPE_NOT_ALLOWED`, `DELIVERABLE_TOO_LARGE`, `DELIVERABLE_INVALID_IMAGE`, `DELIVERABLE_STORAGE_FAILED`, and `DELIVERABLE_RETRY_REQUIRED`.
 
+### Refresh a watermarked deliverable preview
+
+```http
+GET /api/v1/orders/:id/deliverables/:deliverableId/preview
+Authorization: Bearer <client-token>
+```
+
+The authenticated user must be the order client. The order must be in review and the deliverable must be under review. The endpoint creates a fresh temporary signed URL from the stored private watermarked object path.
+
+Success: `200` with:
+
+```json
+{
+  "deliverable_id": "uuid",
+  "watermarked_url": "https://signed-url.example.com/watermarked.webp"
+}
+```
+
+Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, `DELIVERABLE_ACCESS_DENIED`, `DELIVERABLE_NOT_FOUND`, `DELIVERABLE_NOT_REVIEWABLE`, and `DELIVERABLE_STORAGE_FAILED`.
+
 ### Approve or reject a deliverable
 
 ```http
@@ -1041,6 +1064,25 @@ Success for approval: `200` with:
 
 `clean_url` is a temporary signed URL for the unwatermarked file.
 
+### Refresh a completed deliverable download
+
+```http
+GET /api/v1/orders/:id/deliverables/:deliverableId/download
+Authorization: Bearer <client-token>
+```
+
+The authenticated user must be the order client. The order must be completed and the deliverable must be approved. The endpoint creates a fresh temporary signed URL from the stored private clean object path and requests download handling from storage.
+
+Success: `200` with:
+
+```json
+{
+  "deliverable_id": "uuid",
+  "file_name": "final-design.png",
+  "clean_url": "https://signed-url.example.com/clean.webp"
+}
+```
+
 Reject:
 
 ```json
@@ -1059,6 +1101,25 @@ Success for rejection: `200` with:
 ```
 
 Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, `DELIVERABLE_ACCESS_DENIED`, `DELIVERABLE_NOT_FOUND`, `DELIVERABLE_NOT_REVIEWABLE`, and `DELIVERABLE_RETRY_REQUIRED`.
+
+### Check review status
+
+```http
+GET /api/v1/orders/:id/reviews
+Authorization: Bearer <client-token>
+```
+
+The authenticated user must be the client of the order. A completed order returns whether that client already submitted a review. Other order states return `reviewed: false`.
+
+Success: `200` with:
+
+```json
+{
+  "reviewed": true
+}
+```
+
+Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, and `REVIEW_ACCESS_DENIED`.
 
 ### Create a review
 

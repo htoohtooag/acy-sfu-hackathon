@@ -7,10 +7,10 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ## Current Status
 
-**Active Stack:** Backend
-**Active Plan File:** `BACKEND_BUILD_PLAN.md`
-**Last completed:** Backend Phase 7 Step 15 Socket.io private rooms and notification service
-**Next:** Verify Backend Phase 5 Step 10.1 WIP chat image upload
+**Active Stack:** Frontend
+**Active Plan File:** `FRONTEND_BUILD_PLAN.md`
+**Last completed:** Frontend Phase 6 Step 11.1 Workroom Real-time Implementation
+**Next:** Verify Frontend Phase 6 Step 12, then Frontend Phase 6 Step 13 Reviews
 
 ---
 
@@ -27,9 +27,6 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 3 — Marketplace & AI
 - [x] 05 Catalog APIs (Packages & Jobs)
 - [x] 06 AI Search Agent (Vercel AI SDK + Gemini)
-
-### Phase 3.1: Real-Time Notifications System (Frontend)
-- [ ] 6.1 Notifications Page & Real-Time Integration
 
 ### Phase 4 — Transactions & Workroom
 - [x] 07 Order & Escrow APIs
@@ -72,6 +69,10 @@ Update this file after every completed feature. Any AI agent reading this should
 - [] 07 Home Dashboard (Stats & Activity) (skipped per user direction)
 - [] 7.1 Notifications Page (Mail-Style) (skipped per user direction)
 
+### Phase 3.1: Real-Time Notifications System (Frontend)
+- [ ] 6.1 Notifications Page & Real-Time Integration
+
+
 ### Phase 4 — Marketplace Management
 - [x] 08 My Packages & Job Posts (Enterprise CRUD)
 
@@ -84,8 +85,8 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 6 — Messaging & Final Review
 - [x] 11  Workroom Inbox & Chat UI Shell (Mock Data)
 - [x] 11.1 Workroom  Real-time Implementation (Socket.io & Backend)
-- [ ] 12 Watermark Delivery & Approval
-- [ ] 13 Reviews
+- [x] 12 Watermark Delivery & Approval (watermarked submission, approval or revision, payment release, refreshable signed previews, and refreshable completed downloads)
+- [x] 13 Reviews (client review dialog, validated submission, database persistence, duplicate protection, and freelancer success rate update)
 
 -------
 
@@ -97,6 +98,8 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Session Notes
 *AI Agent Rules: Update this section at the end of every session. Keep notes under 3 bullet points. Focus on what was done, what is broken, and exactly where to pick up next. Do not write essays here.*
 
+- Frontend Phase 6 Steps 12 and 13 are implemented and working. Workrooms support authenticated watermarked delivery, client approval or revision, payment release, refreshable signed previews, refreshable completed downloads, the client review dialog, persisted review status after switching or refreshing, duplicate protection, and freelancer success rate updates.
+- Shared and backend production builds, all 25 backend tests, focused frontend lint, and deliverable schema regression tests pass. Full frontend lint still has a pre-existing `/login/` anchor violation in `signup-role-picker.tsx`.
 - Frontend Phase 2 remains complete, including Supabase auth, role persistence, callback routing, onboarding, and lookup backed experience selection.
 - Phase 3 Step 6 is complete. The protected app shell now has TanStack Query, typed current user and recent order queries, Zustand role state, a responsive grouped sidebar, collapsible desktop navigation, role switching, profile membership actions, and corrected collapsed tooltips and popovers.
 - Frontend Phase 4 Step 8 is implemented with role routed package cards and job post table CRUD. Package tier lookup is now available through the authenticated backend endpoint and wired into the form. All shared, backend, and frontend checks pass. The catalog owner query and inactive package listing still need backend support.

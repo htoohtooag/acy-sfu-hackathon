@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createReviewSchema, reviewOrderParamsSchema } from 'shared/schemas';
+import { createReviewSchema, reviewOrderParamsSchema, reviewStatusResponseSchema } from 'shared/schemas';
 
 test('review schema accepts a bounded rating and optional comment', () => {
   const result = createReviewSchema.safeParse({
@@ -25,4 +25,9 @@ test('review schema rejects client supplied reviewee ids and unknown fields', ()
 
 test('review schema rejects comments longer than 2000 characters', () => {
   assert.equal(createReviewSchema.safeParse({ rating: 5, comment: 'a'.repeat(2001) }).success, false);
+});
+
+test('review status responses expose only the persisted review state', () => {
+  assert.deepEqual(reviewStatusResponseSchema.parse({ reviewed: true }), { reviewed: true });
+  assert.equal(reviewStatusResponseSchema.safeParse({ reviewed: 'true' }).success, false);
 });

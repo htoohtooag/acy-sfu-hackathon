@@ -68,10 +68,10 @@ export function getWorkroomStatusPresentation(status: OrderStatus, role: Workroo
 
   if (status === "IN_REVIEW") {
     return {
-      locked: false,
-      bannerTone: null,
-      bannerMessage: null,
-      roleNote: role === "FREELANCER" ? "Waiting for client to review your work." : null,
+      locked: true,
+      bannerTone: "neutral",
+      bannerMessage: role === "CLIENT" ? "Review the submitted work below to release payment." : "Final work is waiting for client review.",
+      roleNote: null,
       showSubmitFinalWork: false,
       showReviewPanel: role === "CLIENT",
       showReviewPrompt: false,
@@ -120,6 +120,18 @@ export function getMessagePreview(message: WorkroomMessage | undefined, order: O
   if (content) return content;
   if (message?.type === "SYSTEM") return "A workroom update is available.";
   return getProjectTitle(order);
+}
+
+export function sortWorkroomMessages(messages: WorkroomMessage[]): WorkroomMessage[] {
+  return [...messages].sort((left, right) => {
+    const timestampDifference = Date.parse(left.created_at) - Date.parse(right.created_at);
+    if (timestampDifference !== 0) return timestampDifference;
+    return left.id.localeCompare(right.id);
+  });
+}
+
+export function getLatestWorkroomMessage(messages: WorkroomMessage[] | undefined): WorkroomMessage | undefined {
+  return sortWorkroomMessages(messages ?? []).at(-1);
 }
 
 export function getInitials(name: string): string {

@@ -24,6 +24,12 @@ export const reviewResponseSchema = z
   })
   .strict();
 
+export const reviewStatusResponseSchema = z
+  .object({
+    reviewed: z.boolean(),
+  })
+  .strict();
+
 export type CreateReviewRequest = z.infer<typeof createReviewSchema>;
 
 export type ReviewResponse = {
@@ -35,4 +41,8 @@ export type ReviewResponse = {
   comment: string | null;
   success_rate: string;
   created_at: string;
+};
+
+export type ReviewStatusResponse = {
+  reviewed: boolean;
 };

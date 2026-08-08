@@ -30,6 +30,21 @@ export const deliverableSubmissionResponseSchema = z
   })
   .strict();
 
+export const deliverablePreviewResponseSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    watermarked_url: z.url(),
+  })
+  .strict();
+
+export const deliverableDownloadResponseSchema = z
+  .object({
+    deliverable_id: z.uuid(),
+    file_name: z.string(),
+    clean_url: z.url(),
+  })
+  .strict();
+
 export const deliverableApprovalResponseSchema = z
   .object({
     deliverable_id: z.uuid(),
@@ -82,6 +97,17 @@ export type DeliverableSubmissionResponse = {
   order_status: 'IN_REVIEW';
   submitted_at: string;
   watermarked_url: string;
+};
+
+export type DeliverablePreviewResponse = {
+  deliverable_id: string;
+  watermarked_url: string;
+};
+
+export type DeliverableDownloadResponse = {
+  deliverable_id: string;
+  file_name: string;
+  clean_url: string;
 };
 
 export type DeliverableApprovalResponse = {

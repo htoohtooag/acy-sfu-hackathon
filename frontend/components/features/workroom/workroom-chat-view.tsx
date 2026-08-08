@@ -26,17 +26,19 @@ interface WorkroomChatViewProps {
   role: WorkroomRole;
   currentUserName: string | null;
   detail: OrderDetail | null;
+  deliverableId: string | null;
   watermarkedUrl: string | null;
   cleanUrl: string | null;
   reviewSubmitted: boolean;
   onWatermarkedUrl: (deliverableId: string, url: string) => void;
   onCleanUrl: (deliverableId: string, url: string) => void;
+  onDeliverableRejected: (deliverableId: string) => void;
   onReviewSubmitted: () => void;
   onSendMessage: (orderId: string, content: string) => boolean;
   onTypingStatus: (orderId: string, isTyping: boolean) => boolean;
 }
 
-export function WorkroomChatView({ order, messages, messagesPending, messagesError, currentUserId, connectionState, joinedOrderId, socketError, typingUserId, role, currentUserName, detail, watermarkedUrl, cleanUrl, reviewSubmitted, onWatermarkedUrl, onCleanUrl, onReviewSubmitted, onSendMessage, onTypingStatus }: WorkroomChatViewProps): React.ReactNode {
+export function WorkroomChatView({ order, messages, messagesPending, messagesError, currentUserId, connectionState, joinedOrderId, socketError, typingUserId, role, currentUserName, detail, deliverableId, watermarkedUrl, cleanUrl, reviewSubmitted, onWatermarkedUrl, onCleanUrl, onDeliverableRejected, onReviewSubmitted, onSendMessage, onTypingStatus }: WorkroomChatViewProps): React.ReactNode {
   if (!order) {
     return (
       <section className="flex min-h-[28rem] min-w-0 items-center justify-center bg-muted/20 px-6 py-12 lg:min-h-0" aria-labelledby="empty-chat-title">
@@ -98,11 +100,13 @@ export function WorkroomChatView({ order, messages, messagesPending, messagesErr
         order={order}
         detail={detail}
         role={role}
+        deliverableId={deliverableId}
         watermarkedUrl={watermarkedUrl}
         cleanUrl={cleanUrl}
         reviewSubmitted={reviewSubmitted}
         onWatermarkedUrl={onWatermarkedUrl}
         onCleanUrl={onCleanUrl}
+        onRejected={onDeliverableRejected}
         onReviewSubmitted={onReviewSubmitted}
       />
 

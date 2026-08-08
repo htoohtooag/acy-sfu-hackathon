@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto';
 import type {
   DeliverableDecisionRequest,
   DeliverableDecisionResponse,
+  DeliverableDownloadResponse,
+  DeliverablePreviewResponse,
   DeliverableSubmissionResponse,
 } from 'shared/schemas';
 import sharp from 'sharp';
@@ -87,15 +89,21 @@ function assertClient(order: DeliveryOrderRecord, userId: string): void {
 
 function assertOrderStatus(
   order: DeliveryOrderRecord,
-  status: 'ACTIVE' | 'IN_REVIEW',
+  status: 'ACTIVE' | 'IN_REVIEW' | 'COMPLETED',
 ): void {
   if (order.status !== status) {
     throw new ApiError(
       409,
-      status === 'ACTIVE' ? 'ORDER_NOT_ACTIVE' : 'DELIVERABLE_NOT_REVIEWABLE',
+      status === 'ACTIVE'
+        ? 'ORDER_NOT_ACTIVE'
+        : status === 'IN_REVIEW'
+          ? 'DELIVERABLE_NOT_REVIEWABLE'
+          : 'ORDER_NOT_COMPLETED',
       status === 'ACTIVE'
         ? 'A deliverable can only be submitted for an active order.'
-        : 'The deliverable is not waiting for a client decision.',
+        : status === 'IN_REVIEW'
+          ? 'The deliverable is not waiting for a client decision.'
+          : 'The clean deliverable is available only after the order is completed.',
     );
   }
 }
@@ -171,10 +179,12 @@ async function uploadObject(path: string, body: Buffer): Promise<void> {
   }
 }
 
-async function signedUrl(path: string): Promise<string> {
+async function signedUrl(path: string, downloadFileName?: string): Promise<string> {
   const { data, error } = await supabaseAdmin.storage
     .from(env.SUPABASE_DELIVERABLE_BUCKET)
-    .createSignedUrl(path, env.DELIVERABLE_SIGNED_URL_TTL_SECONDS);
+    .createSignedUrl(path, env.DELIVERABLE_SIGNED_URL_TTL_SECONDS, downloadFileName === undefined ? undefined : {
+      download: downloadFileName,
+    });
 
   if (error !== null || data?.signedUrl === undefined) {
     throw new ApiError(502, 'DELIVERABLE_STORAGE_FAILED', 'A deliverable access URL could not be created.');
@@ -332,6 +342,61 @@ export async function submitDeliverable(
 
     throw error;
   }
+}
+
+export async function getWatermarkedDeliverablePreview(
+  clientUserId: string,
+  orderId: string,
+  deliverableId: string,
+): Promise<DeliverablePreviewResponse> {
+  const order = await findDeliveryOrder(orderId);
+  if (order === null) {
+    throw new ApiError(404, 'ORDER_NOT_FOUND', 'The order was not found.');
+  }
+
+  assertClient(order, clientUserId);
+  assertOrderStatus(order, 'IN_REVIEW');
+
+  const deliverable = await findDeliverable(orderId, deliverableId);
+  if (deliverable === null) {
+    throw new ApiError(404, 'DELIVERABLE_NOT_FOUND', 'The deliverable was not found.');
+  }
+
+  assertUnderReview(deliverable);
+
+  return {
+    deliverable_id: deliverable.id,
+    watermarked_url: await signedUrl(deliverable.file_url_watermarked),
+  };
+}
+
+export async function getCleanDeliverableDownload(
+  clientUserId: string,
+  orderId: string,
+  deliverableId: string,
+): Promise<DeliverableDownloadResponse> {
+  const order = await findDeliveryOrder(orderId);
+  if (order === null) {
+    throw new ApiError(404, 'ORDER_NOT_FOUND', 'The order was not found.');
+  }
+
+  assertClient(order, clientUserId);
+  assertOrderStatus(order, 'COMPLETED');
+
+  const deliverable = await findDeliverable(orderId, deliverableId);
+  if (deliverable === null) {
+    throw new ApiError(404, 'DELIVERABLE_NOT_FOUND', 'The deliverable was not found.');
+  }
+
+  if (deliverable.status !== 'APPROVED') {
+    throw new ApiError(409, 'DELIVERABLE_NOT_APPROVED', 'The clean deliverable is not available for download.');
+  }
+
+  return {
+    deliverable_id: deliverable.id,
+    file_name: deliverable.file_name,
+    clean_url: await signedUrl(deliverable.file_url_clean, deliverable.file_name),
+  };
 }
 
 export async function approveOrRejectDeliverable(

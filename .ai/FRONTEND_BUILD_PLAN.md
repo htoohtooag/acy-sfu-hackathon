@@ -269,11 +269,22 @@ This document defines the implementation logic for the frontend. AI agents MUST 
     - *Revision Flow:* Calls `PATCH` with `{ action: "REJECT" }`. Reverts Order status to `ACTIVE` so the freelancer can send WIP chat files again.
   - *Done when:* Freelancer can send lightly watermarked drafts in chat, formally submit a heavily watermarked final deliverable, and the client can approve it via a sticky action bar to download the clean file.
 
-- [ ] **Step 13: Reviews**
-  - Once Order status is `COMPLETED`, show a "Leave a Review" prompt.
-  - Modal with Star Rating (1-5) and Comment text area.
-  - Call `POST /api/v1/orders/:id/reviews`.
-  - *Done when:* Two users can chat in real-time, share files, the freelancer submits work, the client approves it, downloads the clean file, and leaves a 5-star review.
+- [ ] **Step 13: Reviews (The "Golden Moment" UX)**
+  - **Component:** Create a `<ReviewModal />` using `shadcn/ui Dialog`. 
+    - *UI:* 5 interactive Star icons (using `lucide-react` `Star`) that fill on hover/click, and a `Textarea` for the optional comment. Include a "Submit Review" button.
+    - *Validation:* Disable the submit button until a star rating (1-5) is selected.
+  - **Trigger 1: Auto-Open on Approval (Crucial UX):**
+    - In the Workroom, when the Client clicks "Approve & Release Payment" (from Step 12) and the `PATCH` API succeeds, automatically open the `<ReviewModal />` instantly. 
+  - **Trigger 2: Persistent Fallback Button:**
+    - If the user closes the modal without reviewing, or if they refresh the page, the review prompt must not disappear.
+    - In the Green "Completed" Sticky Action Bar (from Step 12), check if a review exists for this order (fetch `GET /api/v1/orders/:id` to check review status, or fetch the review entity).
+    - If no review exists, render a prominent **[ Leave a Review ]** button in the Sticky Bar. 
+  - **API Connection & State:**
+    - On modal submit, call `POST /api/v1/orders/:id/reviews` with `{ rating, comment }`.
+    - Use React Query `useMutation`. 
+    - *On Success:* Close the modal, show a success toast (`sonner`), and invalidate the `['order', orderId]` query. The Sticky Bar will automatically re-render to hide the "Leave a Review" button and show "Thank you for your review!" instead.
+    - *On Error (409 Conflict):* If the backend returns a 409 (already reviewed), close the modal and show a warning toast.
+  - *Done when:* Client approves work -> Review modal auto-pops -> Client submits 5 stars -> Modal closes -> Sticky bar updates to "Thank you" state.
 
 
 

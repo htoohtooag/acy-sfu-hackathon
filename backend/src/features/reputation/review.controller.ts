@@ -2,7 +2,7 @@ import type { RequestHandler } from 'express';
 import { createReviewSchema, reviewOrderParamsSchema } from 'shared/schemas';
 import { ApiError } from '../../utils/api-error.js';
 import { successResponse } from '../../utils/api-response.js';
-import { createClientReview } from './review.service.js';
+import { createClientReview, getClientReviewStatus } from './review.service.js';
 
 function authenticatedUserId(request: Parameters<RequestHandler>[0]): string {
   if (request.user === undefined) {
@@ -19,6 +19,16 @@ export const createReview: RequestHandler = async (request, response, next): Pro
     const result = await createClientReview(authenticatedUserId(request), orderId, fields);
 
     response.status(201).json(successResponse(result));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const getReviewStatus: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const { id: orderId } = reviewOrderParamsSchema.parse({ id: request.params.id });
+    const result = await getClientReviewStatus(authenticatedUserId(request), orderId);
+    response.status(200).json(successResponse(result));
   } catch (error: unknown) {
     next(error);
   }

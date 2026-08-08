@@ -8,6 +8,8 @@ import { ApiError } from '../../utils/api-error.js';
 import { successResponse } from '../../utils/api-response.js';
 import {
   approveOrRejectDeliverable,
+  getCleanDeliverableDownload,
+  getWatermarkedDeliverablePreview,
   submitDeliverable,
 } from './deliverable.service.js';
 
@@ -49,6 +51,40 @@ export const decide: RequestHandler = async (request, response, next): Promise<v
       params.id,
       params.deliverableId,
       decision,
+    );
+    response.status(200).json(successResponse(result));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const preview: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const params = deliverableDecisionParamsSchema.parse({
+      id: request.params.id,
+      deliverableId: request.params.deliverableId,
+    });
+    const result = await getWatermarkedDeliverablePreview(
+      authenticatedUserId(request),
+      params.id,
+      params.deliverableId,
+    );
+    response.status(200).json(successResponse(result));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const download: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const params = deliverableDecisionParamsSchema.parse({
+      id: request.params.id,
+      deliverableId: request.params.deliverableId,
+    });
+    const result = await getCleanDeliverableDownload(
+      authenticatedUserId(request),
+      params.id,
+      params.deliverableId,
     );
     response.status(200).json(successResponse(result));
   } catch (error: unknown) {

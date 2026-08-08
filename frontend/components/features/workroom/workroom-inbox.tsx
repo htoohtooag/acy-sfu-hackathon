@@ -7,9 +7,11 @@ import type { DeliverableSubmittedEvent, DeliverableUnlockedEvent, WorkroomMessa
 import { useCurrentUser } from "@/features/app/app-api";
 import {
   conversationMatchesFilter,
+  getLatestWorkroomMessage,
   getFreelancerName,
   getMessagePreview,
   isWorkroomConversationFilter,
+  sortWorkroomMessages,
   type WorkroomConversationFilter,
 } from "@/features/workroom/workroom-types";
 import {
@@ -18,6 +20,7 @@ import {
   useWorkroomOrderDetail,
   workroomMessagesQueryKey,
 } from "@/features/workroom/workroom-api";
+import { useCleanDeliverableDownload, useWatermarkedDeliverablePreview, useWorkroomReviewStatus } from "@/features/workroom/workroom-deliverable-api";
 import { useWorkroomSocket } from "@/features/workroom/use-workroom-socket";
 import { useAppStore } from "@/store/use-app-store";
 import { WorkroomChatView } from "./workroom-chat-view";
@@ -45,13 +48,25 @@ export function WorkroomInbox({ initialOrderId }: WorkroomInboxProps): React.Rea
   const selectedOrder = orders.find((order) => order.id === selectedOrderIdForView) ?? null;
   const messagesQuery = useWorkroomMessages(selectedOrderIdForView);
   const orderDetailQuery = useWorkroomOrderDetail(selectedOrderIdForView);
+  const reviewDeliverableId = activeRole === "CLIENT" && selectedOrder?.status === "IN_REVIEW"
+    ? orderDetailQuery.data?.deliverables.find((deliverable) => deliverable.status === "UNDER_REVIEW")?.id ?? null
+    : null;
+  const previewQuery = useWatermarkedDeliverablePreview(selectedOrderIdForView, reviewDeliverableId);
+  const completedDeliverableId = activeRole === "CLIENT" && selectedOrder?.status === "COMPLETED"
+    ? orderDetailQuery.data?.deliverables.find((deliverable) => deliverable.status === "APPROVED")?.id ?? null
+    : null;
+  const cleanDownloadQuery = useCleanDeliverableDownload(selectedOrderIdForView, completedDeliverableId);
+  const reviewStatusQuery = useWorkroomReviewStatus(
+    selectedOrderIdForView,
+    activeRole === "CLIENT" && selectedOrder?.status === "COMPLETED",
+  );
 
   const handleMessage = useCallback((message: import("shared/schemas").WorkroomMessage): void => {
     queryClient.setQueryData<WorkroomMessageHistory>(workroomMessagesQueryKey(message.order_id), (history) => {
       if (!history || history.items.some((item) => item.id === message.id)) return history;
       return {
         ...history,
-        items: [...history.items, message],
+        items: sortWorkroomMessages([...history.items, message]),
         total_items: history.total_items + 1,
         total_pages: Math.max(1, Math.ceil((history.total_items + 1) / history.page_size)),
       };
@@ -94,7 +109,7 @@ export function WorkroomInbox({ initialOrderId }: WorkroomInboxProps): React.Rea
       const history = order.id === selectedOrderIdForView
         ? messagesQuery.data
         : queryClient.getQueryData<WorkroomMessageHistory>(workroomMessagesQueryKey(order.id));
-      const latestMessage = history?.items.at(-1);
+      const latestMessage = getLatestWorkroomMessage(history?.items);
       return `${getFreelancerName(order, activeRole, currentUser?.id ?? null, currentUser?.fullName ?? null)} ${order.source?.title ?? ""} ${getMessagePreview(latestMessage, order)}`
         .toLowerCase()
         .includes(normalizedSearch);
@@ -118,7 +133,7 @@ export function WorkroomInbox({ initialOrderId }: WorkroomInboxProps): React.Rea
           const history = order.id === selectedOrderIdForView
             ? messagesQuery.data
             : queryClient.getQueryData<WorkroomMessageHistory>(workroomMessagesQueryKey(order.id));
-          return getMessagePreview(history?.items.at(-1), order);
+          return getMessagePreview(getLatestWorkroomMessage(history?.items), order);
         }}
         onSearchChange={setSearch}
         onFilterChange={handleFilterChange}
@@ -140,9 +155,10 @@ export function WorkroomInbox({ initialOrderId }: WorkroomInboxProps): React.Rea
         role={activeRole}
         currentUserName={currentUser?.fullName ?? null}
         detail={orderDetailQuery.data ?? null}
-        watermarkedUrl={selectedOrderIdForView ? deliverableAssets[selectedOrderIdForView]?.watermarkedUrl ?? null : null}
-        cleanUrl={selectedOrderIdForView ? deliverableAssets[selectedOrderIdForView]?.cleanUrl ?? null : null}
-        reviewSubmitted={selectedOrderIdForView ? reviewedOrders[selectedOrderIdForView] === true : false}
+        deliverableId={selectedOrderIdForView ? deliverableAssets[selectedOrderIdForView]?.deliverableId ?? null : null}
+        watermarkedUrl={selectedOrderIdForView ? deliverableAssets[selectedOrderIdForView]?.watermarkedUrl ?? previewQuery.data?.watermarked_url ?? null : null}
+        cleanUrl={selectedOrderIdForView ? cleanDownloadQuery.data?.clean_url ?? deliverableAssets[selectedOrderIdForView]?.cleanUrl ?? null : null}
+        reviewSubmitted={selectedOrderIdForView ? reviewedOrders[selectedOrderIdForView] === true || reviewStatusQuery.data?.reviewed === true : false}
         onWatermarkedUrl={(deliverableId, url) => {
           if (!selectedOrderIdForView) return;
           setDeliverableAssets((current) => ({ ...current, [selectedOrderIdForView]: { deliverableId, watermarkedUrl: url, cleanUrl: current[selectedOrderIdForView]?.cleanUrl ?? null } }));
@@ -150,6 +166,14 @@ export function WorkroomInbox({ initialOrderId }: WorkroomInboxProps): React.Rea
         onCleanUrl={(deliverableId, url) => {
           if (!selectedOrderIdForView) return;
           setDeliverableAssets((current) => ({ ...current, [selectedOrderIdForView]: { deliverableId, watermarkedUrl: current[selectedOrderIdForView]?.watermarkedUrl ?? null, cleanUrl: url } }));
+        }}
+        onDeliverableRejected={(deliverableId) => {
+          if (!selectedOrderIdForView) return;
+          setDeliverableAssets((current) => {
+            const existing = current[selectedOrderIdForView];
+            if (!existing || existing.deliverableId !== deliverableId) return current;
+            return { ...current, [selectedOrderIdForView]: { ...existing, watermarkedUrl: null, cleanUrl: null } };
+          });
         }}
         onReviewSubmitted={() => {
           if (!selectedOrderIdForView) return;

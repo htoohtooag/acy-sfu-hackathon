@@ -43,6 +43,11 @@ export function WorkroomReviewDialog({ orderId, open, onOpenChange, onSubmitted 
       onSubmitted();
       onOpenChange(false);
     } catch (error: unknown) {
+      if (error instanceof ApiRequestError && error.code === "REVIEW_ALREADY_EXISTS") {
+        onSubmitted();
+        onOpenChange(false);
+        return;
+      }
       setSubmitError(errorMessage(error));
     }
   }
