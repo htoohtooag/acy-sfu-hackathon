@@ -96,7 +96,7 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
 - [ ] **Step 6: AI Search Agent (Enterprise Agentic RAG)**
   - **Endpoint:** Implement `POST /api/v1/ai/search` using the Vercel AI SDK (`streamText`).
   - **Persona & Guardrails:** 
-    - Configure the AI as "TalentScout", an expert, professional assistant.
+    - Configure the AI as "Gigmatch", an expert, professional assistant.
     - **Scope Restriction:** The AI MUST ONLY answer questions related to the marketplace. Off-topic questions must be politely declined.
     - **Abuse Guardrail:** Rude/abusive language must be met with a polite refusal to engage.
     - **Tone Rules:** Concise, objective, and professional. No fluff or long essays.
@@ -177,7 +177,7 @@ Here is the exact Markdown for Step 4. You can copy and paste this directly into
 - [ ] **Step 10.1: Backend - WIP Chat File Upload (Tier 1)**
   - **Endpoint:** `POST /api/v1/orders/:id/messages/upload`
   - **Authorization:** Verify `req.user.id` is a participant of the Order.
-  - **Logic:** Use `multer` (memory storage) to receive exactly one JPEG, PNG, or WebP image. Require the order to be `ACTIVE`. Use `sharp` to apply a *light, semi-transparent "TalentScout DRAFT" watermark* tiled across the image and convert it to `.webp`. Upload the private object to Supabase Storage (`chat-attachments` bucket). Save a row to the `messages` table (`type: FILE`, internal object path in `attachment_url`, `attachment_type: IMAGE`), return a short lived signed URL, and emit a Socket.io `new_message` event to the order room with the file metadata. PDF upload is deferred until a separate watermarking pipeline is designed.
+  - **Logic:** Use `multer` (memory storage) to receive exactly one JPEG, PNG, or WebP image. Require the order to be `ACTIVE`. Use `sharp` to apply a *light, semi-transparent "Gigmatch DRAFT" watermark* tiled across the image and convert it to `.webp`. Upload the private object to Supabase Storage (`chat-attachments` bucket). Save a row to the `messages` table (`type: FILE`, internal object path in `attachment_url`, `attachment_type: IMAGE`), return a short lived signed URL, and emit a Socket.io `new_message` event to the order room with the file metadata. PDF upload is deferred until a separate watermarking pipeline is designed.
 
 
 - [x] **Step 11: Reputation & Reviews**

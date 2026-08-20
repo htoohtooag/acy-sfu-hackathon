@@ -36,7 +36,7 @@ export function chatWatermarkOverlay(width: number, height: number): Buffer {
   const svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <pattern id="draft-watermark" width="${tileWidth}" height="${tileHeight}" patternUnits="userSpaceOnUse" patternTransform="rotate(-25)">
-      <text x="${Math.round(tileWidth / 2)}" y="${Math.round(tileHeight / 2)}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="700" fill="white" fill-opacity="0.42" stroke="black" stroke-opacity="0.18" stroke-width="2">TalentScout DRAFT</text>
+      <text x="${Math.round(tileWidth / 2)}" y="${Math.round(tileHeight / 2)}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="700" fill="white" fill-opacity="0.42" stroke="black" stroke-opacity="0.18" stroke-width="2">Gigmatch DRAFT</text>
     </pattern>
   </defs>
   <rect width="100%" height="100%" fill="url(#draft-watermark)" />

@@ -2,7 +2,7 @@
 
 ## Objective
 
-Implement the authenticated TalentScout workspace shell for `/dashboard` and future protected app routes. The shell must provide a desktop sidebar, a responsive mobile navigation sheet, role-aware navigation, a profile popover, and the React Query/Zustand foundations needed by the next dashboard step.
+Implement the authenticated Gigmatch workspace shell for `/dashboard` and future protected app routes. The shell must provide a desktop sidebar, a responsive mobile navigation sheet, role-aware navigation, a profile popover, and the React Query/Zustand foundations needed by the next dashboard step.
 
 The visual direction is based on `design/dashboardsidebarsample.png`: a calm light workspace, a narrow fixed navigation rail, a profile card near the top, uppercase section labels, a blue-lavender active state, and settings pinned to the bottom. Use `design/dashboardsidebarsample2.jpg` only as a reference for information density and quick-access content. Do not copy its dark palette.
 
@@ -63,7 +63,7 @@ Notifications, unread counts, active owned packages/jobs, and a dedicated recent
    - Client component for interactive navigation.
    - Accept normalized current-user and recent-workroom data as props where practical; do not fetch directly inside the visual component.
    - Render:
-     - TalentScout brand mark.
+     - Gigmatch brand mark.
      - Profile trigger card with initials/avatar fallback, display name fallback from email, role label, and plan label.
      - Grouped sections: `GENERAL`, role-specific `WORK`, `COMMUNICATION`, and `RECENT MESSAGES`.
      - General links: Home, Search, Notifications. Show an accessible notification badge only when a real count is available; otherwise omit it.

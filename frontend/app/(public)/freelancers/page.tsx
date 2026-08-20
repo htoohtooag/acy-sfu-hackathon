@@ -6,9 +6,9 @@ import { getCatalogPackages as getCatalogPackagesFromApi } from "@/features/cata
 import { parseCatalogFilters, sortCatalogPackages, toCatalogPackageQuery, type CatalogSearchParams } from "@/features/catalog/catalog-data";
 
 export const metadata: Metadata = {
-  title: "Find Talent | TalentScout",
-  description: "Browse trusted independent talent and services on TalentScout.",
-  openGraph: { title: "Find Talent | TalentScout", description: "Browse trusted independent talent and services on TalentScout." },
+  title: "Find Talent | Gigmatch",
+  description: "Browse trusted independent talent and services on Gigmatch.",
+  openGraph: { title: "Find Talent | Gigmatch", description: "Browse trusted independent talent and services on Gigmatch." },
 };
 
 type FreelancersPageProps = { searchParams: Promise<CatalogSearchParams> };

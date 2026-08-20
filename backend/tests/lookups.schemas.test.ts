@@ -28,7 +28,7 @@ test('payment method lookup schema accepts nullable configured account metadata'
       name: 'KBZ_PAY',
       display_name: 'KBZPay',
       logo_url: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d',
-      account_name: 'TalentScout',
+      account_name: 'Gigmatch',
       account_number: '09 123 456 789',
       instructions: 'Include your order id in the transfer note.',
     },

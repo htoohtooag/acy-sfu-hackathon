@@ -2,6 +2,7 @@ import type {
   CatalogJobPost,
   CatalogPackage,
   CatalogPage,
+  FreelancerPublicSampleWork,
   JobPostListQuery,
   JobPostStatus,
   PackageListQuery,
@@ -37,6 +38,7 @@ export type PackageRecord = Prisma.PackageGetPayload<{
         location_city: true;
         is_verified: true;
         user: { select: { id: true; full_name: true; avatar_url: true } };
+        sample_works: { select: { id: true; title: true; description: true; tags: true; image_path: true; sort_order: true } };
       };
     };
     tier: { select: { id: true; name: true; display_name: true } };
@@ -75,7 +77,7 @@ function getStringArray(value: Prisma.JsonValue): string[] {
   return value.filter((item): item is string => typeof item === 'string');
 }
 
-export function mapPackage(record: PackageRecord): CatalogPackage {
+export function mapPackage(record: PackageRecord, sampleWorks: FreelancerPublicSampleWork[]): CatalogPackage {
   return {
     id: record.id,
     freelancer_id: record.freelancer_id,
@@ -88,7 +90,7 @@ export function mapPackage(record: PackageRecord): CatalogPackage {
     is_active: record.is_active,
     created_at: record.created_at.toISOString(),
     updated_at: record.updated_at.toISOString(),
-    freelancer: record.freelancer,
+    freelancer: { ...record.freelancer, sample_works: sampleWorks },
     tier: record.tier,
   };
 }

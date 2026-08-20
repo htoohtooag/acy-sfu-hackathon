@@ -58,6 +58,7 @@ UUID values must be valid UUID strings. Money values are strings containing nonn
 | POST | `/api/v1/orders/quote` | Yes | `CLIENT` | 200 |
 | GET | `/api/v1/orders` | Yes | Authenticated role | 200 |
 | GET | `/api/v1/orders/:id` | Yes | Order participant | 200 |
+| GET | `/api/v1/dashboard` | Yes | Authenticated requested role | 200 |
 | POST | `/api/v1/orders/:id/payments` | Yes | `CLIENT` | 201 |
 | GET | `/api/v1/orders/:id/messages` | Yes | Order participant | 200 |
 | POST | `/api/v1/orders/:id/messages/upload` | Yes | Order participant | 201 |
@@ -116,11 +117,62 @@ Success: `200` with `data` containing:
       "skills": ["Branding"],
       "status": "completed"
     }
+  ],
+  "sample_works": [
+    {
+      "id": "uuid",
+      "title": "Mobile banking redesign",
+      "description": "A research led mobile banking experience.",
+      "tags": ["Figma", "Mobile UX"],
+      "image_url": "https://signed-storage-url",
+      "sort_order": 0
+    }
   ]
 }
 ```
 
 Important errors: `VALIDATION_ERROR` for a malformed UUID and `FREELANCER_NOT_FOUND` for a missing, deleted, or unavailable profile.
+
+## Freelancer sample work
+
+Sample work belongs directly to a freelancer profile and is separate from `PackageMedia`. A freelancer can manage up to six private image samples. Uploads accept JPEG, PNG, and WebP images up to 10 MB. The database stores only a server generated private storage path. Responses contain one hour signed `image_url` values and never expose that path.
+
+### List owner samples
+
+```http
+GET /api/v1/me/sample-works
+Authorization: Bearer <freelancer-token>
+```
+
+### Create a sample
+
+```http
+POST /api/v1/me/sample-works
+Authorization: Bearer <freelancer-token>
+Content-Type: multipart/form-data
+```
+
+Multipart fields are `file`, `title`, `description`, and optional `tags`. Send `tags` as a JSON array string, for example `["Branding","Figma"]`.
+
+### Edit or delete a sample
+
+Use `PATCH /api/v1/me/sample-works/:sampleId` with optional multipart `file`, `title`, `description`, and `tags`, or `DELETE /api/v1/me/sample-works/:sampleId`.
+
+### Save sample order
+
+```http
+PUT /api/v1/me/sample-works/order
+Authorization: Bearer <freelancer-token>
+Content-Type: application/json
+```
+
+Send the complete current list, with no duplicates:
+
+```json
+{ "sampleIds": ["uuid-1", "uuid-2"] }
+```
+
+The list must contain every sample owned by the authenticated freelancer. Only a freelancer owner can access these management routes. Important errors include `SAMPLE_WORK_LIMIT_REACHED`, `SAMPLE_WORK_ORDER_INVALID`, `SAMPLE_WORK_CLEANUP_FAILED`, `SAMPLE_WORK_STORAGE_FAILED`, and `FREELANCER_PROFILE_REQUIRED`.
 
 ## Checkout lookups
 
@@ -142,7 +194,7 @@ Success: `200` with:
     "name": "KBZ_PAY",
     "display_name": "KBZPay",
     "logo_url": "https://images.example.com/kbzpay.svg",
-    "account_name": "TalentScout",
+    "account_name": "Gigmatch",
     "account_number": "09 123 456 789",
     "instructions": "Include your order id in the transfer note."
   }
@@ -950,7 +1002,7 @@ Content-Type: multipart/form-data
 
 The authenticated user must be a participant in the order, and the order must be `ACTIVE`. Submit exactly one JPEG, PNG, or WebP image in the field `file`. PDF uploads are not supported in Tier 1.
 
-The backend converts the image to a WebP with a light tiled `TalentScout DRAFT` watermark. The source file is not stored. The private storage path is kept inside the backend, and `attachment_url` contains a temporary signed URL in the response.
+The backend converts the image to a WebP with a light tiled `Gigmatch DRAFT` watermark. The source file is not stored. The private storage path is kept inside the backend, and `attachment_url` contains a temporary signed URL in the response.
 
 Example with `FormData`:
 
@@ -1158,6 +1210,33 @@ Success: `201` with:
 Important errors: `UNAUTHORIZED`, `VALIDATION_ERROR`, `ORDER_NOT_FOUND`, `REVIEW_ACCESS_DENIED`, `ORDER_NOT_COMPLETED`, `REVIEW_ALREADY_EXISTS`, `FREELANCER_PROFILE_NOT_FOUND`, and `REVIEW_RETRY_REQUIRED`.
 
 ## Admin routes
+
+### Admin payment review session
+
+```http
+GET /api/v1/admin/me
+Authorization: Bearer <admin-token>
+```
+
+The authenticated user must have an active `SUPER_ADMIN` or `FINANCE_ADMIN` admin assignment. The response contains the display name and the `PAYMENT_REVIEW` capability used by the protected admin frontend.
+
+### List pending payment proofs
+
+```http
+GET /api/v1/admin/payments?page=1&page_size=20
+Authorization: Bearer <admin-token>
+```
+
+The response contains only payments with `PENDING_ADMIN` status, ordered oldest first. It includes safe payment, method, order, client, and freelancer summaries. It never includes the private receipt storage path. `page_size` defaults to `20` and is capped at `50`.
+
+### Read one pending payment proof
+
+```http
+GET /api/v1/admin/payments/:id
+Authorization: Bearer <admin-token>
+```
+
+The authenticated user must have an active `SUPER_ADMIN` or `FINANCE_ADMIN` admin assignment. The response contains the safe payment detail and a private receipt URL signed for five minutes. A payment that is no longer pending returns `PAYMENT_ALREADY_DECIDED`.
 
 ### Verify or reject a payment
 
@@ -1437,3 +1516,31 @@ Common socket error codes include `VALIDATION_ERROR`, `ROOM_ACCESS_DENIED`, `ROO
 * Do not send a JSON `Content-Type` header for browser `FormData` requests. The browser must create the multipart boundary.
 * Order creation, payment proof submission, admin payment decisions, deliverable decisions, and reviews are stateful operations. The frontend should use the returned status and error code instead of assuming that a repeated request is safe.
 * Order list and order detail HTTP routes are available to authenticated order participants as documented above.
+## Dashboard summary
+
+### Read the role aware dashboard
+
+```http
+GET /api/v1/dashboard?role=client|freelancer
+Authorization: Bearer <token>
+```
+
+The authenticated user must hold the requested role. The response contains three role specific order counts and up to five urgent order summaries. It excludes payment proof paths, private storage paths, email, and full order detail.
+
+Success: `200` with `data` shaped as:
+
+```json
+{
+  "role": "client",
+  "metrics": [
+    { "key": "AWAITING_ESCROW", "label": "Awaiting payment", "count": 1 },
+    { "key": "ACTIVE_WORK", "label": "Active work", "count": 2 },
+    { "key": "IN_REVIEW", "label": "Ready for review", "count": 0 }
+  ],
+  "attention_items": []
+}
+```
+
+Attention items are ordered by work state priority, then most recently updated. Their action codes are `VIEW_ESCROW_STATUS`, `OPEN_WORKROOM`, `REVIEW_DELIVERABLE`, and `VIEW_REVIEW_STATUS`. The frontend maps these codes to existing workroom routes.
+
+Important errors: `UNAUTHORIZED`, `FORBIDDEN`, and `VALIDATION_ERROR`.

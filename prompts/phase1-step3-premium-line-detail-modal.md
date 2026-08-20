@@ -45,7 +45,7 @@ Turn the catalog package results into a complete public browsing flow. A user mu
 - Create a premium public storefront presentation with an identity header, package overview, feature list, delivery and revision facts, pricing panel, freelancer context, and a clear next action.
 - Use only existing semantic project tokens and Lucide icons.
 - Use local gradient or CSS visual treatment for the package preview. Do not add remote images or invented image URLs.
-- Keep all text useful and specific to TalentScout. Do not use lorem ipsum.
+- Keep all text useful and specific to Gigmatch. Do not use lorem ipsum.
 
 ### `frontend/components/features/catalog/package-detail-modal.tsx`
 

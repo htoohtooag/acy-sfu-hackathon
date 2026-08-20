@@ -330,6 +330,18 @@ exports.Prisma.PackageMediaScalarFieldEnum = {
   sort_order: 'sort_order'
 };
 
+exports.Prisma.FreelancerSampleWorkScalarFieldEnum = {
+  id: 'id',
+  freelancer_id: 'freelancer_id',
+  title: 'title',
+  description: 'description',
+  tags: 'tags',
+  image_path: 'image_path',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.JobPostScalarFieldEnum = {
   id: 'id',
   client_id: 'client_id',
@@ -617,6 +629,7 @@ exports.Prisma.ModelName = {
   AuditAction: 'AuditAction',
   Package: 'Package',
   PackageMedia: 'PackageMedia',
+  FreelancerSampleWork: 'FreelancerSampleWork',
   JobPost: 'JobPost',
   Notification: 'Notification',
   PlatformDocument: 'PlatformDocument',

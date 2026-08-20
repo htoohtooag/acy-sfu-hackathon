@@ -1,10 +1,30 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  aiSearchPackageCardSchema,
   aiSearchRequestSchema,
   searchPackagesToolSchema,
   searchPlatformDocsToolSchema,
 } from 'shared/schemas';
+
+const packageCard = {
+  id: '00000000-0000-0000-0000-000000000001',
+  title: 'Brand design',
+  description: 'A package description',
+  price_mmk: '250000',
+  delivery_days: 7,
+  features: ['Logo design'],
+  tier: null,
+  freelancer: {
+    id: '00000000-0000-0000-0000-000000000002',
+    name: 'Aye Aye',
+    avatar_url: null,
+    headline: 'Brand designer',
+    city: 'Yangon',
+    is_verified: true,
+    completed_projects_count: 3,
+  },
+};
 
 const textMessage = (role: 'user' | 'assistant', text: string) => ({
   id: `${role}-message`,
@@ -40,4 +60,16 @@ test('AI search safely accepts UI parts but tool parts are not part of the tool 
   assert.equal(searchPackagesToolSchema.safeParse({ query: 'web design', max_budget_mmk: '250000' }).success, true);
   assert.equal(searchPackagesToolSchema.safeParse({ query: 'web design', max_budget_mmk: '-1' }).success, false);
   assert.equal(searchPlatformDocsToolSchema.safeParse({ query: 'How does escrow work?' }).success, true);
+});
+
+test('AI package cards accept an owned sample work or an explicit empty value', () => {
+  assert.equal(aiSearchPackageCardSchema.safeParse({
+    ...packageCard,
+    sample_work: {
+      id: '00000000-0000-0000-0000-000000000003',
+      title: 'Identity system',
+      image_url: 'https://example.com/sample-work.jpg',
+    },
+  }).success, true);
+  assert.equal(aiSearchPackageCardSchema.safeParse({ ...packageCard, sample_work: null }).success, true);
 });

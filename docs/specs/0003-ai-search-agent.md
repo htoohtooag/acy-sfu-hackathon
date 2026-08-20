@@ -5,7 +5,7 @@
 
 ## Summary
 
-Add one authenticated search endpoint where a client describes the service they need in a chat message. TalentScout uses the Vercel AI SDK with Gemini, applies exact package filters before semantic ranking, and retrieves platform rules from a database knowledge base. The response is an AI SDK UI message stream that contains concise text and structured package tool results for future Package Cards.
+Add one authenticated search endpoint where a client describes the service they need in a chat message. Gigmatch uses the Vercel AI SDK with Gemini, applies exact package filters before semantic ranking, and retrieves platform rules from a database knowledge base. The response is an AI SDK UI message stream that contains concise text and structured package tool results for future Package Cards.
 
 ## Context
 
@@ -25,13 +25,13 @@ The backend already uses Express, Prisma, Supabase PostgreSQL with pgvector, Sup
 **Acceptance criteria** (the contract):
 - **AC-1**: `POST /api/v1/ai/search` requires a valid Supabase bearer token, an active database user with the `CLIENT` role, and an active client subscription. Missing or invalid access returns the standard `401`, `403`, or `409 SUBSCRIPTION_REQUIRED` envelope.
 - **AC-2**: The request accepts validated UI messages, requires a final user message, allows at most 20 messages, limits the final user message to 4,000 characters, and ignores client supplied tool calls and tool results.
-- **AC-3**: The endpoint uses the Vercel AI SDK `streamText` flow with the configured Google Gemini generation model and returns an AI SDK UI message stream that contains concise TalentScout text and structured tool invocations.
+- **AC-3**: The endpoint uses the Vercel AI SDK `streamText` flow with the configured Google Gemini generation model and returns an AI SDK UI message stream that contains concise Gigmatch text and structured tool invocations.
 - **AC-4**: `searchPackages` accepts a query plus optional `skill`, `location_city`, and `max_budget_mmk` filters. It applies nondeleted active package filtering and exact case insensitive skill, city, and maximum price constraints before cosine similarity ranking, then returns at most the five highest ranked package cards.
 - **AC-5**: Each package card includes package id, title, description, MMK price, delivery days, features, tier information, freelancer id, name, avatar, headline, city, `is_verified`, and `completed_projects_count`. Embeddings, private identity fields, subscription internals, and provider secrets are not returned.
-- **AC-6**: `searchPlatformDocs` retrieves at most the two closest `PlatformDocument` rows by cosine similarity and provides only their title and content to TalentScout. If no document is available, TalentScout says the platform rule is unavailable instead of using general model knowledge.
+- **AC-6**: `searchPlatformDocs` retrieves at most the two closest `PlatformDocument` rows by cosine similarity and provides only their title and content to Gigmatch. If no document is available, Gigmatch says the platform rule is unavailable instead of using general model knowledge.
 - **AC-7**: `PlatformDocument` is stored in Supabase PostgreSQL with a unique title and a 1536 dimension vector. The seed operation inserts exactly the initial Escrow, Watermark Lock, and Subscription Plans documents, and a content update regenerates and atomically replaces its embedding.
 - **AC-8**: A `BASIC` client plan exposes only `searchPackages`; a non-BASIC active client plan exposes both tools. An idempotent non-BASIC client plan is seeded so both plan paths can be tested.
-- **AC-9**: Off topic and rude requests receive a concise polite refusal without invoking marketplace tools. TalentScout answers only marketplace questions and platform rule questions covered by retrieved documents.
+- **AC-9**: Off topic and rude requests receive a concise polite refusal without invoking marketplace tools. Gigmatch answers only marketplace questions and platform rule questions covered by retrieved documents.
 - **AC-10**: Database search failures return a safe `503 SEARCH_UNAVAILABLE` result without relaxing hard filters. A provider failure before streaming returns a safe `502` API envelope; a failure after streaming begins is sent as a safe AI SDK stream error.
 - **AC-11**: The request abort signal stops provider work when the client disconnects. The feature does not persist conversations, messages, search requests, or tool results.
 - **AC-12**: The feature applies in memory per user and IP rate limiting, records safe operational telemetry, and never logs prompts, tokens, secrets, embedding values, or private identity data.
@@ -136,8 +136,8 @@ The stream uses the AI SDK UI message protocol. Before headers are sent, errors 
 | Rank package results | Cosine similarity order | Package embedding and the Gemini embedding of the original user query |
 | Build package card | Package and freelancer trust fields | Existing package, tier, freelancer profile, and user columns |
 | Retrieve platform rules | At most two document titles and contents | `platform_documents.title`, `platform_documents.content`, and query embedding cosine distance |
-| Generate answer | TalentScout text and tool invocations | Configured Gemini generation model, system guardrails, validated messages, and tool results |
-| Refuse unsupported request | Concise refusal text | TalentScout system instructions and the absence of an allowed marketplace tool call |
+| Generate answer | Gigmatch text and tool invocations | Configured Gemini generation model, system guardrails, validated messages, and tool results |
+| Refuse unsupported request | Concise refusal text | Gigmatch system instructions and the absence of an allowed marketplace tool call |
 | Report rate limit | Stable `429 AI_SEARCH_RATE_LIMITED` error | In memory limiter keyed by authenticated user id and request IP |
 | Report telemetry | Request id, plan mode, tool, latency, count, and stable error code | Request context and server side timing; never raw prompt or secret data |
 
@@ -192,7 +192,7 @@ The project does not record a separate scope approach. This plan assumes a Trace
 3. Add the confirmed `PlatformDocument` Prisma model and generated migration with a unique title, 1536 vector, timestamps, RLS enabled, and no public policies. Add the idempotent non-BASIC client plan seed, satisfying **AC-7** and **AC-8**.
 4. Extend the seed and maintenance path to create exactly the Escrow, Watermark Lock, and Subscription Plans documents, generate embeddings before writes, and replace content and embedding atomically, satisfying **AC-6** and **AC-7**.
 5. Add the AI search repository for strict visible package selection, parameterized pgvector ranking, rich card projection, and top two platform document retrieval. Keep relational CRUD in Prisma and limit raw SQL to parameterized vector similarity queries, satisfying **AC-4**, **AC-5**, and **AC-6**.
-6. Add the AI search service with plan based tool exposure, TalentScout guardrails, exact tool schemas, maximum three generation steps, safe provider and database error translation, abort propagation, and no persistence, satisfying **AC-3**, **AC-8**, **AC-9**, **AC-10**, and **AC-11**.
+6. Add the AI search service with plan based tool exposure, Gigmatch guardrails, exact tool schemas, maximum three generation steps, safe provider and database error translation, abort propagation, and no persistence, satisfying **AC-3**, **AC-8**, **AC-9**, **AC-10**, and **AC-11**.
 7. Add the feature validator, in memory rate limiter, controller, route, and app registration for `POST /api/v1/ai/search`. Use Supabase auth, client role checks, shared validation, and stream versus envelope error handling, satisfying **AC-1**, **AC-2**, **AC-3**, and **AC-12**.
 8. Add focused unit and integration tests for filters, ranking, plan modes, document retrieval, guardrails, limits, rate limiting, safe failures, abort behavior, and stream output. Run strict build and backend tests, satisfying **AC-4** through **AC-13**.
 

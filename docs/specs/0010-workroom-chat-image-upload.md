@@ -5,7 +5,7 @@
 
 ## Summary
 
-Add participant only image uploads to the existing Workroom chat. The backend will apply a light tiled `TalentScout DRAFT` watermark, store the result in a private Supabase Storage bucket, save a file message, and broadcast it to the authorized order room. Tier 1 supports images only because the required Sharp watermark pipeline cannot safely watermark PDFs without a separate document rasterization decision.
+Add participant only image uploads to the existing Workroom chat. The backend will apply a light tiled `Gigmatch DRAFT` watermark, store the result in a private Supabase Storage bucket, save a file message, and broadcast it to the authorized order room. Tier 1 supports images only because the required Sharp watermark pipeline cannot safely watermark PDFs without a separate document rasterization decision.
 
 ## Context
 
@@ -25,7 +25,7 @@ The build plan names both images and PDFs while also requiring Sharp to watermar
 
 - **AC-1**: `POST /api/v1/orders/:id/messages/upload` accepts exactly one `file` multipart image in JPEG, PNG, or WebP format, uses memory storage, enforces the configured byte limit, and returns the standard error envelope for missing, invalid, or oversized files.
 - **AC-2**: Only an authenticated participant of the nondeleted order can upload, and the order must be `ACTIVE`. Nonparticipants, unauthenticated callers, and locked orders receive the existing authorization or chat lock error without storage or database writes.
-- **AC-3**: Sharp validates the image bytes, converts the result to WebP, and applies a light, semi transparent tiled `TalentScout DRAFT` watermark. The source file name and client MIME value are never used as a storage path.
+- **AC-3**: Sharp validates the image bytes, converts the result to WebP, and applies a light, semi transparent tiled `Gigmatch DRAFT` watermark. The source file name and client MIME value are never used as a storage path.
 - **AC-4**: The backend uploads the processed WebP to the private `chat-attachments` bucket, creates one existing `Message` row with `type = FILE`, `attachment_type = IMAGE`, `content = null`, and the server generated storage path, and removes the object when persistence fails.
 - **AC-5**: The endpoint returns a JSON safe `WorkroomMessage`, and the Socket.io `new_message` event broadcasts the same file message to the authorized order room only after the message transaction commits. The returned attachment URL is a short lived signed URL, never the private storage path.
 - **AC-6**: Message history resolves private file paths into fresh signed URLs for participant requests. Text, system, and custom offer messages keep their current mapping and attachment behavior.
@@ -125,7 +125,7 @@ The upload route must be registered before any future route that could interpret
 | Input bytes | one in memory multipart buffer | `request.file.buffer` after multer validation |
 | Accepted content type | `IMAGE` | Server allowlist for JPEG, PNG, and WebP input |
 | Watermarked bytes | WebP buffer | Sharp pipeline using the validated input buffer and the fixed watermark decision |
-| Watermark text | `TalentScout DRAFT` | Server constant in the Workroom attachment service |
+| Watermark text | `Gigmatch DRAFT` | Server constant in the Workroom attachment service |
 | Storage bucket | `chat-attachments` by default | `SUPABASE_CHAT_ATTACHMENT_BUCKET` |
 | Storage path | order scoped server generated path ending in `.webp` | Order UUID plus generated message UUID, never the request file name |
 | Stored attachment value | private object path | Supabase upload result path, stored in existing `Message.attachment_url` |

@@ -1,0 +1,8 @@
+import type { FreelancerSampleWork, FreelancerSampleWorkList, SampleWorkOrder, SampleWorkText, SampleWorkUpdate } from 'shared/schemas';
+import { authenticatedApiRequest } from '@/lib/api-client';
+
+export function getSampleWorks(): Promise<FreelancerSampleWorkList> { return authenticatedApiRequest<FreelancerSampleWorkList>('/api/v1/me/sample-works'); }
+export function createSampleWork(input: SampleWorkText, file: File): Promise<FreelancerSampleWork> { const form = new FormData(); form.append('file', file); form.append('title', input.title); form.append('description', input.description); form.append('tags', JSON.stringify(input.tags)); return authenticatedApiRequest<FreelancerSampleWork>('/api/v1/me/sample-works', { method: 'POST', body: form }); }
+export function updateSampleWork(id: string, input: SampleWorkUpdate, file?: File): Promise<FreelancerSampleWork> { const form = new FormData(); if (file !== undefined) form.append('file', file); if (input.title !== undefined) form.append('title', input.title); if (input.description !== undefined) form.append('description', input.description); if (input.tags !== undefined) form.append('tags', JSON.stringify(input.tags)); return authenticatedApiRequest<FreelancerSampleWork>(`/api/v1/me/sample-works/${id}`, { method: 'PATCH', body: form }); }
+export function deleteSampleWork(id: string): Promise<{ id: string; deleted: true }> { return authenticatedApiRequest<{ id: string; deleted: true }>(`/api/v1/me/sample-works/${id}`, { method: 'DELETE' }); }
+export function reorderSampleWorks(input: SampleWorkOrder): Promise<FreelancerSampleWorkList> { return authenticatedApiRequest<FreelancerSampleWorkList>('/api/v1/me/sample-works/order', { method: 'PUT', body: JSON.stringify(input) }); }

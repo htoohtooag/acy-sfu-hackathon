@@ -27,7 +27,8 @@ function isRecord(value: unknown): value is UnknownRecord {
 function isCatalogPackage(value: unknown): value is CatalogPackage {
   if (!isRecord(value) || typeof value.id !== "string" || typeof value.title !== "string") return false;
   const freelancer = value.freelancer;
-  return isRecord(freelancer) && typeof freelancer.id === "string" && isRecord(freelancer.user);
+  if (!isRecord(freelancer) || typeof freelancer.id !== "string" || !isRecord(freelancer.user) || !Array.isArray(freelancer.sample_works)) return false;
+  return freelancer.sample_works.every((sample) => isRecord(sample) && typeof sample.id === "string" && typeof sample.title === "string" && typeof sample.image_url === "string");
 }
 
 function isPackagePage(value: unknown): value is CatalogPackageListResponse {
@@ -36,7 +37,7 @@ function isPackagePage(value: unknown): value is CatalogPackageListResponse {
 }
 
 function isFreelancerProfile(value: unknown): value is FreelancerPublicProfile {
-  if (!isRecord(value) || typeof value.id !== "string" || !Array.isArray(value.skills) || !Array.isArray(value.packages)) return false;
+  if (!isRecord(value) || typeof value.id !== "string" || !Array.isArray(value.skills) || !Array.isArray(value.packages) || !Array.isArray(value.sample_works)) return false;
   return isRecord(value.user);
 }
 

@@ -5,7 +5,7 @@
 
 ## Summary
 
-Build the first visual version of TalentScout's AI search assistant. It will use mock conversation content and existing mock package data so the team can review the experience before connecting the AI service. The assistant will open in a shadcn Dialog, use separate components, and keep interactive code in small Client Components around a Server Component route structure.
+Build the first visual version of Gigmatch's AI search assistant. It will use mock conversation content and existing mock package data so the team can review the experience before connecting the AI service. The assistant will open in a shadcn Dialog, use separate components, and keep interactive code in small Client Components around a Server Component route structure.
 
 ## Context
 

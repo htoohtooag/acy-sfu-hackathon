@@ -25,7 +25,11 @@ const packageSelect = {
       headline: true,
       location_city: true,
       is_verified: true,
-      user: { select: { id: true, full_name: true, avatar_url: true } },
+        user: { select: { id: true, full_name: true, avatar_url: true } },
+        sample_works: {
+          orderBy: [{ sort_order: 'asc' }, { id: 'asc' }],
+          select: { id: true, title: true, description: true, tags: true, image_path: true, sort_order: true },
+        },
     },
   },
   tier: { select: { id: true, name: true, display_name: true } },

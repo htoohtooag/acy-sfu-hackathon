@@ -52,6 +52,17 @@ export const freelancerProfileSelect = {
       tier: { select: { id: true, name: true, display_name: true } },
     },
   },
+  sample_works: {
+    orderBy: [{ sort_order: 'asc' }, { id: 'asc' }],
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      tags: true,
+      image_path: true,
+      sort_order: true,
+    },
+  },
 } satisfies Prisma.FreelancerProfileSelect;
 
 export type FreelancerProfileRecord = Prisma.FreelancerProfileGetPayload<{
@@ -84,7 +95,7 @@ function mapWorkHistory(record: FreelancerProfileRecord['user']['orders_as_freel
   });
 }
 
-export function mapFreelancerProfile(record: FreelancerProfileRecord): FreelancerPublicProfile {
+export function mapFreelancerProfile(record: FreelancerProfileRecord, sampleImageUrls: Map<string, string> = new Map()): FreelancerPublicProfile {
   return {
     id: record.id,
     user_id: record.user_id,
@@ -111,5 +122,13 @@ export function mapFreelancerProfile(record: FreelancerProfileRecord): Freelance
       tier: item.tier,
     })),
     work_history: mapWorkHistory(record.user.orders_as_freelancer, record.user.id),
+    sample_works: (record.sample_works ?? []).map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      tags: item.tags,
+      image_url: sampleImageUrls.get(item.id) ?? '',
+      sort_order: item.sort_order,
+    })),
   };
 }

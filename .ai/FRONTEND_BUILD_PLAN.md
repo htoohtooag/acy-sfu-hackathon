@@ -46,7 +46,7 @@ This document defines the implementation logic for the frontend. AI agents MUST 
   - Build the `/(public)/jobs` page (Server Component) to display open job posts posted by clients.
   - Layout: Clean list or split-pane view showing Job Title, Budget Range, Expected Deadline, and Client Company Name.
   - *Data Fetching:* Use server-side `fetch` to `GET /api/v1/jobs`.
-  - *SEO:* Export a static `metadata` object with title "Find Work | TalentScout" and description.
+  - *SEO:* Export a static `metadata` object with title "Find Work | Gigmatch" and description.
 - [ ] **Step 3.3: Sitemap & Robots.txt (SEO Finalization)**
   - Create `app/sitemap.ts` to dynamically fetch all active packages and freelancers, generating a sitemap for Google Search Console.
   - Create `app/robots.ts` to allow search engine crawling of public `(public)` routes while blocking `(auth)` and `(app)` routes.
@@ -117,22 +117,6 @@ This document defines the implementation logic for the frontend. AI agents MUST 
         - COMMUNICATION: "View All Messages" link at the bottom.
     - **Bottom Pinned:** Settings.
 
-
-- [ ] **Step 7: Home Dashboard (Analytics & Stats)**
-  - Build the `/(app)/dashboard` page.
-  - **UI:** Standard SaaS analytics dashboard. 
-    - Row 1: 3 Stat Cards (Active Orders, Earnings/Spent, Success Rate/Reviews).
-    - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
-  - *Note:* NO AI Chat on this page. Use React Query to fetch `GET /api/v1/orders`.
-  
-- [ ] **Step 7.1: Notifications Page (Mail-Style)**
-  - Build the `/(app)/notifications` page.
-  - **UI:** A clean, email-style list of system alerts (Offer Received, Escrow Verified, etc.).
-  - Fetch `GET /api/v1/notifications`. Mark as read when clicked.
-
-### Phase 3.1: Real-Time Notifications System (Frontend)
-*Goal: Display real-time system alerts with a tabbed, mail-style inbox and instant sidebar badge updates.*
-
 - [ ] **Step 6.1: Notifications Page & Real-Time Integration**
   - **Data Fetching (React Query):**
     - Create `useNotifications` hook fetching `GET /api/v1/notifications`. Accept filter params for tabs.
@@ -150,6 +134,15 @@ This document defines the implementation logic for the frontend. AI agents MUST 
       1. Call `queryClient.invalidateQueries({ queryKey: ['notifications'] })` and `queryClient.invalidateQueries({ queryKey: ['unreadCount'] })` to silently refetch the list and update the sidebar badge.
       2. Show a transient UI popup (toast via `sonner`) with the notification title. Clicking the toast routes the user to the `metadata.link`.
   - *Done when:* User sees the red badge update instantly when the backend triggers an event, can browse alerts by category, and clicking an alert routes them to the correct context.
+
+- [ ] **Step 7: Home Dashboard (Analytics & Stats)**
+  - Build the `/(app)/dashboard` page.
+  - **UI:** Standard SaaS analytics dashboard. 
+    - Row 1: 3 Stat Cards (Active Orders, Earnings/Spent, Success Rate/Reviews).
+    - Row 2: Split layout. Left (2/3): "Active Workrooms" list. Right (1/3): "Pending Actions" to-do list.
+  - *Note:* NO AI Chat on this page. Use React Query to fetch `GET /api/v1/orders`.
+  
+
 
 
 

@@ -1,4 +1,4 @@
-import type { CatalogPackage, FreelancerPublicProfile } from "shared/schemas";
+import type { CatalogPackage, FreelancerPublicProfile, FreelancerPublicSampleWork } from "shared/schemas";
 
 import { catalogPackagePresentation, type FreelancerProfilePresentation, type ProfileWorkHistory } from "@/features/catalog/mock-data";
 
@@ -129,7 +129,7 @@ export function sortCatalogPackages(items: CatalogPackage[], filters: CatalogFil
   });
 }
 
-export function mapPublicProfileToPresentation(profile: FreelancerPublicProfile): { profile: FreelancerProfilePresentation; packages: CatalogPackage[]; freelancer: CatalogPackage["freelancer"] } {
+export function mapPublicProfileToPresentation(profile: FreelancerPublicProfile): { profile: FreelancerProfilePresentation; packages: CatalogPackage[]; freelancer: CatalogPackage["freelancer"]; sampleWorks: FreelancerPublicSampleWork[] } {
   const packages: CatalogPackage[] = profile.packages.map((item) => ({
     id: item.id,
     freelancer_id: profile.id,
@@ -149,6 +149,7 @@ export function mapPublicProfileToPresentation(profile: FreelancerPublicProfile)
       location_city: profile.location_city,
       is_verified: profile.is_verified,
       user: profile.user,
+      sample_works: profile.sample_works,
     },
     tier: item.tier,
   }));
@@ -167,6 +168,7 @@ export function mapPublicProfileToPresentation(profile: FreelancerPublicProfile)
     languages: [{ name: "English", fluency: "Public profile" }],
     coreExpertise: profile.skills,
     workHistory: mapPublicWorkHistory(profile),
+    portfolioGallery: profile.sample_works.map((item) => ({ id: item.id, imageUrl: item.image_url, alt: item.title })),
   };
 
   return {
@@ -179,7 +181,9 @@ export function mapPublicProfileToPresentation(profile: FreelancerPublicProfile)
       location_city: profile.location_city,
       is_verified: profile.is_verified,
       user: profile.user,
+      sample_works: profile.sample_works,
     },
+    sampleWorks: profile.sample_works,
   };
 }
 

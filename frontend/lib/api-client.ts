@@ -5,12 +5,14 @@ type ApiErrorBody = { code?: string; message?: string; details?: unknown };
 type ApiEnvelope<T> = { success: true; data: T } | { success: false; error: ApiErrorBody };
 
 export class ApiRequestError extends Error {
+  readonly status: number | undefined;
   readonly code: string | undefined;
   readonly details: unknown;
 
-  constructor(message: string, code?: string, details?: unknown) {
+  constructor(message: string, code?: string, details?: unknown, status?: number) {
     super(message);
     this.name = "ApiRequestError";
+    this.status = status;
     this.code = code;
     this.details = details;
   }
@@ -37,8 +39,8 @@ export async function authenticatedApiRequest<T>(path: string, init: RequestInit
     headers,
   });
   const payload: unknown = await response.json().catch(() => null);
-  if (!isEnvelope<T>(payload)) throw new ApiRequestError("The server returned an invalid response.");
-  if (!payload.success) throw new ApiRequestError(payload.error.message ?? "The request could not be completed.", payload.error.code, payload.error.details);
+  if (!isEnvelope<T>(payload)) throw new ApiRequestError("The server returned an invalid response.", undefined, undefined, response.status);
+  if (!payload.success) throw new ApiRequestError(payload.error.message ?? "The request could not be completed.", payload.error.code, payload.error.details, response.status);
   return payload.data;
 }
 

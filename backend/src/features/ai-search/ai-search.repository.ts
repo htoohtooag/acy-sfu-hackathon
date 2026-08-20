@@ -1,6 +1,8 @@
 import type { SearchPackagesToolInput } from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
+import { env } from '../../config/env.js';
 import { prisma } from '../../config/prisma.js';
+import { supabaseAdmin } from '../../config/supabase.js';
 import type {
   AiSearchPlanMode,
   PackageSearchCard,
@@ -61,6 +63,31 @@ function getStringArray(value: Prisma.JsonValue): string[] {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 }
 
+async function getFirstSampleWork(freelancerId: string): Promise<{ id: string; title: string; image_path: string } | null> {
+  return prisma.freelancerSampleWork.findFirst({
+    where: { freelancer_id: freelancerId },
+    orderBy: [{ sort_order: 'asc' }, { id: 'asc' }],
+    select: { id: true, title: true, image_path: true },
+  });
+}
+
+async function getSampleWorkImageUrl(sampleWork: { image_path: string }): Promise<string | null> {
+  if (sampleWork.image_path.trim().length === 0) {
+    return null;
+  }
+
+  try {
+    const { data, error } = await supabaseAdmin.storage
+      .from(env.SUPABASE_FREELANCER_SAMPLE_WORK_BUCKET)
+      .createSignedUrl(sampleWork.image_path, env.FREELANCER_SAMPLE_WORK_SIGNED_URL_TTL_SECONDS);
+
+    return error === null && data?.signedUrl !== undefined ? data.signedUrl : null;
+  } catch (error: unknown) {
+    console.warn('AI search sample work signing failed.', { error });
+    return null;
+  }
+}
+
 export async function searchPackages(
   input: SearchPackagesToolInput,
   embeddingVector: string,
@@ -114,13 +141,14 @@ export async function searchPackages(
   });
   const recordsById = new Map(records.map((record) => [record.id, record]));
 
-  console.log("package found: ", rankRows);
-  return rankRows.flatMap((rankRow) => {
+  const mappedRecords = await Promise.all(rankRows.map(async (rankRow) => {
     const record = recordsById.get(rankRow.id);
     if (record === undefined) {
-      return [];
+      return null;
     }
 
+    const firstSampleWork = await getFirstSampleWork(record.freelancer.id);
+    const sampleWorkImageUrl = firstSampleWork === null ? null : await getSampleWorkImageUrl(firstSampleWork);
 
     return [{
       id: record.id,
@@ -139,8 +167,13 @@ export async function searchPackages(
         is_verified: record.freelancer.is_verified,
         completed_projects_count: record.freelancer.completed_projects_count,
       },
+      sample_work: firstSampleWork !== null && sampleWorkImageUrl !== null
+        ? { id: firstSampleWork.id, title: firstSampleWork.title, image_url: sampleWorkImageUrl }
+        : null,
     } satisfies PackageSearchCard];
-  });
+  }));
+
+  return mappedRecords.flatMap((record) => record ?? []);
 }
 
 export async function searchPlatformDocuments(

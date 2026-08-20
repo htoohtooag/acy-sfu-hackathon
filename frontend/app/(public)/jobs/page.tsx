@@ -5,9 +5,9 @@ import { JobCatalog } from "@/components/features/jobs/job-catalog";
 import { getJobs, type JobListQuery } from "@/features/jobs/job-data";
 
 export const metadata: Metadata = {
-  title: "Find Work | TalentScout",
+  title: "Find Work | Gigmatch",
   description: "Find open freelance projects from teams looking for thoughtful, reliable independent talent.",
-  openGraph: { title: "Find Work | TalentScout", description: "Explore open freelance projects on TalentScout." },
+  openGraph: { title: "Find Work | Gigmatch", description: "Explore open freelance projects on Gigmatch." },
 };
 
 type SearchParamValue = string | string[] | undefined;

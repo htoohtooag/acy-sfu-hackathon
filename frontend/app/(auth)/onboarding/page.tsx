@@ -4,7 +4,7 @@ import { OnboardingWizard } from "@/components/features/onboarding/onboarding-wi
 import { getServerCurrentUser } from "@/lib/auth/server-auth";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "Complete your profile | TalentScout", description: "Tell TalentScout what you do and what you need." };
+export const metadata: Metadata = { title: "Complete your profile | Gigmatch", description: "Tell Gigmatch what you do and what you need." };
 
 export default async function OnboardingPage() {
   const user = await getServerCurrentUser();

@@ -53,7 +53,7 @@ export function PublicNavbar({ isAuthenticated }: { isAuthenticated: boolean }) 
         onPointerLeave={() => setOpenMenu(null)}
       >
         <Link href="/" className="shrink-0 font-heading text-2xl font-bold tracking-tight text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
-          TalentScout
+          Gigmatch
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
           <div onPointerEnter={() => setOpenMenu("talent")}>

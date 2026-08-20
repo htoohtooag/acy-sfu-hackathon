@@ -120,7 +120,7 @@ export function AiSearchTranscript({ messages, status, error }: AiSearchTranscri
                       {packageResults ? (
                         packageResults.length > 0 ? <OverlapCardCarousel packages={packageResults} /> : <Marker variant="border"><MarkerContent>No matching packages found yet. Try adding a skill, budget, or delivery timeline.</MarkerContent></Marker>
                       ) : null}
-                      <MessageFooter>{isAssistant ? "Indy AI" : "Just now"}</MessageFooter>
+                      <MessageFooter>{isAssistant ? "Gigmatch AI" : "Just now"}</MessageFooter>
                     </MessageContent>
                   </Message>
                 </MessageScrollerItem>
@@ -130,7 +130,7 @@ export function AiSearchTranscript({ messages, status, error }: AiSearchTranscri
               <MessageScrollerItem messageId="ai-search-connecting">
                 <Marker variant="border">
                   <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
-                  <MarkerContent>Connecting to Indy AI…</MarkerContent>
+                  <MarkerContent>Connecting to Gigmatch AI…</MarkerContent>
                 </Marker>
               </MessageScrollerItem>
             ) : null}

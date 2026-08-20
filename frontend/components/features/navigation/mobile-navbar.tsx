@@ -24,7 +24,7 @@ export function MobileNavbar({ isAuthenticated }: { isAuthenticated: boolean }) 
         <SheetContent>
           <SheetHeader>
             <div className="flex items-center justify-between gap-4">
-              <SheetTitle className="font-heading text-xl tracking-tight text-primary">TalentScout</SheetTitle>
+              <SheetTitle className="font-heading text-xl tracking-tight text-primary">Gigmatch</SheetTitle>
               <SheetClose render={<Button variant="ghost" size="icon" aria-label="Close navigation"><X aria-hidden="true" /></Button>} />
             </div>
             <SheetDescription>Find trusted people and meaningful work in one place.</SheetDescription>

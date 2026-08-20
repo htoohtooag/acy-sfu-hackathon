@@ -39,4 +39,14 @@ export type FreelancerPublicProfile = {
   user: { id: string; full_name: string | null; avatar_url: string | null };
   packages: FreelancerPublicPackage[];
   work_history: FreelancerWorkHistoryItem[];
+  sample_works: FreelancerPublicSampleWork[];
+};
+
+export type FreelancerPublicSampleWork = {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  image_url: string;
+  sort_order: number;
 };

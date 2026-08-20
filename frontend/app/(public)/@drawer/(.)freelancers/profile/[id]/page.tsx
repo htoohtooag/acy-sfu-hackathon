@@ -16,5 +16,5 @@ export default async function ProfileDrawerPage({ params }: ProfileDrawerPagePro
   const resolved = mapPublicProfileToPresentation(apiProfile);
   const firstPackage = resolved.packages[0];
   const packagePresentation = firstPackage ? findCatalogPackageDetailPresentation(firstPackage.id) ?? createFallbackCatalogPackageDetailPresentation(firstPackage) : undefined;
-  return <FreelancerProfileDrawer profile={resolved.profile} packages={resolved.packages} packagePresentation={packagePresentation} freelancer={resolved.freelancer} />;
+  return <FreelancerProfileDrawer profile={resolved.profile} packages={resolved.packages} packagePresentation={packagePresentation} freelancer={resolved.freelancer} sampleWorks={resolved.sampleWorks} />;
 }

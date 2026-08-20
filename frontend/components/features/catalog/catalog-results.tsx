@@ -3,12 +3,12 @@
 import { ArrowRight, ChevronDown, LayoutGrid, List, SearchX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { CatalogResultCard } from "@/components/features/catalog/catalog-result-card";
+import { CatalogResultCard, type CatalogPackageDetailPath } from "@/components/features/catalog/catalog-result-card";
 import { type CatalogFilters } from "@/features/catalog/catalog-data";
 import type { CatalogPackage } from "shared/schemas";
 import { useCatalogQueryControls } from "@/components/features/catalog/catalog-query-controls";
 
-type CatalogResultsProps = { items: CatalogPackage[]; filters: CatalogFilters; total: number };
+type CatalogResultsProps = { items: CatalogPackage[]; filters: CatalogFilters; total: number; packageDetailPath: CatalogPackageDetailPath };
 
 const quickFilters = [
   { id: "location", label: "Location", queryKey: "location", options: [["", "Any location"], ["Yangon", "Yangon"], ["Mandalay", "Mandalay"], ["Mawlamyine", "Mawlamyine"]] },
@@ -17,9 +17,8 @@ const quickFilters = [
   { id: "english-level", label: "English level", queryKey: "english_level", options: [["", "Any level"], ["Fluent", "Fluent"], ["Conversational", "Conversational"]] },
 ] as const;
 
-export function CatalogResults({ items, filters, total }: CatalogResultsProps) {
+export function CatalogResults({ items, filters, total, packageDetailPath }: CatalogResultsProps) {
   const { updateCatalogQuery, clearCatalogQuery } = useCatalogQueryControls();
-
   return (
     <section aria-labelledby="catalog-results-heading" aria-live="polite" className="min-w-0">
       <div className="flex flex-col gap-5 border-b border-border pb-5">
@@ -50,7 +49,8 @@ export function CatalogResults({ items, filters, total }: CatalogResultsProps) {
           </div>
         </div>
       </div>
-      {items.length > 0 ? <ul className="mt-6 space-y-6">{items.map((item, index) => <li key={item.id}><CatalogResultCard item={item} index={index} /></li>)}</ul> : (
+      {items.length > 0 ? <ul className="mt-6 space-y-6">{items.map((item, index) => <li key={item.id}>
+        <CatalogResultCard item={item} index={index} packageDetailPath={packageDetailPath} /></li>)}</ul> : (
         <div className="mt-6 flex min-h-80 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 p-8 text-center">
           <SearchX aria-hidden="true" className="size-10 text-muted-foreground" /><h3 className="mt-5 font-heading text-xl font-semibold text-foreground">No services match those filters</h3><p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">Try a broader search or clear your filters to see more independent talent.</p><Button type="button" variant="outline" className="mt-5" onClick={clearCatalogQuery}>Clear filters <ArrowRight aria-hidden="true" /></Button>
         </div>

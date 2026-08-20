@@ -1,7 +1,7 @@
 import { catalogPackagePresentation } from "@/features/catalog/mock-data";
 
 export const aiAssistantIdentity = {
-  name: "Indy AI",
+  name: "Gigmatch AI",
   initials: "IA",
   prompt: "How can I help you find the right talent?",
 } as const;

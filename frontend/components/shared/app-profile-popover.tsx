@@ -3,8 +3,12 @@
 import { Popover } from "@base-ui/react/popover";
 import { Check, ChevronDown, CircleGauge, LogOut, Settings, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useAppStore, type AppRole } from "@/store/use-app-store";
 import type { AppUser } from "@/features/app/app-types";
 
@@ -13,11 +17,37 @@ type AppProfilePopoverProps = { user: AppUser; compact?: boolean };
 const roleNames: Record<AppRole, string> = { CLIENT: "Client view", FREELANCER: "Freelancer view" };
 
 export function AppProfilePopover({ user, compact = false }: AppProfilePopoverProps) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const activeRole = useAppStore((state) => state.activeRole);
   const setActiveRole = useAppStore((state) => state.setActiveRole);
-  const displayName = user.fullName ?? user.email.split("@")[0] ?? "TalentScout member";
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const displayName = user.fullName ?? user.email.split("@")[0] ?? "Gigmatch member";
   const initials = displayName.slice(0, 2).toUpperCase();
   const canSwitchRoles = user.roles.length > 1;
+
+  async function logOut(): Promise<void> {
+    setLoggingOut(true);
+    setLogoutError(null);
+
+    try {
+      const { error } = await createSupabaseBrowserClient().auth.signOut();
+      if (error) {
+        setLogoutError("We could not log you out. Please try again.");
+        return;
+      }
+
+      queryClient.clear();
+      router.replace("/login");
+      router.refresh();
+    } catch (error: unknown) {
+      console.error("Logout failed.", error);
+      setLogoutError("We could not log you out. Please try again.");
+    } finally {
+      setLoggingOut(false);
+    }
+  }
 
   return (
     <Popover.Root>
@@ -80,7 +110,8 @@ export function AppProfilePopover({ user, compact = false }: AppProfilePopoverPr
             </div>
 
             <div className="p-2">
-              <button type="button" className="flex min-h-10 w-full items-center gap-3 rounded-lg px-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"><LogOut className="size-4" aria-hidden="true" />Log out</button>
+              {logoutError ? <p className="mb-2 rounded-lg bg-destructive/10 px-2 py-2 text-xs text-destructive" role="alert">{logoutError}</p> : null}
+              <button type="button" disabled={loggingOut} aria-busy={loggingOut} onClick={() => { void logOut(); }} className="flex min-h-10 w-full items-center gap-3 rounded-lg px-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60"><LogOut className="size-4" aria-hidden="true" />{loggingOut ? "Logging out…" : "Log out"}</button>
             </div>
           </Popover.Popup>
         </Popover.Positioner>

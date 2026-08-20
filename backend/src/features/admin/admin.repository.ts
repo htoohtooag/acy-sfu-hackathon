@@ -1,8 +1,8 @@
 import type { ModerationRequest } from 'shared/schemas';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
-import { paymentVerificationSelect, moderationSelect } from './admin.types.js';
-import type { AdminAssignment, PaymentVerificationRecord, ModerationRecord } from './admin.types.js';
+import { paymentVerificationSelect, moderationSelect, adminPaymentReadSelect } from './admin.types.js';
+import type { AdminAssignment, PaymentVerificationRecord, ModerationRecord, AdminPaymentReadRecord } from './admin.types.js';
 
 export type AdminClient = Prisma.TransactionClient | typeof prisma;
 
@@ -17,6 +17,7 @@ export async function findAdminAssignment(
     },
     select: {
       is_active: true,
+      user: { select: { full_name: true } },
       admin_role: { select: { name: true } },
     },
   });
@@ -29,6 +30,36 @@ export async function findPaymentById(
   return client.paymentTransaction.findFirst({
     where: { id: paymentId },
     select: paymentVerificationSelect,
+  });
+}
+
+export async function countPendingPayments(client: AdminClient = prisma): Promise<number> {
+  return client.paymentTransaction.count({
+    where: { status: 'PENDING_ADMIN', order: { deleted_at: null } },
+  });
+}
+
+export async function findPendingPayments(
+  page: number,
+  pageSize: number,
+  client: AdminClient = prisma,
+): Promise<AdminPaymentReadRecord[]> {
+  return client.paymentTransaction.findMany({
+    where: { status: 'PENDING_ADMIN', order: { deleted_at: null } },
+    orderBy: [{ created_at: 'asc' }, { id: 'asc' }],
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    select: adminPaymentReadSelect,
+  });
+}
+
+export async function findAdminPaymentById(
+  paymentId: string,
+  client: AdminClient = prisma,
+): Promise<AdminPaymentReadRecord | null> {
+  return client.paymentTransaction.findFirst({
+    where: { id: paymentId, status: 'PENDING_ADMIN', order: { deleted_at: null } },
+    select: adminPaymentReadSelect,
   });
 }
 

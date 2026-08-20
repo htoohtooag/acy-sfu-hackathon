@@ -124,6 +124,7 @@ model FreelancerProfile {
   user             User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   experience_level ExperienceLevel?        @relation(fields: [experience_level_id], references: [id])
   packages         Package[]
+  sample_works     FreelancerSampleWork[]
 
   @@index([skills], type: Gin, map: "idx_freelancer_skills")
   @@map("freelancer_profiles")

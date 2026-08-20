@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { FreelancerPublicSampleWork } from './freelancers.js';
 
 const requiredText = z.string().trim().min(1);
 const moneyString = z.string().regex(/^[0-9]+$/, 'Money must be a nonnegative integer string.');
@@ -133,6 +134,7 @@ export type CatalogPackage = {
     location_city: string | null;
     is_verified: boolean;
     user: { id: string; full_name: string | null; avatar_url: string | null };
+    sample_works: FreelancerPublicSampleWork[];
   };
   tier: { id: string; name: string; display_name: string | null } | null;
 };

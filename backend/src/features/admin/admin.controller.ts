@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express';
 import {
+  adminPaymentListQuerySchema,
   adminPaymentIdSchema,
   moderationRequestSchema,
   moderationTargetIdSchema,
@@ -7,7 +8,7 @@ import {
 } from 'shared/schemas';
 import { ApiError } from '../../utils/api-error.js';
 import { successResponse } from '../../utils/api-response.js';
-import { moderateUser, rejectEscrowPayment, verifyEscrowPayment } from './admin.service.js';
+import { getAdminPaymentDetail, getAdminSession, listAdminPendingPayments, moderateUser, rejectEscrowPayment, verifyEscrowPayment } from './admin.service.js';
 
 function userIdOrThrow(request: Parameters<RequestHandler>[0]): string {
   if (request.user === undefined) {
@@ -26,6 +27,32 @@ export const verifyPayment: RequestHandler = async (request, response, next): Pr
         ? await rejectEscrowPayment(userIdOrThrow(request), paymentId, decision.reason)
         : await verifyEscrowPayment(userIdOrThrow(request), paymentId);
     response.status(200).json(successResponse(result));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const getAdminProfile: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    response.status(200).json(successResponse(await getAdminSession(userIdOrThrow(request))));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const listPendingPayments: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const query = adminPaymentListQuerySchema.parse(request.query);
+    response.status(200).json(successResponse(await listAdminPendingPayments(query.page, query.page_size)));
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const getPendingPayment: RequestHandler = async (request, response, next): Promise<void> => {
+  try {
+    const paymentId = adminPaymentIdSchema.parse({ id: request.params.id }).id;
+    response.status(200).json(successResponse(await getAdminPaymentDetail(paymentId)));
   } catch (error: unknown) {
     next(error);
   }

@@ -24,7 +24,7 @@ test('Sharp creates a bounded watermarked WebP chat image', async () => {
   assert.equal(metadata.width, 1200);
   assert.equal(metadata.height, 675);
   assert.notDeepEqual(output, input);
-  assert.match(chatWatermarkOverlay(1200, 675).toString('utf8'), /TalentScout DRAFT/);
+  assert.match(chatWatermarkOverlay(1200, 675).toString('utf8'), /Gigmatch DRAFT/);
 });
 
 test('chat attachment paths are generated from trusted identifiers', () => {

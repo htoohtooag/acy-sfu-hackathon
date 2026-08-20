@@ -9,9 +9,11 @@ import { packageRouter } from './features/marketplace/package.routes.js';
 import { freelancerProfileRouter } from './features/marketplace/freelancer-profile.routes.js';
 import { reviewRouter } from './features/reputation/review.routes.js';
 import { orderRouter } from './features/transactions/order.routes.js';
+import { dashboardRouter } from './features/transactions/dashboard.routes.js';
 import { workroomRouter } from './features/workroom/workroom.routes.js';
 import { lookupRouter } from './features/lookups/lookup.routes.js';
 import { notificationRouter } from './features/notifications/notification.routes.js';
+import { sampleWorkRouter } from './features/marketplace/sample-work.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import { successResponse } from './utils/api-response.js';
 
@@ -35,6 +37,7 @@ app.get('/api/v1/health', (_request, response) => {
 });
 
 app.use('/api/v1/users', identityRouter);
+app.use('/api/v1/me/sample-works', sampleWorkRouter);
 app.use('/api/v1/lookups', lookupRouter);
 app.use('/api/v1/packages', packageRouter);
 app.use('/api/v1/jobs', jobRouter);
@@ -42,6 +45,7 @@ app.use('/api/v1/freelancers', freelancerProfileRouter);
 app.use('/api/v1/ai', aiSearchRouter);
 app.use('/api/v1/orders', workroomRouter);
 app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/orders', reviewRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/notifications', notificationRouter);

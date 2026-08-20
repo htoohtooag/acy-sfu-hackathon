@@ -5,7 +5,9 @@ export {
 } from './onboarding.js';
 export type { OnboardingRequest, OnboardingResponse } from './onboarding.js';
 export { freelancerProfileIdSchema } from './freelancers.js';
-export type { FreelancerPublicPackage, FreelancerPublicProfile, FreelancerWorkHistoryItem } from './freelancers.js';
+export type { FreelancerPublicPackage, FreelancerPublicProfile, FreelancerPublicSampleWork, FreelancerWorkHistoryItem } from './freelancers.js';
+export { sampleWorkIdSchema, sampleWorkOrderSchema, sampleWorkTextSchema, sampleWorkUpdateSchema } from './sample-works.js';
+export type { FreelancerSampleWork, FreelancerSampleWorkList, SampleWorkOrder, SampleWorkText, SampleWorkUpdate } from './sample-works.js';
 export {
   catalogPageQuerySchema,
   createJobPostSchema,
@@ -63,6 +65,8 @@ export {
   orderStatusSchema,
   paymentProofFieldsSchema,
 } from './orders.js';
+export { dashboardActionSchema, dashboardMetricKeySchema, dashboardQuerySchema, dashboardRoleSchema, dashboardSummarySchema } from './dashboard.js';
+export type { DashboardAction, DashboardAttentionItem, DashboardMetric, DashboardMetricKey, DashboardQuery, DashboardRole, DashboardSummary } from './dashboard.js';
 export type {
   CreateOrderRequest,
   OrderQuoteRequest,
@@ -88,10 +92,24 @@ export {
 } from './admin.js';
 export type {
   AdminModerationResponse,
+  AdminCapability,
+  AdminPaymentDetail,
+  AdminPaymentListQuery,
+  AdminPaymentListResponse,
   AdminPaymentRejectionResponse,
+  AdminPaymentSummary,
+  AdminSessionResponse,
   AdminPaymentVerificationResponse,
   ModerationRequest,
   PaymentDecisionRequest,
+} from './admin.js';
+export {
+  adminCapabilitySchema,
+  adminPaymentDetailSchema,
+  adminPaymentListQuerySchema,
+  adminPaymentListResponseSchema,
+  adminPaymentSummarySchema,
+  adminSessionResponseSchema,
 } from './admin.js';
 export {
   joinRoomSchema,

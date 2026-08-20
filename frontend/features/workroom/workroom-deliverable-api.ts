@@ -82,6 +82,7 @@ async function getReviewStatus(orderId: string): Promise<ReviewStatusResponse> {
 }
 
 function invalidateWorkroomQueries(queryClient: ReturnType<typeof useQueryClient>, orderId: string): void {
+  void queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
   void queryClient.invalidateQueries({ queryKey: ["workroom-orders"] });
   void queryClient.invalidateQueries({ queryKey: ["workroom-messages", orderId] });
   void queryClient.invalidateQueries({ queryKey: ["workroom-order-detail", orderId] });

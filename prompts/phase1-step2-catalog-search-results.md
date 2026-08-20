@@ -2,7 +2,7 @@
 
 ## Objective
 
-Build the public Find Talent catalog at `/freelancers`. Searching from the public navbar must navigate to this catalog and show filtered mock package results. The catalog should be a clean, modern TalentScout experience inspired by the supplied result and filter references, but it must use the project’s design tokens, shadcn-style primitives, and shared catalog response types rather than copying the reference designs.
+Build the public Find Talent catalog at `/freelancers`. Searching from the public navbar must navigate to this catalog and show filtered mock package results. The catalog should be a clean, modern Gigmatch experience inspired by the supplied result and filter references, but it must use the project’s design tokens, shadcn-style primitives, and shared catalog response types rather than copying the reference designs.
 
 ## Existing context
 
@@ -31,7 +31,7 @@ Build the public Find Talent catalog at `/freelancers`. Searching from the publi
 
 - Define deterministic mock catalog data using `CatalogPackage` from the shared package.
 - Include enough entries to demonstrate search, category, budget, delivery-time, and freelancer-level filtering.
-- Use realistic TalentScout marketplace copy, Myanmar kyat prices, delivery days, feature arrays, verified freelancer state, tier data, and avatar initials/fallback values.
+- Use realistic Gigmatch marketplace copy, Myanmar kyat prices, delivery days, feature arrays, verified freelancer state, tier data, and avatar initials/fallback values.
 - Do not add fields to `CatalogPackage` just for presentation. If visual-only metadata is needed, define a separate typed view-model mapping in the catalog feature.
 - Keep the data deterministic and local; do not call the backend in this step.
 

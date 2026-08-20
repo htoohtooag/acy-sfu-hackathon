@@ -2,7 +2,7 @@
 
 ## Objective
 
-Build the first public storefront shell for TalentScout using the supplied navbar, Hire Talent popup, and Find Work popup images as visual references. The result should be a modern, responsive, accessible implementation that matches the project’s Tailwind v4, shadcn/ui, Next.js App Router, and feature-sliced architecture.
+Build the first public storefront shell for Gigmatch using the supplied navbar, Hire Talent popup, and Find Work popup images as visual references. The result should be a modern, responsive, accessible implementation that matches the project’s Tailwind v4, shadcn/ui, Next.js App Router, and feature-sliced architecture.
 
 ## Scope assumption
 
@@ -32,7 +32,7 @@ For this request, “Phase 1 → Step 1 and 2 together” means the public navba
 - Create the responsive public navbar composition.
 - Use a client boundary only for interactive hover/focus state and the mobile menu trigger.
 - Desktop layout:
-  - TalentScout brand/logo text linked to /.
+  - Gigmatch brand/logo text linked to /.
   - “Find Talent” and “Find Work” navigation triggers with chevrons.
   - “Enterprise” and “Pricing” links using project-appropriate routes/placeholders.
   - Search affordance styled as a compact service search field.
@@ -71,15 +71,15 @@ For this request, “Phase 1 → Step 1 and 2 together” means the public navba
   - Find Work categories and submenu items.
   - Top-level public links.
   - Mobile grouping labels.
-- Use TalentScout language and marketplace concepts rather than Upwork-specific copy.
+- Use Gigmatch language and marketplace concepts rather than Upwork-specific copy.
 - Suggested Find Talent categories: AI & Automation, Development & IT, Design & Creative, Marketing, Data & Analytics, Admin & Support, Writing & Content.
-- Suggested Find Work categories: About TalentScout, Customer Stories, Partnerships, Blog, Help Center, Terms of Service, Privacy Policy, Refund Policy.
+- Suggested Find Work categories: About Gigmatch, Customer Stories, Partnerships, Blog, Help Center, Terms of Service, Privacy Policy, Refund Policy.
 - Give each menu item a stable key, label, short description, href, and optional Lucide icon name/type as appropriate. Avoid any; use explicit TypeScript types.
 
 ### frontend/app/page.tsx
 
 - Replace the starter page with a minimal public storefront landing shell that demonstrates the navbar in context.
-- Keep the page focused on this task: a calm hero or intro section with TalentScout messaging and a small supporting section is sufficient.
+- Keep the page focused on this task: a calm hero or intro section with Gigmatch messaging and a small supporting section is sufficient.
 - Do not build the catalog/filter/results page in this task.
 - Use semantic headings and project tokens only.
 

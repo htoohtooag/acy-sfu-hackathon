@@ -1,0 +1,2 @@
+import { FreelancerSampleWorkSection } from '@/components/features/settings/freelancer-sample-work-section';
+export default function SettingsPage() { return <div className="mx-auto w-full max-w-6xl space-y-8 p-5 sm:p-8 lg:p-10"><header><p className="text-sm font-semibold uppercase tracking-[0.14em] text-primary">Workspace settings</p><h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight text-foreground">Settings</h1></header><FreelancerSampleWorkSection /></div>; }

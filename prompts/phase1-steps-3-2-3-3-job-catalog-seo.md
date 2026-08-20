@@ -62,7 +62,7 @@ The implementation must preserve the completed 3.1 freelancer profile routes, pa
 ### `frontend/app/(public)/jobs/page.tsx`
 
 - Add a Server Component page using the existing public layout.
-- Export static `Metadata` with title `Find Work | TalentScout`, a useful description, and Open Graph title/description.
+- Export static `Metadata` with title `Find Work | Gigmatch`, a useful description, and Open Graph title/description.
 - Parse and constrain URL search params before passing them to the typed data layer. Support `search`, `max_budget_mmk`, `page`, and `page_size`.
 - Handle API failures with a useful server-rendered fallback rather than exposing internal error details.
 - Render one `<main>` landmark through the page/component composition and keep the page focused on composing the feature.

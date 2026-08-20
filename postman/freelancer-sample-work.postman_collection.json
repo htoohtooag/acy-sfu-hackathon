@@ -1,0 +1,21 @@
+{
+  "info": { "name": "Gigmatch Freelancer Sample Work", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001" },
+    { "key": "freelancerToken", "value": "" },
+    { "key": "freelancerProfileId", "value": "" },
+    { "key": "sampleId", "value": "" },
+    { "key": "sampleImagePath", "value": "/absolute/path/to/sample.jpg" }
+  ],
+  "item": [
+    { "name": "Public profile with samples", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/freelancers/{{freelancerProfileId}}" } },
+    { "name": "Owner list samples", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }], "url": "{{baseUrl}}/api/v1/me/sample-works" } },
+    { "name": "Create sample work", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }], "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "{{sampleImagePath}}" }, { "key": "title", "value": "Restaurant brand identity", "type": "text" }, { "key": "description", "value": "A complete visual identity for a Yangon restaurant.", "type": "text" }, { "key": "tags", "value": "[\"Branding\",\"Illustrator\",\"Food and beverage\"]", "type": "text" }] }, "url": "{{baseUrl}}/api/v1/me/sample-works" } },
+    { "name": "Edit sample text", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }], "body": { "mode": "formdata", "formdata": [{ "key": "title", "value": "Updated restaurant brand identity", "type": "text" }, { "key": "description", "value": "Updated description for the published sample.", "type": "text" }, { "key": "tags", "value": "[\"Branding\",\"Packaging\"]", "type": "text" }] }, "url": "{{baseUrl}}/api/v1/me/sample-works/{{sampleId}}" } },
+    { "name": "Replace sample image", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }], "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "{{sampleImagePath}}" }] }, "url": "{{baseUrl}}/api/v1/me/sample-works/{{sampleId}}" } },
+    { "name": "Save sample order", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"sampleIds\": [\"{{sampleId}}\"]\n}" }, "url": "{{baseUrl}}/api/v1/me/sample-works/order" } },
+    { "name": "Delete sample", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }], "url": "{{baseUrl}}/api/v1/me/sample-works/{{sampleId}}" } },
+    { "name": "Negative missing token", "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/me/sample-works" } },
+    { "name": "Negative invalid order", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{freelancerToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"sampleIds\": [\"not-a-uuid\"]\n}" }, "url": "{{baseUrl}}/api/v1/me/sample-works/order" } }
+  ]
+}

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: FreelancerProfilePageProps): 
   const resolved = await loadProfile(id);
   console.log(resolved, "prfoi")
   const name = resolved?.freelancer.user.full_name ?? "Freelancer";
-  return { title: `${name} | TalentScout`, description: resolved?.profile.about ?? "Explore a public TalentScout freelancer profile.", openGraph: { title: `${name} | TalentScout`, description: resolved?.profile.about ?? "Explore a public TalentScout freelancer profile." } };
+  return { title: `${name} | Gigmatch`, description: resolved?.profile.about ?? "Explore a public Gigmatch freelancer profile.", openGraph: { title: `${name} | Gigmatch`, description: resolved?.profile.about ?? "Explore a public Gigmatch freelancer profile." } };
 }
 
 export default async function FreelancerProfilePage({ params }: FreelancerProfilePageProps) {
@@ -30,5 +30,5 @@ export default async function FreelancerProfilePage({ params }: FreelancerProfil
 
   const firstPackage = resolved.packages[0];
   const packagePresentation = firstPackage ? findCatalogPackageDetailPresentation(firstPackage.id) ?? createFallbackCatalogPackageDetailPresentation(firstPackage) : undefined;
-  return <main id="main-content" className="flex-1 bg-muted/20 px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16"><FreelancerProfileContent profile={resolved.profile} packages={resolved.packages} freelancer={resolved.freelancer} packagePresentation={packagePresentation} mode="page" /></main>;
+  return <main id="main-content" className="flex-1 bg-muted/20 px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16"><FreelancerProfileContent profile={resolved.profile} packages={resolved.packages} freelancer={resolved.freelancer} sampleWorks={resolved.sampleWorks} packagePresentation={packagePresentation} mode="page" /></main>;
 }

@@ -15,7 +15,7 @@ The current code uses `useAppStore().sidebarCollapsed` for desktop collapse and 
    - Keep the collapsed rail narrow, around `w-20`, with no horizontal overflow.
 
 2. Center collapsed controls.
-   - Center the TalentScout mark, profile avatar trigger, navigation icons, dynamic list icons, and Settings icon horizontally.
+   - Center the Gigmatch mark, profile avatar trigger, navigation icons, dynamic list icons, and Settings icon horizontally.
    - The profile trigger must become an avatar-only square button with `justify-center`, `mx-auto`, and no visible role or plan text.
    - Hide the profile dropdown chevron when collapsed.
    - Keep the expand or collapse control accessible and visually aligned.

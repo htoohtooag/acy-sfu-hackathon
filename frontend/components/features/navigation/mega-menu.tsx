@@ -24,7 +24,7 @@ export function MegaMenu({ mode, categories = [], cards = [], onNavigate }: Mega
                 href={card.href}
                 onClick={onNavigate}
                 className={cn(
-                  "group flex min-h-24 items-end justify-between rounded-xl border border-border bg-card/80 p-5 transition-colors hover:bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                  "group flex min-h-24 items-end justify-between rounded-xl border border-border bg-menu-rail/35 p-5 transition-colors hover:bg-menu-item-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                   card.featured && "min-h-36",
                 )}
               >
@@ -47,9 +47,9 @@ export function MegaMenu({ mode, categories = [], cards = [], onNavigate }: Mega
   }
 
   return (
-    <div className="absolute inset-x-0 top-full z-40 hidden overflow-hidden rounded-b-2xl border border-border bg-card text-card-foreground shadow-xl lg:block">
+    <div className="absolute inset-x-0 top-full z-40 hidden overflow-hidden rounded-b-2xl border border-border bg-menu-surface text-foreground shadow-xl lg:block">
       <div className="mx-auto grid max-w-7xl grid-cols-[14rem_1fr]">
-        <aside className="border-e border-border bg-muted/50 p-3">
+        <aside className="border-e border-border bg-menu-rail p-3">
           <p className="px-3 pb-3 pt-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Categories</p>
           <ul className="space-y-1">
             {categories.map((category, index) => (
@@ -57,8 +57,8 @@ export function MegaMenu({ mode, categories = [], cards = [], onNavigate }: Mega
                 <button
                   type="button"
                   className={cn(
-                    "group flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-start text-sm font-medium text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    index === 0 && "bg-background text-foreground shadow-sm",
+                    "group flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-start text-sm font-medium text-muted-foreground transition-colors hover:bg-menu-item-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    index === 0 && "bg-menu-item-active text-foreground shadow-sm",
                   )}
                 >
                   {category.label}
@@ -76,7 +76,7 @@ export function MegaMenu({ mode, categories = [], cards = [], onNavigate }: Mega
                 key={item.key}
                 href={item.href}
                 onClick={onNavigate}
-                className="group flex min-h-24 gap-4 rounded-xl p-3 transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="group flex min-h-24 gap-4 rounded-xl p-3 transition-colors hover:bg-menu-item-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   {Icon ? <Icon aria-hidden="true" className="size-4" /> : null}

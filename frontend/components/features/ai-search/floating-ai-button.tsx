@@ -35,7 +35,7 @@ function FloatingAiButtonContent() {
         render={
           <Button
             type="button"
-            aria-label="Open Indy AI assistant"
+            aria-label="Open Gigmatch AI assistant"
             aria-haspopup="dialog"
             className="fixed end-4 bottom-4 z-40 flex h-auto min-h-16 w-[min(23rem,calc(100vw-2rem))] justify-start gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-start text-foreground shadow-xl hover:bg-card sm:end-6 sm:bottom-6"
           />

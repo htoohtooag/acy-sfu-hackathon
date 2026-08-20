@@ -15,7 +15,7 @@ The full page should contain:
 3. A metrics row with job success, top rated status, completed jobs, and response time.
 4. A two-column main area. The larger left column contains Portfolio & Overview with a large active portfolio image, thumbnail carousel, and detailed about copy. The right column contains package tier tabs/cards, languages, and skills.
 5. A completed jobs section with tabs for Completed jobs, In progress, and Search related. The completed jobs tab shows typed history rows with rating, contract type, price or rate, dates, review text, and skill tags.
-6. A public marketplace footer matching the existing TalentScout visual language.
+6. A public marketplace footer matching the existing Gigmatch visual language.
 
 Use the reference for hierarchy and layout. Use the repository semantic tokens and existing typography rather than copying reference colors or hardcoded values.
 
@@ -68,7 +68,7 @@ Use the reference for hierarchy and layout. Use the repository semantic tokens a
 
 ### `frontend/components/features/catalog/public-marketplace-footer.tsx`
 
-- Build the footer visible on the public freelancer detail page using existing TalentScout copy and semantic navigation links.
+- Build the footer visible on the public freelancer detail page using existing Gigmatch copy and semantic navigation links.
 - Use project tokens and responsive columns.
 - Do not change unrelated navbar/footer behavior outside this page.
 

@@ -31,6 +31,18 @@ const chatAttachmentUploadParser = multer({
   },
 });
 
+const sampleWorkUploadParser = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: env.FREELANCER_SAMPLE_WORK_MAX_BYTES, files: 1 },
+  fileFilter: (_request, file, callback): void => {
+    if (!supportedImageTypes.has(file.mimetype)) {
+      callback(new ApiError(415, 'SAMPLE_WORK_TYPE_NOT_ALLOWED', 'Only JPEG, PNG, and WebP images are allowed.'));
+      return;
+    }
+    callback(null, true);
+  },
+});
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: env.PAYMENT_PROOF_MAX_BYTES, files: 1 },
@@ -160,6 +172,32 @@ export const chatAttachmentUpload: RequestHandler = (
       return;
     }
 
+    next();
+  });
+};
+
+export const sampleWorkUpload: RequestHandler = (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+): void => {
+  sampleWorkUploadParser.single('file')(request, response, (error: unknown) => {
+    if (error instanceof ApiError) {
+      next(error);
+      return;
+    }
+    if (error instanceof multer.MulterError) {
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        next(new ApiError(413, 'SAMPLE_WORK_TOO_LARGE', 'The sample work image is too large.'));
+        return;
+      }
+      next(new ApiError(422, 'SAMPLE_WORK_UPLOAD_INVALID', 'The sample work upload is invalid.'));
+      return;
+    }
+    if (error !== undefined && error !== null) {
+      next(new ApiError(422, 'SAMPLE_WORK_UPLOAD_INVALID', 'The sample work upload is invalid.'));
+      return;
+    }
     next();
   });
 };

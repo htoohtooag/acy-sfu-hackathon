@@ -9,11 +9,11 @@ type PackageDetailPageProps = { params: Promise<{ id: string }> };
 export async function generateMetadata({ params }: PackageDetailPageProps): Promise<Metadata> {
   const { id } = await params;
   const item = await getCatalogPackage(id).catch(() => null);
-  if (!item) return { title: "Package not found | TalentScout" };
+  if (!item) return { title: "Package not found | Gigmatch" };
 
   return {
-    title: `${item.title} | TalentScout`,
-    description: item.description ?? `Explore a service from ${item.freelancer.user.full_name ?? "TalentScout talent"}.`,
+    title: `${item.title} | Gigmatch`,
+    description: item.description ?? `Explore a service from ${item.freelancer.user.full_name ?? "Gigmatch talent"}.`,
   };
 }
 

@@ -17,7 +17,7 @@ Update the existing Find Work navbar popup so its background follows the project
   - Content Writing
   - Data & Analytics
 - Keep the existing typed NavigationCard structure.
-- Use descriptions that explain the service category in TalentScout language.
+- Use descriptions that explain the service category in Gigmatch language.
 - Use category appropriate existing Lucide icons.
 - Update each href to use the existing freelancer catalog pattern, for example /freelancers?category=web-development.
 - Keep the cards data driven and separate from the component markup.

@@ -302,6 +302,7 @@ model FreelancerProfile {
   user             User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   experience_level ExperienceLevel?        @relation(fields: [experience_level_id], references: [id])
   packages         Package[]
+  sample_works     FreelancerSampleWork[]
 
   @@index([skills], type: Gin, map: "idx_freelancer_skills")
   @@map("freelancer_profiles")
@@ -454,6 +455,24 @@ model PackageMedia {
 
   @@index([package_id], map: "idx_package_media_package")
   @@map("package_media")
+}
+
+model FreelancerSampleWork {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  freelancer_id String   @db.Uuid
+  title         String   @db.VarChar(120)
+  description   String   @db.VarChar(1000)
+  tags          String[] @default([])
+  image_path    String
+  sort_order    Int
+  created_at    DateTime @default(now()) @db.Timestamptz
+  updated_at    DateTime @updatedAt @db.Timestamptz
+
+  freelancer FreelancerProfile @relation(fields: [freelancer_id], references: [id], onDelete: Cascade)
+
+  @@unique([freelancer_id, sort_order], map: "uq_freelancer_sample_work_order")
+  @@index([freelancer_id], map: "idx_freelancer_sample_work_freelancer")
+  @@map("freelancer_sample_works")
 }
 
 model JobPost {

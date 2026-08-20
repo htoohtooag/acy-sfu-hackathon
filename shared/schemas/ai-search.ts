@@ -97,6 +97,13 @@ export const aiSearchPackageCardSchema = z.object({
     is_verified: z.boolean(),
     completed_projects_count: z.number().int().nonnegative(),
   }),
+  sample_work: z
+    .object({
+      id: z.uuid(),
+      title: z.string(),
+      image_url: z.string().url(),
+    })
+    .nullable(),
 });
 
 export const aiSearchPackageResultsSchema = z.array(aiSearchPackageCardSchema).max(5);

@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk, JetBrains_Mono, Oi } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Providers } from "./providers";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ const oi = Oi({
 });
 
 export const metadata: Metadata = {
-  title: "TalentScout",
+  title: "Gigmatch",
   description: "Myanmar's AI-Native Freelance Marketplace",
 };
 
@@ -49,6 +50,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         <Providers>{children}</Providers>
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

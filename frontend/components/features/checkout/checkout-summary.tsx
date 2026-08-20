@@ -24,7 +24,7 @@ export function CheckoutSummary({ packageItem, quote, loading }: CheckoutSummary
       <CardContent className="gap-5">
         <div className="flex flex-col gap-1">
           <p className="font-heading text-lg font-semibold text-foreground">{packageItem.title}</p>
-          <p className="text-sm text-muted-foreground">{packageItem.freelancer.user.full_name ?? "TalentScout freelancer"}</p>
+          <p className="text-sm text-muted-foreground">{packageItem.freelancer.user.full_name ?? "Gigmatch freelancer"}</p>
         </div>
         <dl className="flex flex-col gap-3 border-y border-border py-4 text-sm">
           <div className="flex items-center justify-between gap-4"><dt className="text-muted-foreground">Package price</dt><dd className="font-medium text-foreground">{formatMmk(price)}</dd></div>

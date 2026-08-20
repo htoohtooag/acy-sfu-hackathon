@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../../middlewares/auth.js';
 import { requireAdminRole } from './admin.middleware.js';
-import { moderate, verifyPayment } from './admin.controller.js';
+import { getAdminProfile, getPendingPayment, listPendingPayments, moderate, verifyPayment } from './admin.controller.js';
 import {
   validateModerationBody,
   validateModerationParams,
@@ -10,6 +10,28 @@ import {
 } from './admin.validator.js';
 
 export const adminRouter = Router();
+
+adminRouter.get(
+  '/me',
+  requireAuth,
+  requireAdminRole('SUPER_ADMIN', 'FINANCE_ADMIN'),
+  getAdminProfile,
+);
+
+adminRouter.get(
+  '/payments',
+  requireAuth,
+  requireAdminRole('SUPER_ADMIN', 'FINANCE_ADMIN'),
+  listPendingPayments,
+);
+
+adminRouter.get(
+  '/payments/:id',
+  requireAuth,
+  requireAdminRole('SUPER_ADMIN', 'FINANCE_ADMIN'),
+  validatePaymentParams,
+  getPendingPayment,
+);
 
 adminRouter.patch(
   '/payments/:id',

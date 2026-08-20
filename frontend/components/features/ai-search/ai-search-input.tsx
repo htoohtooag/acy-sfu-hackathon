@@ -36,8 +36,8 @@ export function AiSearchInput({ status, onSend, onStop }: AiSearchInputProps) {
         <InputGroupTextarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          placeholder="Ask Indy AI to find the right talent..."
-          aria-label="Message Indy AI"
+          placeholder="Ask Gigmatch AI to find the right talent..."
+          aria-label="Message Gigmatch AI"
           rows={2}
         />
         <InputGroupAddon align="inline-start" className="self-end pb-1">
@@ -58,7 +58,7 @@ export function AiSearchInput({ status, onSend, onStop }: AiSearchInputProps) {
         </InputGroupAddon>
       </InputGroup>
       <p className="mt-2 text-center text-xs text-muted-foreground">
-        {isStreaming ? "Indy AI is searching the marketplace…" : "Ask about a service, skill, budget, or delivery timeline."}
+        {isStreaming ? "Gigmatch AI is searching the marketplace…" : "Ask about a service, skill, budget, or delivery timeline."}
       </p>
     </form>
   );

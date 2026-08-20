@@ -32,7 +32,7 @@ export function AiSearchDialog() {
         </div>
         <DialogClose
           render={
-            <Button type="button" variant="ghost" size="icon" aria-label="Close Indy AI assistant" />
+            <Button type="button" variant="ghost" size="icon" aria-label="Close Gigmatch AI assistant" />
           }
         >
           <X aria-hidden="true" data-icon="inline-start" />

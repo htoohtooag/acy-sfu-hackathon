@@ -82,6 +82,7 @@ export function useCreatePackageOrder() {
   return useMutation({
     mutationFn: createPackageOrder,
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
       void queryClient.invalidateQueries({ queryKey: ["workroom-orders"] });
       void queryClient.invalidateQueries({ queryKey: ["recent-workrooms"] });
     },
@@ -93,6 +94,7 @@ export function useSubmitPaymentProof() {
   return useMutation({
     mutationFn: submitPaymentProof,
     onSuccess: (payment) => {
+      void queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
       void queryClient.invalidateQueries({ queryKey: ["workroom-orders"] });
       void queryClient.invalidateQueries({ queryKey: ["recent-workrooms"] });
       void queryClient.invalidateQueries({ queryKey: ["order", payment.order_id] });

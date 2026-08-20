@@ -25,8 +25,29 @@ import {
   updatePackage,
 } from './package.repository.js';
 import type { CatalogClient } from './package.repository.js';
-import { mapPackage, mapPage, toVectorLiteral } from './catalog.types.js';
+import { mapPackage, toVectorLiteral } from './catalog.types.js';
 import { prisma } from '../../config/prisma.js';
+import { supabaseAdmin } from '../../config/supabase.js';
+
+async function mapPackageWithSampleWorks(record: Parameters<typeof mapPackage>[0]): Promise<CatalogPackage> {
+  const sampleWorks = await Promise.all(record.freelancer.sample_works.map(async (item) => {
+    const { data, error } = await supabaseAdmin.storage
+      .from(env.SUPABASE_FREELANCER_SAMPLE_WORK_BUCKET)
+      .createSignedUrl(item.image_path, env.FREELANCER_SAMPLE_WORK_SIGNED_URL_TTL_SECONDS);
+    if (error !== null || data?.signedUrl === undefined) {
+      throw new ApiError(502, 'SAMPLE_WORK_STORAGE_FAILED', 'A sample work image access URL could not be created.');
+    }
+    return {
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      tags: Array.isArray(item.tags) ? item.tags.filter((tag): tag is string => typeof tag === 'string') : [],
+      image_url: data.signedUrl,
+      sort_order: item.sort_order,
+    };
+  }));
+  return mapPackage(record, sampleWorks);
+}
 
 const VECTOR_DIMENSION = 1536;
 
@@ -78,7 +99,7 @@ export async function createCatalogPackage(userId: string, input: CreatePackageR
       await setPackageEmbedding(created.id, toVectorLiteral(embedding), transaction);
       const record = await findPackageById(created.id, transaction);
       if (record === null) throw new ApiError(500, 'PACKAGE_CREATE_FAILED', 'The package could not be loaded after creation.');
-      return mapPackage(record);
+      return mapPackageWithSampleWorks(record);
     });
   } catch (error: unknown) {
     if (error instanceof ApiError || isPrismaError(error, 'P2002')) throw error;
@@ -88,13 +109,18 @@ export async function createCatalogPackage(userId: string, input: CreatePackageR
 
 export async function listCatalogPackages(filters: PackageListQuery): Promise<CatalogPage<CatalogPackage>> {
   const result = await listPackages(filters);
-  return mapPage(result.records, filters.page, filters.page_size, result.total, mapPackage);
+  return {
+    items: await Promise.all(result.records.map(mapPackageWithSampleWorks)),
+    page: filters.page,
+    page_size: filters.page_size,
+    total: result.total,
+  };
 }
 
 export async function getCatalogPackage(id: string): Promise<CatalogPackage> {
   const record = await findPublicPackageById(id);
   if (record === null) throw new ApiError(404, 'PACKAGE_NOT_FOUND', 'Package not found.');
-  return mapPackage(record);
+  return mapPackageWithSampleWorks(record);
 }
 
 export async function updateCatalogPackage(userId: string, id: string, input: UpdatePackageRequest): Promise<CatalogPackage> {
@@ -117,7 +143,7 @@ export async function updateCatalogPackage(userId: string, id: string, input: Up
     await setPackageEmbedding(id, toVectorLiteral(embedding), transaction);
     const record = await findPackageById(id, transaction);
     if (record === null) throw new ApiError(404, 'PACKAGE_NOT_FOUND', 'Package not found.');
-    return mapPackage(record);
+    return mapPackageWithSampleWorks(record);
   });
 }
 

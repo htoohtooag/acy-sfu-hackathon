@@ -1,4 +1,7 @@
 import type {
+  AdminPaymentDetail,
+  AdminPaymentListResponse,
+  AdminSessionResponse,
   AdminModerationResponse,
   AdminPaymentRejectionResponse,
   AdminPaymentVerificationResponse,
@@ -7,6 +10,8 @@ import type {
 import { sendNotification } from '../notifications/notification.service.js';
 import { Prisma } from '../../../prisma/generated/prisma/client.js';
 import { prisma } from '../../config/prisma.js';
+import { env } from '../../config/env.js';
+import { supabaseAdmin } from '../../config/supabase.js';
 import { ApiError } from '../../utils/api-error.js';
 import {
   createModeration,
@@ -16,12 +21,94 @@ import {
   findAuditActionId,
   findModerationTarget,
   findPaymentById,
+  countPendingPayments,
+  findPendingPayments,
+  findAdminPaymentById,
+  findAdminAssignment,
   markOrderActive,
   markPaymentRejected,
   markPaymentVerified,
   suspendUser,
 } from './admin.repository.js';
-import type { ModerationRecord, PaymentVerificationRecord } from './admin.types.js';
+import type { AdminPaymentReadRecord, ModerationRecord, PaymentVerificationRecord } from './admin.types.js';
+
+const PAYMENT_PROOF_SIGNED_URL_TTL_SECONDS = 300;
+
+function paymentTitle(record: AdminPaymentReadRecord): string {
+  if (record.order.package?.deleted_at === null) return record.order.package.title;
+  if (record.order.job_post?.deleted_at === null) return record.order.job_post.title;
+  return 'Untitled order';
+}
+
+function mapAdminPaymentSummary(record: AdminPaymentReadRecord) {
+  return {
+    id: record.id,
+    amount_mmk: record.amount_mmk.toString(),
+    transaction_ref: record.transaction_ref,
+    status: 'PENDING_ADMIN' as const,
+    created_at: record.created_at.toISOString(),
+    payment_method: record.payment_method === null ? {
+      id: null,
+      name: null,
+      display_name: null,
+      account_name: null,
+    } : record.payment_method,
+    order: { id: record.order.id, title: paymentTitle(record) },
+    client: record.order.client,
+    freelancer: record.order.freelancer,
+  };
+}
+
+async function signPaymentProof(path: string): Promise<string> {
+  const { data, error } = await supabaseAdmin.storage
+    .from(env.SUPABASE_PAYMENT_PROOF_BUCKET)
+    .createSignedUrl(path, PAYMENT_PROOF_SIGNED_URL_TTL_SECONDS);
+  if (error !== null || data?.signedUrl === undefined) {
+    throw new ApiError(502, 'PAYMENT_PROOF_STORAGE_FAILED', 'The payment proof could not be opened.');
+  }
+  return data.signedUrl;
+}
+
+export async function getAdminSession(userId: string): Promise<AdminSessionResponse> {
+  const assignment = await findAdminAssignment(userId);
+  if (assignment === null || assignment.admin_role === null) {
+    throw new ApiError(403, 'ADMIN_ASSIGNMENT_REQUIRED', 'An active administrator assignment is required.');
+  }
+  return {
+    display_name: assignment.user.full_name,
+    capabilities: assignment.admin_role.name === 'SUPER_ADMIN' || assignment.admin_role.name === 'FINANCE_ADMIN'
+      ? ['PAYMENT_REVIEW']
+      : [],
+  };
+}
+
+export async function listAdminPendingPayments(page: number, pageSize: number): Promise<AdminPaymentListResponse> {
+  const [totalItems, records] = await prisma.$transaction(async (transaction) => Promise.all([
+    countPendingPayments(transaction),
+    findPendingPayments(page, pageSize, transaction),
+  ]));
+  return {
+    items: records.map(mapAdminPaymentSummary),
+    page,
+    page_size: pageSize,
+    total_items: totalItems,
+    total_pages: Math.ceil(totalItems / pageSize),
+  };
+}
+
+export async function getAdminPaymentDetail(paymentId: string): Promise<AdminPaymentDetail> {
+  const record = await findAdminPaymentById(paymentId);
+  if (record === null) {
+    const decided = await findPaymentById(paymentId);
+    if (decided === null) throw new ApiError(404, 'PAYMENT_NOT_FOUND', 'The payment was not found.');
+    throw new ApiError(409, 'PAYMENT_ALREADY_DECIDED', 'This payment has already been decided.');
+  }
+  return {
+    ...mapAdminPaymentSummary(record),
+    agreed_price_mmk: record.order.agreed_price_mmk.toString(),
+    screenshot_url: await signPaymentProof(record.screenshot_url),
+  };
+}
 
 function isPrismaError(error: unknown, code: string): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === code;

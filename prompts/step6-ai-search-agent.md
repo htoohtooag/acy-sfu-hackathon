@@ -50,12 +50,12 @@ Create or modify only the following areas, plus the generated Prisma migration a
    - Create feature first modules for `ai-search.routes.ts`, `ai-search.controller.ts`, `ai-search.service.ts`, `ai-search.repository.ts`, `ai-search.validator.ts`, `ai-search.types.ts`, and the feature rate limiter if needed.
    - Routes attach auth, client role, validation, and rate limiting only.
    - Controllers orchestrate HTTP and stream response handling only.
-   - Services own plan access, TalentScout system instructions, tool definitions, model invocation, abort propagation, and safe error translation.
+   - Services own plan access, Gigmatch system instructions, tool definitions, model invocation, abort propagation, and safe error translation.
    - Repositories own Prisma reads and the parameterized pgvector similarity queries.
 
 ## AI behavior
 
-Configure TalentScout as concise, objective, and professional.
+Configure Gigmatch as concise, objective, and professional.
 
 The system instructions must:
 

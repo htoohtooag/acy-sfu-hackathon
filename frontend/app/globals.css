@@ -3,12 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+/* :root {
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.52 0.16 155);
+  --primary: oklch(97.015% 0.00011 271.152);
   --primary-foreground: oklch(0.985 0.01 155);
   --secondary: oklch(0.95 0.035 220);
   --secondary-foreground: oklch(0.28 0.06 220);
@@ -60,6 +60,7 @@
   --foreground: oklch(0.145 0 0);
   --pattern-line: var(--border);
   --pattern-surface: var(--background);
+
 }
 
 .dark {
@@ -117,6 +118,217 @@
   --shadow-lg: 0px 4px 16px 0px hsl(0 0% 0% / 0.35), 0px 4px 6px -1px hsl(0 0% 0% / 0.35);
   --shadow-xl: 0px 4px 16px 0px hsl(0 0% 0% / 0.35), 0px 8px 10px -1px hsl(0 0% 0% / 0.35);
   --shadow-2xl: 0px 4px 16px 0px hsl(0 0% 0% / 0.88);
+} */
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.307633 0.00334 345.426);
+
+  /* White first content surfaces keep marketplace information easy to scan. */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.307633 0.00334 345.426);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.307633 0.00334 345.426);
+
+  /* #7477FF */
+  --primary: oklch(0.636818 0.197558 278.243);
+  --primary-foreground: oklch(1 0 0);
+
+  /* #C5D4CA */
+  --secondary: oklch(0.855695 0.021195 156.752);
+  --secondary-foreground: oklch(0.307633 0.00334 345.426);
+
+  --muted: oklch(0.97 0.007 156.752);
+  --muted-foreground: oklch(0.45 0.015 345.426);
+
+  /* Soft purple tint */
+  --accent: oklch(0.92 0.055 278.243);
+  --accent-foreground: oklch(0.307633 0.00334 345.426);
+
+  /* #F66554 */
+  --destructive: oklch(0.686851 0.18142 29.262);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* #F9CD61 */
+  --warning: oklch(0.866193 0.134809 87.080);
+  --warning-foreground: oklch(0.307633 0.00334 345.426);
+
+  --border: oklch(0.9 0.014 156.752);
+  --input: oklch(0.9 0.014 156.752);
+
+  --ring: oklch(0.636818 0.197558 278.243);
+
+  /* Screenshot palette used across charts */
+  --chart-1: oklch(0.636818 0.197558 278.243); /* #7477FF */
+  --chart-2: oklch(0.686851 0.18142 29.262);   /* #F66554 */
+  --chart-3: oklch(0.866193 0.134809 87.080);  /* #F9CD61 */
+  --chart-4: oklch(0.855695 0.021195 156.752); /* #C5D4CA */
+  --chart-5: oklch(0.307633 0.00334 345.426);  /* #312F30 */
+
+  /* Sidebar */
+  --sidebar: oklch(0.855695 0.021195 156.752);
+  --sidebar-foreground: oklch(0.307633 0.00334 345.426);
+
+  --sidebar-primary: oklch(0.636818 0.197558 278.243);
+  --sidebar-primary-foreground: oklch(1 0 0);
+
+  --sidebar-accent: oklch(0.92 0.055 278.243);
+  --sidebar-accent-foreground: oklch(0.307633 0.00334 345.426);
+
+  --sidebar-border: oklch(0.89 0.012 156.752);
+  --sidebar-ring: oklch(0.636818 0.197558 278.243);
+
+  --font-sans: Inter, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: JetBrains Mono, monospace;
+
+  --radius: 0.625rem;
+
+  --shadow-x: 0px;
+  --shadow-y: 2px;
+  --shadow-blur: 12px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.08;
+  --shadow-color: #312F30;
+
+  --shadow-2xs: 0px 2px 12px 0px rgb(49 47 48 / 0.04);
+  --shadow-xs: 0px 2px 12px 0px rgb(49 47 48 / 0.04);
+  --shadow-sm:
+    0px 2px 12px 0px rgb(49 47 48 / 0.08),
+    0px 1px 2px -1px rgb(49 47 48 / 0.08);
+  --shadow:
+    0px 2px 12px 0px rgb(49 47 48 / 0.08),
+    0px 1px 2px -1px rgb(49 47 48 / 0.08);
+  --shadow-md:
+    0px 2px 12px 0px rgb(49 47 48 / 0.08),
+    0px 2px 4px -1px rgb(49 47 48 / 0.08);
+  --shadow-lg:
+    0px 2px 12px 0px rgb(49 47 48 / 0.08),
+    0px 4px 6px -1px rgb(49 47 48 / 0.08);
+  --shadow-xl:
+    0px 2px 12px 0px rgb(49 47 48 / 0.08),
+    0px 8px 10px -1px rgb(49 47 48 / 0.08);
+  --shadow-2xl:
+    0px 2px 12px 0px rgb(49 47 48 / 0.20);
+
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --pattern-line: var(--border);
+  --pattern-surface: var(--background);
+
+  /* Public mega menu surfaces, derived from the supplied sage and purple palette. */
+  --menu-surface: oklch(0.975 0.008 156.752);
+  --menu-rail: oklch(0.855695 0.021195 156.752);
+  --menu-item-hover: oklch(0.94 0.04 278.243);
+  --menu-item-active: oklch(0.9 0.07 278.243);
+  --menu-pattern-line: oklch(0.855695 0.021195 156.752 / 0.72);
+}
+
+.dark {
+  /* #312F30 */
+  --background: oklch(0.307633 0.00334 345.426);
+  --foreground: oklch(1 0 0);
+
+  /* #312F30 based dark surfaces */
+  --card: oklch(0.36 0.004 345.426);
+  --card-foreground: oklch(1 0 0);
+
+  --popover: oklch(0.36 0.004 345.426);
+  --popover-foreground: oklch(1 0 0);
+
+  /* #7477FF */
+  --primary: oklch(0.636818 0.197558 278.243);
+  --primary-foreground: oklch(1 0 0);
+
+  /* #C5D4CA */
+  --secondary: oklch(0.855695 0.021195 156.752);
+  --secondary-foreground: oklch(0.307633 0.00334 345.426);
+
+  --muted: oklch(0.39 0.008 345.426);
+  --muted-foreground: oklch(0.78 0.015 156.752);
+
+  /* Purple-tinted accent */
+  --accent: oklch(0.43 0.10 278.243);
+  --accent-foreground: oklch(1 0 0);
+
+  /* #F66554 */
+  --destructive: oklch(0.686851 0.18142 29.262);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* #F9CD61 */
+  --warning: oklch(0.866193 0.134809 87.080);
+  --warning-foreground: oklch(0.307633 0.00334 345.426);
+
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+
+  /* Purple focus ring */
+  --ring: oklch(0.636818 0.197558 278.243);
+
+  /* Screenshot palette */
+  --chart-1: oklch(0.636818 0.197558 278.243); /* #7477FF */
+  --chart-2: oklch(0.686851 0.18142 29.262);   /* #F66554 */
+  --chart-3: oklch(0.866193 0.134809 87.080);  /* #F9CD61 */
+  --chart-4: oklch(0.855695 0.021195 156.752); /* #C5D4CA */
+  --chart-5: oklch(1 0 0);                      /* #FFFFFF */
+
+  /* Dark-mode sidebar */
+  --sidebar: oklch(0.34 0.004 345.426);
+  --sidebar-foreground: oklch(1 0 0);
+
+  --sidebar-primary: oklch(0.636818 0.197558 278.243);
+  --sidebar-primary-foreground: oklch(1 0 0);
+
+  --sidebar-accent: oklch(0.42 0.07 278.243);
+  --sidebar-accent-foreground: oklch(1 0 0);
+
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.636818 0.197558 278.243);
+
+  --font-sans: Segoe UI, Helvetica Neue, Helvetica, Lucida Grande, Arial, Ubuntu, Cantarell, Fira Sans, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+
+  --radius: 0.5rem;
+
+  --shadow-x: 0px;
+  --shadow-y: 4px;
+  --shadow-blur: 16px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.35;
+  --shadow-color: #000000;
+
+  --shadow-2xs: 0px 4px 16px 0px rgb(0 0 0 / 0.17);
+  --shadow-xs: 0px 4px 16px 0px rgb(0 0 0 / 0.17);
+  --shadow-sm:
+    0px 4px 16px 0px rgb(0 0 0 / 0.35),
+    0px 1px 2px -1px rgb(0 0 0 / 0.35);
+  --shadow:
+    0px 4px 16px 0px rgb(0 0 0 / 0.35),
+    0px 1px 2px -1px rgb(0 0 0 / 0.35);
+  --shadow-md:
+    0px 4px 16px 0px rgb(0 0 0 / 0.35),
+    0px 2px 4px -1px rgb(0 0 0 / 0.35);
+  --shadow-lg:
+    0px 4px 16px 0px rgb(0 0 0 / 0.35),
+    0px 4px 6px -1px rgb(0 0 0 / 0.35);
+  --shadow-xl:
+    0px 4px 16px 0px rgb(0 0 0 / 0.35),
+    0px 8px 10px -1px rgb(0 0 0 / 0.35);
+  --shadow-2xl:
+    0px 4px 16px 0px rgb(0 0 0 / 0.88);
+
+  --pattern-line: var(--border);
+  --pattern-surface: var(--background);
+
+  /* Public mega menu surfaces, kept distinct in dark mode. */
+  --menu-surface: oklch(0.335 0.006 345.426);
+  --menu-rail: oklch(0.42 0.02 156.752);
+  --menu-item-hover: oklch(0.4 0.055 278.243);
+  --menu-item-active: oklch(0.46 0.1 278.243);
+  --menu-pattern-line: oklch(0.855695 0.021195 156.752 / 0.2);
 }
 
 @theme inline {
@@ -154,6 +366,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-menu-surface: var(--menu-surface);
+  --color-menu-rail: var(--menu-rail);
+  --color-menu-item-hover: var(--menu-item-hover);
+  --color-menu-item-active: var(--menu-item-active);
+  --color-menu-pattern-line: var(--menu-pattern-line);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -194,10 +411,10 @@
 }
 
 @utility menu-pattern {
-  background-color: var(--pattern-surface);
+  background-color: var(--menu-surface);
   background-image:
-    linear-gradient(135deg, transparent 0 45%, var(--pattern-line) 45% 46%, transparent 46% 100%),
-    linear-gradient(45deg, transparent 0 45%, var(--pattern-line) 45% 46%, transparent 46% 100%);
+    linear-gradient(135deg, transparent 0 45%, var(--menu-pattern-line) 45% 46%, transparent 46% 100%),
+    linear-gradient(45deg, transparent 0 45%, var(--menu-pattern-line) 45% 46%, transparent 46% 100%);
   background-size: 4rem 4rem;
 }
 

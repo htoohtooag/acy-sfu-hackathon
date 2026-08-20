@@ -1,0 +1,11 @@
+"use client";
+import { useState } from 'react';
+import type { FreelancerSampleWork } from 'shared/schemas';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+type SampleWorkFormProps = { existing?: FreelancerSampleWork; busy: boolean; onCancel: () => void; onSubmit: (input: { title: string; description: string; tags: string[] }, file?: File) => void };
+export function SampleWorkForm({ existing, busy, onCancel, onSubmit }: SampleWorkFormProps) {
+  const [title, setTitle] = useState(existing?.title ?? ''); const [description, setDescription] = useState(existing?.description ?? ''); const [tags, setTags] = useState(existing?.tags.join(', ') ?? ''); const [file, setFile] = useState<File | undefined>();
+  return <form className="space-y-4 rounded-2xl border border-border bg-background p-5" onSubmit={(event) => { event.preventDefault(); onSubmit({ title: title.trim(), description: description.trim(), tags: tags.split(',').map((tag) => tag.trim()).filter(Boolean) }, file); }}><div className="grid gap-4 sm:grid-cols-2"><label className="space-y-2 text-sm font-medium text-foreground">Title<Input value={title} maxLength={120} required onChange={(event) => setTitle(event.target.value)} /></label><label className="space-y-2 text-sm font-medium text-foreground">Image{existing ? <span className="ml-2 text-xs font-normal text-muted-foreground">Optional replacement</span> : null}<Input type="file" accept="image/jpeg,image/png,image/webp" required={!existing} onChange={(event) => setFile(event.target.files?.[0])} /></label></div><label className="block space-y-2 text-sm font-medium text-foreground">Description<Textarea value={description} maxLength={1000} required onChange={(event) => setDescription(event.target.value)} /></label><label className="block space-y-2 text-sm font-medium text-foreground">Tags <span className="font-normal text-muted-foreground">comma separated, up to 10</span><Input value={tags} onChange={(event) => setTags(event.target.value)} placeholder="Branding, Figma, Mobile" /></label><div className="flex justify-end gap-3"><Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? 'Saving…' : existing ? 'Save changes' : 'Add sample work'}</Button></div></form>;
+}

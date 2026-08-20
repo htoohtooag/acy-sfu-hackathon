@@ -23,6 +23,11 @@ export type PackageSearchCard = {
     is_verified: boolean;
     completed_projects_count: number;
   };
+  sample_work: {
+    id: string;
+    title: string;
+    image_url: string;
+  } | null;
 };
 
 export type PlatformDocumentResult = {
