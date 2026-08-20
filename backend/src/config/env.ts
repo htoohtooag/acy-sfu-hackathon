@@ -4,6 +4,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(3001),
+  FRONTEND_ORIGIN: z.string().url().optional(),
   DATABASE_URL: z.string().url(),
   DIRECT_URL: z.string().url(),
   SUPABASE_URL: z.string().url(),
@@ -38,6 +39,14 @@ const envSchema = z.object({
   AI_SEARCH_MAX_USER_MESSAGE_CHARS: z.coerce.number().int().positive().default(4000),
   AI_SEARCH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60000),
   AI_SEARCH_RATE_LIMIT_MAX_REQUESTS: z.coerce.number().int().positive().default(10),
+}).superRefine((environment, context) => {
+  if (environment.NODE_ENV === 'production' && environment.FRONTEND_ORIGIN === undefined) {
+    context.addIssue({
+      code: 'custom',
+      path: ['FRONTEND_ORIGIN'],
+      message: 'FRONTEND_ORIGIN is required in production.',
+    });
+  }
 });
 
 const parsedEnvironment = envSchema.safeParse(process.env);

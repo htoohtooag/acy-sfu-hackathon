@@ -9,7 +9,7 @@ export function createSocketServer(httpServer: HttpServer): WorkroomSocketServer
   const io: WorkroomSocketServer = new Server(httpServer, {
     cors: {
       credentials: true,
-      origin: env.NODE_ENV === 'development' ? true : false,
+      origin: env.NODE_ENV === 'development' ? true : env.FRONTEND_ORIGIN,
     },
     pingInterval: 25_000,
     pingTimeout: 20_000,

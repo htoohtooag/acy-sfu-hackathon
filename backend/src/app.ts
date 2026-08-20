@@ -22,7 +22,7 @@ export const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: env.NODE_ENV === 'development' ? true : false,
+    origin: env.NODE_ENV === 'development' ? true : env.FRONTEND_ORIGIN,
   }),
 );
 app.use(express.json());
